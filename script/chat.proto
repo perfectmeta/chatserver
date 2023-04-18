@@ -1,0 +1,63 @@
+syntax = "proto3";
+
+option java_multiple_files = true;
+option java_package = "chatserver.gen";
+
+//////////////////////////////////////聊天模型
+
+message Author {
+  int32 type = 1; // 0: 真人，1：AI英语老师, 2：AI女友
+  string name = 3;
+}
+
+message AudioStream {
+  string roomId = 1;
+  bytes audio = 4;
+}
+
+message TextStream {
+  string text = 4; // asr生成
+}
+
+message TextMessage {
+  int32 roomId = 1;
+  string text = 3;
+}
+
+message TextAudioStream {
+  string text = 4;  // chatgpt生成
+  bytes audio = 5; // tts生成
+}
+
+message Message {
+  Author author = 3;
+  int64 createdTime = 4;
+  MsgType msgType = 5;
+  string text = 6;
+  bytes audio = 7;  // 先直接返回，之后再考虑要不要返回id，来做优化
+}
+
+enum MsgType {
+  AUDIO_ORIGIN = 0;  // 真人语音聊天
+  TEXT_ORIGIN = 1;   // chatgpt回复的
+  TEXT_ONLY = 2;     // 真人打字聊天
+}
+
+message RoomInfo {
+  int32 roomId = 1;
+  Author you = 2;  // 先写死，只支持2个人
+  Author ai = 3;
+  repeated Message history = 4;
+}
+
+message RoomId {
+  string roomId = 1;
+}
+
+//////////////////////////////////////
+
+service ChatService {
+  rpc EnterRoom(RoomId) returns (RoomInfo);
+  rpc SpeechRecognize(stream AudioStream) returns (stream TextStream);
+  rpc Chat(TextMessage) returns (stream TextAudioStream);
+}
