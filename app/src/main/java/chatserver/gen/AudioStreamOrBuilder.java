@@ -20,6 +20,10 @@ public interface AudioStreamOrBuilder extends
       getRoomIdBytes();
 
   /**
+   * <pre>
+   * 麦克风收录产生
+   * </pre>
+   *
    * <code>bytes audio = 4;</code>
    * @return The audio.
    */

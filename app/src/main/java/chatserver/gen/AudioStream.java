@@ -134,6 +134,10 @@ private static final long serialVersionUID = 0L;
   public static final int AUDIO_FIELD_NUMBER = 4;
   private com.google.protobuf.ByteString audio_;
   /**
+   * <pre>
+   * 麦克风收录产生
+   * </pre>
+   *
    * <code>bytes audio = 4;</code>
    * @return The audio.
    */
@@ -539,6 +543,10 @@ private static final long serialVersionUID = 0L;
 
     private com.google.protobuf.ByteString audio_ = com.google.protobuf.ByteString.EMPTY;
     /**
+     * <pre>
+     * 麦克风收录产生
+     * </pre>
+     *
      * <code>bytes audio = 4;</code>
      * @return The audio.
      */
@@ -547,6 +555,10 @@ private static final long serialVersionUID = 0L;
       return audio_;
     }
     /**
+     * <pre>
+     * 麦克风收录产生
+     * </pre>
+     *
      * <code>bytes audio = 4;</code>
      * @param value The audio to set.
      * @return This builder for chaining.
@@ -561,6 +573,10 @@ private static final long serialVersionUID = 0L;
       return this;
     }
     /**
+     * <pre>
+     * 麦克风收录产生
+     * </pre>
+     *
      * <code>bytes audio = 4;</code>
      * @return This builder for chaining.
      */

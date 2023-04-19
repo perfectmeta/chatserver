@@ -8,10 +8,16 @@ public interface RoomInfoOrBuilder extends
     com.google.protobuf.MessageOrBuilder {
 
   /**
-   * <code>int32 roomId = 1;</code>
+   * <code>string roomId = 1;</code>
    * @return The roomId.
    */
-  int getRoomId();
+  java.lang.String getRoomId();
+  /**
+   * <code>string roomId = 1;</code>
+   * @return The bytes for roomId.
+   */
+  com.google.protobuf.ByteString
+      getRoomIdBytes();
 
   /**
    * <pre>

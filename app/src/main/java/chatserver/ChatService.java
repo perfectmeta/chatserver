@@ -6,7 +6,9 @@ import io.grpc.stub.StreamObserver;
 public class ChatService extends ChatServiceGrpc.ChatServiceImplBase {
     @Override
     public void enterRoom(RoomId request, StreamObserver<RoomInfo> responseObserver) {
-        super.enterRoom(request, responseObserver);
+        RoomInfo ri = RoomInfo.newBuilder().setRoomId("test room id").build();
+        responseObserver.onNext(ri);
+        responseObserver.onCompleted();
     }
 
     @Override
