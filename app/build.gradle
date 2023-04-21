@@ -12,15 +12,17 @@ plugins {
 }
 
 repositories {
-    // Use Maven Central for resolving dependencies.
-    mavenCentral()
+    maven {
+        url 'https://maven.aliyun.com/repository/central'
+    }
 }
 
 dependencies {
     // Use JUnit Jupiter for testing.
     testImplementation 'org.junit.jupiter:junit-jupiter:5.9.1'
 
-    // This dependency is used by the application.
+    implementation 'org.java-websocket:Java-WebSocket:1.5.3'
+    implementation 'com.squareup.okhttp3:okhttp:4.9.1';
     implementation 'com.google.guava:guava:31.1-jre'
 
     runtimeOnly 'io.grpc:grpc-netty-shaded:1.54.0'
@@ -40,6 +42,11 @@ application {
     // Define the main class for the application.
     mainClass = 'chatserver.App'
 }
+
+tasks.withType(JavaCompile).forEach {
+    it.options.compilerArgs += "--enable-preview"
+}
+
 
 tasks.named('test') {
     // Use JUnit Platform for unit tests.
