@@ -11,9 +11,11 @@ import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
 import java.text.SimpleDateFormat;
 import java.util.*;
+import java.util.logging.Logger;
 
 public class AuthURLEncoder {
-    public static String encodeAuthorUrl(String hostUrl, String apiKey, String apiSecret) {
+    public static final Logger logger = Logger.getLogger(AuthURLEncoder.class.getName());
+    public static String encodeXFYAuthorUrl(String hostUrl, String apiKey, String apiSecret, String method) {
         URI url;
         try {
             url = new URI(hostUrl);
@@ -25,24 +27,26 @@ public class AuthURLEncoder {
         String date = format.format(new Date());
         String builder = "host: " + url.getHost() + "\n" +
                 "date: " + date + "\n" +
-                "GET " + url.getPath() + " HTTP/1.1";
+                method +  " " + url.getPath() + " HTTP/1.1";
         var charset = StandardCharsets.UTF_8;
-        Mac mac;
-        SecretKeySpec spec = new SecretKeySpec(apiSecret.getBytes(charset), "hmacsha256");
+        String sha;
         try {
-            mac = Mac.getInstance("hmacsha256");
+            SecretKeySpec spec = new SecretKeySpec(apiSecret.getBytes(charset), "hmacsha256");
+            Mac mac = Mac.getInstance("hmacsha256");
             mac.init(spec);
+            byte[] hexDigits = mac.doFinal(builder.getBytes(charset));
+            sha = Base64.getEncoder().encodeToString(hexDigits);
         } catch (NoSuchAlgorithmException | InvalidKeyException e) {
+            logger.warning(e.getMessage());
             throw new RuntimeException(e);
         }
-        byte[] hexDigits = mac.doFinal(builder.getBytes(charset));
-        String sha = Base64.getEncoder().encodeToString(hexDigits);
 
-        String authorization = String.format("api_key=\"%s\", algorithm=\"%s\", headers=\"%s\", signature=\"%s\"", apiKey, "hmac-sha256", "host date request-line", sha);
+        String authorization = String.format("api_key=\"%s\", algorithm=\"%s\", headers=\"%s\", signature=\"%s\"",
+                apiKey, "hmac-sha256", "host date request-line", sha);
         HttpUrl httpUrl = Objects.requireNonNull(HttpUrl.parse("https://" + url.getHost() + url.getPath())).newBuilder().
-                addQueryParameter("authorization", Base64.getEncoder().encodeToString(authorization.getBytes(charset))).
-                addQueryParameter("date", date).
                 addQueryParameter("host", url.getHost()).
+                addQueryParameter("date", date).
+                addQueryParameter("authorization", Base64.getEncoder().encodeToString(authorization.getBytes(charset))).
                 build();
         return httpUrl.toString();
     }

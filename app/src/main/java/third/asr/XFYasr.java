@@ -13,8 +13,8 @@ public class XFYasr {
     public static ASRSession makeSession() {
         String url;
         try {
-            logger.info(String.format("key:%s, secret:%s", KeyManager.TTS_API_KEY, KeyManager.TTS_API_SECRET));
-            url = AuthURLEncoder.encodeAuthorUrl(asrHost, KeyManager.TTS_API_KEY, KeyManager.TTS_API_SECRET);
+            logger.info(String.format("key:%s, secret:%s", KeyManager.XFY_API_KEY, KeyManager.XFY_API_SECRET));
+            url = AuthURLEncoder.encodeXFYAuthorUrl(asrHost, KeyManager.XFY_API_KEY, KeyManager.XFY_API_SECRET, "GET");
         } catch (Exception e) {
             throw new RuntimeException(e);
         }

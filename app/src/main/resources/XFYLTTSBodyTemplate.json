@@ -1,0 +1,32 @@
+{
+  "header": {
+    "app_id": "your_appid"
+  },
+  "parameter": {
+    "dts": {
+      "vcn": "x3_mingge",
+      "language": "zh",
+      "speed": 50,
+      "volume": 50,
+      "pitch": 50,
+      "rhy": 1,
+      "audio": {
+        "encoding": "lame",
+        "sample_rate": 16000
+      },
+      "pybuf": {
+        "encoding": "utf8",
+        "compress": "raw",
+        "format": "plain"
+      }
+    }
+  },
+  "payload": {
+    "text": {
+      "encoding": "utf8",
+      "compress": "raw",
+      "format": "plain",
+      "text": "6L+Z5piv5LiA5q615rWL6K+V5paH5pys\n"
+    }
+  }
+}

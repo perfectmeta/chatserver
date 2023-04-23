@@ -1,7 +1,7 @@
 package third.tts.entity;
 
-public class TTSResponse {
-    public TTSResponse(String content) {
+public class LTTSResponse {
+    public LTTSResponse(String content) {
         rawContent = content;
     }
     public String rawContent;

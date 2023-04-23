@@ -8,9 +8,9 @@ import java.nio.file.Paths;
 import java.util.Properties;
 
 public class KeyManager {
-    public static String TTS_APPID = "";
-    public static String TTS_API_SECRET="";
-    public static String TTS_API_KEY="";
+    public static String XFY_APPID = "";
+    public static String XFY_API_SECRET ="";
+    public static String XFY_API_KEY ="";
     public static String TTS_KEY = "";
     public static String ASR_KEY = "";
     public static String OPENAI_KEY = "";
@@ -41,9 +41,9 @@ public class KeyManager {
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
-        TTS_APPID = properties.getProperty("tts.appid");
-        TTS_API_KEY = properties.getProperty("tts.apikey");
-        TTS_API_SECRET = properties.getProperty("tts.apisecret");
+        XFY_APPID = properties.getProperty("tts.appid");
+        XFY_API_KEY = properties.getProperty("tts.apikey");
+        XFY_API_SECRET = properties.getProperty("tts.apisecret");
         TTS_KEY = properties.getProperty("tts.key");
         ASR_KEY = properties.getProperty("asr.key");
         OPENAI_KEY = properties.getProperty("openai.key");
