@@ -1,8 +1,13 @@
 package third.tts.entity;
 
 public class LTTSResponse {
-    public LTTSResponse(String content) {
-        rawContent = content;
+    public LTTSResponse() {}
+
+    public LTTSResponse(int code) {
+        this.code = code;
     }
-    public String rawContent;
+
+    public int code;
+    public String message;
+    public byte[] rawContent;
 }

@@ -48,8 +48,12 @@ tasks.withType(JavaCompile).forEach {
     it.options.compilerArgs += "--enable-preview"
 }
 
+run {
+    jvmArgs += ['--enable-preview']
+}
 
 tasks.named('test') {
     // Use JUnit Platform for unit tests.
     useJUnitPlatform()
+    jvmArgs += ['--enable-preview']
 }
