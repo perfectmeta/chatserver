@@ -8,6 +8,18 @@ public interface MessageOrBuilder extends
     com.google.protobuf.MessageOrBuilder {
 
   /**
+   * <code>string roomId = 1;</code>
+   * @return The roomId.
+   */
+  java.lang.String getRoomId();
+  /**
+   * <code>string roomId = 1;</code>
+   * @return The bytes for roomId.
+   */
+  com.google.protobuf.ByteString
+      getRoomIdBytes();
+
+  /**
    * <code>.Author author = 3;</code>
    * @return Whether the author field is set.
    */
@@ -52,12 +64,38 @@ public interface MessageOrBuilder extends
       getTextBytes();
 
   /**
-   * <pre>
-   * 先直接返回，之后再考虑要不要返回id，来做优化
-   * </pre>
-   *
-   * <code>bytes audio = 7;</code>
-   * @return The audio.
+   * <code>string audioUrl = 7;</code>
+   * @return The audioUrl.
    */
-  com.google.protobuf.ByteString getAudio();
+  java.lang.String getAudioUrl();
+  /**
+   * <code>string audioUrl = 7;</code>
+   * @return The bytes for audioUrl.
+   */
+  com.google.protobuf.ByteString
+      getAudioUrlBytes();
+
+  /**
+   * <code>string imageUrl = 8;</code>
+   * @return The imageUrl.
+   */
+  java.lang.String getImageUrl();
+  /**
+   * <code>string imageUrl = 8;</code>
+   * @return The bytes for imageUrl.
+   */
+  com.google.protobuf.ByteString
+      getImageUrlBytes();
+
+  /**
+   * <code>string videoUrl = 9;</code>
+   * @return The videoUrl.
+   */
+  java.lang.String getVideoUrl();
+  /**
+   * <code>string videoUrl = 9;</code>
+   * @return The bytes for videoUrl.
+   */
+  com.google.protobuf.ByteString
+      getVideoUrlBytes();
 }

@@ -60,28 +60,4 @@ public interface RoomInfoOrBuilder extends
    * <code>.Author ai = 3;</code>
    */
   chatserver.gen.AuthorOrBuilder getAiOrBuilder();
-
-  /**
-   * <code>repeated .Message history = 4;</code>
-   */
-  java.util.List<chatserver.gen.Message> 
-      getHistoryList();
-  /**
-   * <code>repeated .Message history = 4;</code>
-   */
-  chatserver.gen.Message getHistory(int index);
-  /**
-   * <code>repeated .Message history = 4;</code>
-   */
-  int getHistoryCount();
-  /**
-   * <code>repeated .Message history = 4;</code>
-   */
-  java.util.List<? extends chatserver.gen.MessageOrBuilder> 
-      getHistoryOrBuilderList();
-  /**
-   * <code>repeated .Message history = 4;</code>
-   */
-  chatserver.gen.MessageOrBuilder getHistoryOrBuilder(
-      int index);
 }

@@ -3,9 +3,101 @@
  */
 package chatserver;
 
+import chatserver.gen.ChatServiceGrpc;
+import chatserver.gen.Hello;
+import chatserver.gen.RoomInfo;
+import io.grpc.ClientInterceptor;
+import io.grpc.Grpc;
+import io.grpc.InsecureChannelCredentials;
+import io.grpc.ManagedChannel;
+import io.grpc.stub.StreamObserver;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import static org.junit.jupiter.api.Assertions.*;
+import io.grpc.CallOptions;
+import io.grpc.Channel;
+import io.grpc.ClientCall;
+import io.grpc.ForwardingClientCall;
+import io.grpc.Metadata;
+import io.grpc.Metadata.Key;
+import io.grpc.MethodDescriptor;
+import org.springframework.boot.test.context.SpringBootTest;
 
+import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.TimeUnit;
+
+@SpringBootTest
 class AppTest {
+
+
+    public static class AuthTokenClientInterceptor implements ClientInterceptor {
+
+        private final String authToken;
+
+        public AuthTokenClientInterceptor(final String authToken) {
+            this.authToken = authToken;
+        }
+
+
+        public <ReqT, RespT> ClientCall<ReqT, RespT> interceptCall(final MethodDescriptor<ReqT, RespT> methodDescriptor, final CallOptions callOptions, final Channel channel) {
+            return new ForwardingClientCall.SimpleForwardingClientCall<>(channel.newCall(methodDescriptor, callOptions)) {
+                @Override
+                public void start(final Listener<RespT> responseListener, final Metadata headers) {
+
+                    headers.put(Key.of("auth_token", Metadata.ASCII_STRING_MARSHALLER), authToken);
+                    super.start(responseListener, headers);
+                }
+            };
+        }
+    }
+
+    private ChatServiceGrpc.ChatServiceBlockingStub blockingStub;
+    private ChatServiceGrpc.ChatServiceStub asyncStub;
+
+
+    @BeforeEach
+    void init() {
+        String target = "localhost:8080";
+        ManagedChannel channel = Grpc.newChannelBuilder(target, InsecureChannelCredentials.create())
+                .intercept(new AuthTokenClientInterceptor("2")).build();  // NOTE: 这个token必须在数据库中，这个测试才能正确。
+
+        blockingStub = ChatServiceGrpc.newBlockingStub(channel);
+        asyncStub = ChatServiceGrpc.newStub(channel);
+    }
+
+    @Test
+    void listRoom() {
+        blockingStub.listRoom(Hello.newBuilder().build()).forEachRemaining(
+                roomInfo -> System.out.print("blocking enter room ok: " + roomInfo.toString()));
+
+    }
+
+    @Test
+    public void asyncListRoom() throws InterruptedException {
+        CountDownLatch finishLatch = new CountDownLatch(1);
+        StreamObserver<RoomInfo> observer = new StreamObserver<>() {
+
+            @Override
+            public void onNext(RoomInfo value) {
+                System.out.print("async enter room ok: " + value);
+            }
+
+            @Override
+            public void onError(Throwable t) {
+                System.err.println(t.getMessage());
+                finishLatch.countDown();
+            }
+
+            @Override
+            public void onCompleted() {
+                System.out.println("async enter room completed");
+                finishLatch.countDown();
+            }
+        };
+        asyncStub.listRoom(Hello.newBuilder().build(), observer);
+
+        if (!finishLatch.await(1, TimeUnit.SECONDS)) {
+            System.out.println("exit! do not wait");
+        }
+    }
 
 }

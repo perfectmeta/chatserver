@@ -13,25 +13,33 @@ public enum MsgType
    * 真人语音聊天
    * </pre>
    *
-   * <code>AUDIO_ORIGIN = 0;</code>
+   * <code>AUDIO_WITH_TEXT = 0;</code>
    */
-  AUDIO_ORIGIN(0),
+  AUDIO_WITH_TEXT(0),
   /**
    * <pre>
    * chatgpt回复的
    * </pre>
    *
-   * <code>TEXT_ORIGIN = 1;</code>
+   * <code>TEXT_WITH_AUDIO = 1;</code>
    */
-  TEXT_ORIGIN(1),
+  TEXT_WITH_AUDIO(1),
   /**
    * <pre>
    * 真人打字聊天
    * </pre>
    *
-   * <code>TEXT_ONLY = 2;</code>
+   * <code>TEXT = 2;</code>
    */
-  TEXT_ONLY(2),
+  TEXT(2),
+  /**
+   * <code>IMAGE = 3;</code>
+   */
+  IMAGE(3),
+  /**
+   * <code>VIDEO = 4;</code>
+   */
+  VIDEO(4),
   UNRECOGNIZED(-1),
   ;
 
@@ -40,25 +48,33 @@ public enum MsgType
    * 真人语音聊天
    * </pre>
    *
-   * <code>AUDIO_ORIGIN = 0;</code>
+   * <code>AUDIO_WITH_TEXT = 0;</code>
    */
-  public static final int AUDIO_ORIGIN_VALUE = 0;
+  public static final int AUDIO_WITH_TEXT_VALUE = 0;
   /**
    * <pre>
    * chatgpt回复的
    * </pre>
    *
-   * <code>TEXT_ORIGIN = 1;</code>
+   * <code>TEXT_WITH_AUDIO = 1;</code>
    */
-  public static final int TEXT_ORIGIN_VALUE = 1;
+  public static final int TEXT_WITH_AUDIO_VALUE = 1;
   /**
    * <pre>
    * 真人打字聊天
    * </pre>
    *
-   * <code>TEXT_ONLY = 2;</code>
+   * <code>TEXT = 2;</code>
    */
-  public static final int TEXT_ONLY_VALUE = 2;
+  public static final int TEXT_VALUE = 2;
+  /**
+   * <code>IMAGE = 3;</code>
+   */
+  public static final int IMAGE_VALUE = 3;
+  /**
+   * <code>VIDEO = 4;</code>
+   */
+  public static final int VIDEO_VALUE = 4;
 
 
   public final int getNumber() {
@@ -85,9 +101,11 @@ public enum MsgType
    */
   public static MsgType forNumber(int value) {
     switch (value) {
-      case 0: return AUDIO_ORIGIN;
-      case 1: return TEXT_ORIGIN;
-      case 2: return TEXT_ONLY;
+      case 0: return AUDIO_WITH_TEXT;
+      case 1: return TEXT_WITH_AUDIO;
+      case 2: return TEXT;
+      case 3: return IMAGE;
+      case 4: return VIDEO;
       default: return null;
     }
   }

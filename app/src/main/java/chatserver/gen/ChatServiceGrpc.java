@@ -15,35 +15,66 @@ public final class ChatServiceGrpc {
   public static final String SERVICE_NAME = "ChatService";
 
   // Static method descriptors that strictly reflect the proto.
-  private static volatile io.grpc.MethodDescriptor<chatserver.gen.RoomId,
-      chatserver.gen.RoomInfo> getEnterRoomMethod;
+  private static volatile io.grpc.MethodDescriptor<chatserver.gen.Hello,
+      chatserver.gen.RoomInfo> getListRoomMethod;
 
   @io.grpc.stub.annotations.RpcMethod(
-      fullMethodName = SERVICE_NAME + '/' + "EnterRoom",
-      requestType = chatserver.gen.RoomId.class,
+      fullMethodName = SERVICE_NAME + '/' + "ListRoom",
+      requestType = chatserver.gen.Hello.class,
       responseType = chatserver.gen.RoomInfo.class,
-      methodType = io.grpc.MethodDescriptor.MethodType.UNARY)
-  public static io.grpc.MethodDescriptor<chatserver.gen.RoomId,
-      chatserver.gen.RoomInfo> getEnterRoomMethod() {
-    io.grpc.MethodDescriptor<chatserver.gen.RoomId, chatserver.gen.RoomInfo> getEnterRoomMethod;
-    if ((getEnterRoomMethod = ChatServiceGrpc.getEnterRoomMethod) == null) {
+      methodType = io.grpc.MethodDescriptor.MethodType.SERVER_STREAMING)
+  public static io.grpc.MethodDescriptor<chatserver.gen.Hello,
+      chatserver.gen.RoomInfo> getListRoomMethod() {
+    io.grpc.MethodDescriptor<chatserver.gen.Hello, chatserver.gen.RoomInfo> getListRoomMethod;
+    if ((getListRoomMethod = ChatServiceGrpc.getListRoomMethod) == null) {
       synchronized (ChatServiceGrpc.class) {
-        if ((getEnterRoomMethod = ChatServiceGrpc.getEnterRoomMethod) == null) {
-          ChatServiceGrpc.getEnterRoomMethod = getEnterRoomMethod =
-              io.grpc.MethodDescriptor.<chatserver.gen.RoomId, chatserver.gen.RoomInfo>newBuilder()
-              .setType(io.grpc.MethodDescriptor.MethodType.UNARY)
-              .setFullMethodName(generateFullMethodName(SERVICE_NAME, "EnterRoom"))
+        if ((getListRoomMethod = ChatServiceGrpc.getListRoomMethod) == null) {
+          ChatServiceGrpc.getListRoomMethod = getListRoomMethod =
+              io.grpc.MethodDescriptor.<chatserver.gen.Hello, chatserver.gen.RoomInfo>newBuilder()
+              .setType(io.grpc.MethodDescriptor.MethodType.SERVER_STREAMING)
+              .setFullMethodName(generateFullMethodName(SERVICE_NAME, "ListRoom"))
               .setSampledToLocalTracing(true)
               .setRequestMarshaller(io.grpc.protobuf.ProtoUtils.marshaller(
-                  chatserver.gen.RoomId.getDefaultInstance()))
+                  chatserver.gen.Hello.getDefaultInstance()))
               .setResponseMarshaller(io.grpc.protobuf.ProtoUtils.marshaller(
                   chatserver.gen.RoomInfo.getDefaultInstance()))
-              .setSchemaDescriptor(new ChatServiceMethodDescriptorSupplier("EnterRoom"))
+              .setSchemaDescriptor(new ChatServiceMethodDescriptorSupplier("ListRoom"))
               .build();
         }
       }
     }
-    return getEnterRoomMethod;
+    return getListRoomMethod;
+  }
+
+  private static volatile io.grpc.MethodDescriptor<chatserver.gen.Hello,
+      chatserver.gen.Message> getGetMessageStreamMethod;
+
+  @io.grpc.stub.annotations.RpcMethod(
+      fullMethodName = SERVICE_NAME + '/' + "GetMessageStream",
+      requestType = chatserver.gen.Hello.class,
+      responseType = chatserver.gen.Message.class,
+      methodType = io.grpc.MethodDescriptor.MethodType.SERVER_STREAMING)
+  public static io.grpc.MethodDescriptor<chatserver.gen.Hello,
+      chatserver.gen.Message> getGetMessageStreamMethod() {
+    io.grpc.MethodDescriptor<chatserver.gen.Hello, chatserver.gen.Message> getGetMessageStreamMethod;
+    if ((getGetMessageStreamMethod = ChatServiceGrpc.getGetMessageStreamMethod) == null) {
+      synchronized (ChatServiceGrpc.class) {
+        if ((getGetMessageStreamMethod = ChatServiceGrpc.getGetMessageStreamMethod) == null) {
+          ChatServiceGrpc.getGetMessageStreamMethod = getGetMessageStreamMethod =
+              io.grpc.MethodDescriptor.<chatserver.gen.Hello, chatserver.gen.Message>newBuilder()
+              .setType(io.grpc.MethodDescriptor.MethodType.SERVER_STREAMING)
+              .setFullMethodName(generateFullMethodName(SERVICE_NAME, "GetMessageStream"))
+              .setSampledToLocalTracing(true)
+              .setRequestMarshaller(io.grpc.protobuf.ProtoUtils.marshaller(
+                  chatserver.gen.Hello.getDefaultInstance()))
+              .setResponseMarshaller(io.grpc.protobuf.ProtoUtils.marshaller(
+                  chatserver.gen.Message.getDefaultInstance()))
+              .setSchemaDescriptor(new ChatServiceMethodDescriptorSupplier("GetMessageStream"))
+              .build();
+        }
+      }
+    }
+    return getGetMessageStreamMethod;
   }
 
   private static volatile io.grpc.MethodDescriptor<chatserver.gen.AudioStream,
@@ -158,9 +189,16 @@ public final class ChatServiceGrpc {
 
     /**
      */
-    default void enterRoom(chatserver.gen.RoomId request,
+    default void listRoom(chatserver.gen.Hello request,
         io.grpc.stub.StreamObserver<chatserver.gen.RoomInfo> responseObserver) {
-      io.grpc.stub.ServerCalls.asyncUnimplementedUnaryCall(getEnterRoomMethod(), responseObserver);
+      io.grpc.stub.ServerCalls.asyncUnimplementedUnaryCall(getListRoomMethod(), responseObserver);
+    }
+
+    /**
+     */
+    default void getMessageStream(chatserver.gen.Hello request,
+        io.grpc.stub.StreamObserver<chatserver.gen.Message> responseObserver) {
+      io.grpc.stub.ServerCalls.asyncUnimplementedUnaryCall(getGetMessageStreamMethod(), responseObserver);
     }
 
     /**
@@ -207,10 +245,18 @@ public final class ChatServiceGrpc {
 
     /**
      */
-    public void enterRoom(chatserver.gen.RoomId request,
+    public void listRoom(chatserver.gen.Hello request,
         io.grpc.stub.StreamObserver<chatserver.gen.RoomInfo> responseObserver) {
-      io.grpc.stub.ClientCalls.asyncUnaryCall(
-          getChannel().newCall(getEnterRoomMethod(), getCallOptions()), request, responseObserver);
+      io.grpc.stub.ClientCalls.asyncServerStreamingCall(
+          getChannel().newCall(getListRoomMethod(), getCallOptions()), request, responseObserver);
+    }
+
+    /**
+     */
+    public void getMessageStream(chatserver.gen.Hello request,
+        io.grpc.stub.StreamObserver<chatserver.gen.Message> responseObserver) {
+      io.grpc.stub.ClientCalls.asyncServerStreamingCall(
+          getChannel().newCall(getGetMessageStreamMethod(), getCallOptions()), request, responseObserver);
     }
 
     /**
@@ -248,9 +294,18 @@ public final class ChatServiceGrpc {
 
     /**
      */
-    public chatserver.gen.RoomInfo enterRoom(chatserver.gen.RoomId request) {
-      return io.grpc.stub.ClientCalls.blockingUnaryCall(
-          getChannel(), getEnterRoomMethod(), getCallOptions(), request);
+    public java.util.Iterator<chatserver.gen.RoomInfo> listRoom(
+        chatserver.gen.Hello request) {
+      return io.grpc.stub.ClientCalls.blockingServerStreamingCall(
+          getChannel(), getListRoomMethod(), getCallOptions(), request);
+    }
+
+    /**
+     */
+    public java.util.Iterator<chatserver.gen.Message> getMessageStream(
+        chatserver.gen.Hello request) {
+      return io.grpc.stub.ClientCalls.blockingServerStreamingCall(
+          getChannel(), getGetMessageStreamMethod(), getCallOptions(), request);
     }
 
     /**
@@ -277,19 +332,12 @@ public final class ChatServiceGrpc {
         io.grpc.Channel channel, io.grpc.CallOptions callOptions) {
       return new ChatServiceFutureStub(channel, callOptions);
     }
-
-    /**
-     */
-    public com.google.common.util.concurrent.ListenableFuture<chatserver.gen.RoomInfo> enterRoom(
-        chatserver.gen.RoomId request) {
-      return io.grpc.stub.ClientCalls.futureUnaryCall(
-          getChannel().newCall(getEnterRoomMethod(), getCallOptions()), request);
-    }
   }
 
-  private static final int METHODID_ENTER_ROOM = 0;
-  private static final int METHODID_CHAT = 1;
-  private static final int METHODID_SPEECH_RECOGNIZE = 2;
+  private static final int METHODID_LIST_ROOM = 0;
+  private static final int METHODID_GET_MESSAGE_STREAM = 1;
+  private static final int METHODID_CHAT = 2;
+  private static final int METHODID_SPEECH_RECOGNIZE = 3;
 
   private static final class MethodHandlers<Req, Resp> implements
       io.grpc.stub.ServerCalls.UnaryMethod<Req, Resp>,
@@ -308,9 +356,13 @@ public final class ChatServiceGrpc {
     @java.lang.SuppressWarnings("unchecked")
     public void invoke(Req request, io.grpc.stub.StreamObserver<Resp> responseObserver) {
       switch (methodId) {
-        case METHODID_ENTER_ROOM:
-          serviceImpl.enterRoom((chatserver.gen.RoomId) request,
+        case METHODID_LIST_ROOM:
+          serviceImpl.listRoom((chatserver.gen.Hello) request,
               (io.grpc.stub.StreamObserver<chatserver.gen.RoomInfo>) responseObserver);
+          break;
+        case METHODID_GET_MESSAGE_STREAM:
+          serviceImpl.getMessageStream((chatserver.gen.Hello) request,
+              (io.grpc.stub.StreamObserver<chatserver.gen.Message>) responseObserver);
           break;
         case METHODID_CHAT:
           serviceImpl.chat((chatserver.gen.TextMessage) request,
@@ -338,12 +390,19 @@ public final class ChatServiceGrpc {
   public static final io.grpc.ServerServiceDefinition bindService(AsyncService service) {
     return io.grpc.ServerServiceDefinition.builder(getServiceDescriptor())
         .addMethod(
-          getEnterRoomMethod(),
-          io.grpc.stub.ServerCalls.asyncUnaryCall(
+          getListRoomMethod(),
+          io.grpc.stub.ServerCalls.asyncServerStreamingCall(
             new MethodHandlers<
-              chatserver.gen.RoomId,
+              chatserver.gen.Hello,
               chatserver.gen.RoomInfo>(
-                service, METHODID_ENTER_ROOM)))
+                service, METHODID_LIST_ROOM)))
+        .addMethod(
+          getGetMessageStreamMethod(),
+          io.grpc.stub.ServerCalls.asyncServerStreamingCall(
+            new MethodHandlers<
+              chatserver.gen.Hello,
+              chatserver.gen.Message>(
+                service, METHODID_GET_MESSAGE_STREAM)))
         .addMethod(
           getSpeechRecognizeMethod(),
           io.grpc.stub.ServerCalls.asyncBidiStreamingCall(
@@ -406,7 +465,8 @@ public final class ChatServiceGrpc {
         if (result == null) {
           serviceDescriptor = result = io.grpc.ServiceDescriptor.newBuilder(SERVICE_NAME)
               .setSchemaDescriptor(new ChatServiceFileDescriptorSupplier())
-              .addMethod(getEnterRoomMethod())
+              .addMethod(getListRoomMethod())
+              .addMethod(getGetMessageStreamMethod())
               .addMethod(getSpeechRecognizeMethod())
               .addMethod(getChatMethod())
               .build();

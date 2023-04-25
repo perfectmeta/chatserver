@@ -17,7 +17,6 @@ private static final long serialVersionUID = 0L;
   }
   private RoomInfo() {
     roomId_ = "";
-    history_ = java.util.Collections.emptyList();
   }
 
   @java.lang.Override
@@ -40,7 +39,6 @@ private static final long serialVersionUID = 0L;
     if (extensionRegistry == null) {
       throw new java.lang.NullPointerException();
     }
-    int mutable_bitField0_ = 0;
     com.google.protobuf.UnknownFieldSet.Builder unknownFields =
         com.google.protobuf.UnknownFieldSet.newBuilder();
     try {
@@ -83,15 +81,6 @@ private static final long serialVersionUID = 0L;
 
             break;
           }
-          case 34: {
-            if (!((mutable_bitField0_ & 0x00000001) != 0)) {
-              history_ = new java.util.ArrayList<chatserver.gen.Message>();
-              mutable_bitField0_ |= 0x00000001;
-            }
-            history_.add(
-                input.readMessage(chatserver.gen.Message.parser(), extensionRegistry));
-            break;
-          }
           default: {
             if (!parseUnknownField(
                 input, unknownFields, extensionRegistry, tag)) {
@@ -107,9 +96,6 @@ private static final long serialVersionUID = 0L;
       throw new com.google.protobuf.InvalidProtocolBufferException(
           e).setUnfinishedMessage(this);
     } finally {
-      if (((mutable_bitField0_ & 0x00000001) != 0)) {
-        history_ = java.util.Collections.unmodifiableList(history_);
-      }
       this.unknownFields = unknownFields.build();
       makeExtensionsImmutable();
     }
@@ -229,46 +215,6 @@ private static final long serialVersionUID = 0L;
     return getAi();
   }
 
-  public static final int HISTORY_FIELD_NUMBER = 4;
-  private java.util.List<chatserver.gen.Message> history_;
-  /**
-   * <code>repeated .Message history = 4;</code>
-   */
-  @java.lang.Override
-  public java.util.List<chatserver.gen.Message> getHistoryList() {
-    return history_;
-  }
-  /**
-   * <code>repeated .Message history = 4;</code>
-   */
-  @java.lang.Override
-  public java.util.List<? extends chatserver.gen.MessageOrBuilder> 
-      getHistoryOrBuilderList() {
-    return history_;
-  }
-  /**
-   * <code>repeated .Message history = 4;</code>
-   */
-  @java.lang.Override
-  public int getHistoryCount() {
-    return history_.size();
-  }
-  /**
-   * <code>repeated .Message history = 4;</code>
-   */
-  @java.lang.Override
-  public chatserver.gen.Message getHistory(int index) {
-    return history_.get(index);
-  }
-  /**
-   * <code>repeated .Message history = 4;</code>
-   */
-  @java.lang.Override
-  public chatserver.gen.MessageOrBuilder getHistoryOrBuilder(
-      int index) {
-    return history_.get(index);
-  }
-
   private byte memoizedIsInitialized = -1;
   @java.lang.Override
   public final boolean isInitialized() {
@@ -292,9 +238,6 @@ private static final long serialVersionUID = 0L;
     if (ai_ != null) {
       output.writeMessage(3, getAi());
     }
-    for (int i = 0; i < history_.size(); i++) {
-      output.writeMessage(4, history_.get(i));
-    }
     unknownFields.writeTo(output);
   }
 
@@ -314,10 +257,6 @@ private static final long serialVersionUID = 0L;
     if (ai_ != null) {
       size += com.google.protobuf.CodedOutputStream
         .computeMessageSize(3, getAi());
-    }
-    for (int i = 0; i < history_.size(); i++) {
-      size += com.google.protobuf.CodedOutputStream
-        .computeMessageSize(4, history_.get(i));
     }
     size += unknownFields.getSerializedSize();
     memoizedSize = size;
@@ -346,8 +285,6 @@ private static final long serialVersionUID = 0L;
       if (!getAi()
           .equals(other.getAi())) return false;
     }
-    if (!getHistoryList()
-        .equals(other.getHistoryList())) return false;
     if (!unknownFields.equals(other.unknownFields)) return false;
     return true;
   }
@@ -368,10 +305,6 @@ private static final long serialVersionUID = 0L;
     if (hasAi()) {
       hash = (37 * hash) + AI_FIELD_NUMBER;
       hash = (53 * hash) + getAi().hashCode();
-    }
-    if (getHistoryCount() > 0) {
-      hash = (37 * hash) + HISTORY_FIELD_NUMBER;
-      hash = (53 * hash) + getHistoryList().hashCode();
     }
     hash = (29 * hash) + unknownFields.hashCode();
     memoizedHashCode = hash;
@@ -501,7 +434,6 @@ private static final long serialVersionUID = 0L;
     private void maybeForceBuilderInitialization() {
       if (com.google.protobuf.GeneratedMessageV3
               .alwaysUseFieldBuilders) {
-        getHistoryFieldBuilder();
       }
     }
     @java.lang.Override
@@ -520,12 +452,6 @@ private static final long serialVersionUID = 0L;
       } else {
         ai_ = null;
         aiBuilder_ = null;
-      }
-      if (historyBuilder_ == null) {
-        history_ = java.util.Collections.emptyList();
-        bitField0_ = (bitField0_ & ~0x00000001);
-      } else {
-        historyBuilder_.clear();
       }
       return this;
     }
@@ -553,7 +479,6 @@ private static final long serialVersionUID = 0L;
     @java.lang.Override
     public chatserver.gen.RoomInfo buildPartial() {
       chatserver.gen.RoomInfo result = new chatserver.gen.RoomInfo(this);
-      int from_bitField0_ = bitField0_;
       result.roomId_ = roomId_;
       if (youBuilder_ == null) {
         result.you_ = you_;
@@ -564,15 +489,6 @@ private static final long serialVersionUID = 0L;
         result.ai_ = ai_;
       } else {
         result.ai_ = aiBuilder_.build();
-      }
-      if (historyBuilder_ == null) {
-        if (((bitField0_ & 0x00000001) != 0)) {
-          history_ = java.util.Collections.unmodifiableList(history_);
-          bitField0_ = (bitField0_ & ~0x00000001);
-        }
-        result.history_ = history_;
-      } else {
-        result.history_ = historyBuilder_.build();
       }
       onBuilt();
       return result;
@@ -632,32 +548,6 @@ private static final long serialVersionUID = 0L;
       if (other.hasAi()) {
         mergeAi(other.getAi());
       }
-      if (historyBuilder_ == null) {
-        if (!other.history_.isEmpty()) {
-          if (history_.isEmpty()) {
-            history_ = other.history_;
-            bitField0_ = (bitField0_ & ~0x00000001);
-          } else {
-            ensureHistoryIsMutable();
-            history_.addAll(other.history_);
-          }
-          onChanged();
-        }
-      } else {
-        if (!other.history_.isEmpty()) {
-          if (historyBuilder_.isEmpty()) {
-            historyBuilder_.dispose();
-            historyBuilder_ = null;
-            history_ = other.history_;
-            bitField0_ = (bitField0_ & ~0x00000001);
-            historyBuilder_ = 
-              com.google.protobuf.GeneratedMessageV3.alwaysUseFieldBuilders ?
-                 getHistoryFieldBuilder() : null;
-          } else {
-            historyBuilder_.addAllMessages(other.history_);
-          }
-        }
-      }
       this.mergeUnknownFields(other.unknownFields);
       onChanged();
       return this;
@@ -686,7 +576,6 @@ private static final long serialVersionUID = 0L;
       }
       return this;
     }
-    private int bitField0_;
 
     private java.lang.Object roomId_ = "";
     /**
@@ -1036,246 +925,6 @@ private static final long serialVersionUID = 0L;
         ai_ = null;
       }
       return aiBuilder_;
-    }
-
-    private java.util.List<chatserver.gen.Message> history_ =
-      java.util.Collections.emptyList();
-    private void ensureHistoryIsMutable() {
-      if (!((bitField0_ & 0x00000001) != 0)) {
-        history_ = new java.util.ArrayList<chatserver.gen.Message>(history_);
-        bitField0_ |= 0x00000001;
-       }
-    }
-
-    private com.google.protobuf.RepeatedFieldBuilderV3<
-        chatserver.gen.Message, chatserver.gen.Message.Builder, chatserver.gen.MessageOrBuilder> historyBuilder_;
-
-    /**
-     * <code>repeated .Message history = 4;</code>
-     */
-    public java.util.List<chatserver.gen.Message> getHistoryList() {
-      if (historyBuilder_ == null) {
-        return java.util.Collections.unmodifiableList(history_);
-      } else {
-        return historyBuilder_.getMessageList();
-      }
-    }
-    /**
-     * <code>repeated .Message history = 4;</code>
-     */
-    public int getHistoryCount() {
-      if (historyBuilder_ == null) {
-        return history_.size();
-      } else {
-        return historyBuilder_.getCount();
-      }
-    }
-    /**
-     * <code>repeated .Message history = 4;</code>
-     */
-    public chatserver.gen.Message getHistory(int index) {
-      if (historyBuilder_ == null) {
-        return history_.get(index);
-      } else {
-        return historyBuilder_.getMessage(index);
-      }
-    }
-    /**
-     * <code>repeated .Message history = 4;</code>
-     */
-    public Builder setHistory(
-        int index, chatserver.gen.Message value) {
-      if (historyBuilder_ == null) {
-        if (value == null) {
-          throw new NullPointerException();
-        }
-        ensureHistoryIsMutable();
-        history_.set(index, value);
-        onChanged();
-      } else {
-        historyBuilder_.setMessage(index, value);
-      }
-      return this;
-    }
-    /**
-     * <code>repeated .Message history = 4;</code>
-     */
-    public Builder setHistory(
-        int index, chatserver.gen.Message.Builder builderForValue) {
-      if (historyBuilder_ == null) {
-        ensureHistoryIsMutable();
-        history_.set(index, builderForValue.build());
-        onChanged();
-      } else {
-        historyBuilder_.setMessage(index, builderForValue.build());
-      }
-      return this;
-    }
-    /**
-     * <code>repeated .Message history = 4;</code>
-     */
-    public Builder addHistory(chatserver.gen.Message value) {
-      if (historyBuilder_ == null) {
-        if (value == null) {
-          throw new NullPointerException();
-        }
-        ensureHistoryIsMutable();
-        history_.add(value);
-        onChanged();
-      } else {
-        historyBuilder_.addMessage(value);
-      }
-      return this;
-    }
-    /**
-     * <code>repeated .Message history = 4;</code>
-     */
-    public Builder addHistory(
-        int index, chatserver.gen.Message value) {
-      if (historyBuilder_ == null) {
-        if (value == null) {
-          throw new NullPointerException();
-        }
-        ensureHistoryIsMutable();
-        history_.add(index, value);
-        onChanged();
-      } else {
-        historyBuilder_.addMessage(index, value);
-      }
-      return this;
-    }
-    /**
-     * <code>repeated .Message history = 4;</code>
-     */
-    public Builder addHistory(
-        chatserver.gen.Message.Builder builderForValue) {
-      if (historyBuilder_ == null) {
-        ensureHistoryIsMutable();
-        history_.add(builderForValue.build());
-        onChanged();
-      } else {
-        historyBuilder_.addMessage(builderForValue.build());
-      }
-      return this;
-    }
-    /**
-     * <code>repeated .Message history = 4;</code>
-     */
-    public Builder addHistory(
-        int index, chatserver.gen.Message.Builder builderForValue) {
-      if (historyBuilder_ == null) {
-        ensureHistoryIsMutable();
-        history_.add(index, builderForValue.build());
-        onChanged();
-      } else {
-        historyBuilder_.addMessage(index, builderForValue.build());
-      }
-      return this;
-    }
-    /**
-     * <code>repeated .Message history = 4;</code>
-     */
-    public Builder addAllHistory(
-        java.lang.Iterable<? extends chatserver.gen.Message> values) {
-      if (historyBuilder_ == null) {
-        ensureHistoryIsMutable();
-        com.google.protobuf.AbstractMessageLite.Builder.addAll(
-            values, history_);
-        onChanged();
-      } else {
-        historyBuilder_.addAllMessages(values);
-      }
-      return this;
-    }
-    /**
-     * <code>repeated .Message history = 4;</code>
-     */
-    public Builder clearHistory() {
-      if (historyBuilder_ == null) {
-        history_ = java.util.Collections.emptyList();
-        bitField0_ = (bitField0_ & ~0x00000001);
-        onChanged();
-      } else {
-        historyBuilder_.clear();
-      }
-      return this;
-    }
-    /**
-     * <code>repeated .Message history = 4;</code>
-     */
-    public Builder removeHistory(int index) {
-      if (historyBuilder_ == null) {
-        ensureHistoryIsMutable();
-        history_.remove(index);
-        onChanged();
-      } else {
-        historyBuilder_.remove(index);
-      }
-      return this;
-    }
-    /**
-     * <code>repeated .Message history = 4;</code>
-     */
-    public chatserver.gen.Message.Builder getHistoryBuilder(
-        int index) {
-      return getHistoryFieldBuilder().getBuilder(index);
-    }
-    /**
-     * <code>repeated .Message history = 4;</code>
-     */
-    public chatserver.gen.MessageOrBuilder getHistoryOrBuilder(
-        int index) {
-      if (historyBuilder_ == null) {
-        return history_.get(index);  } else {
-        return historyBuilder_.getMessageOrBuilder(index);
-      }
-    }
-    /**
-     * <code>repeated .Message history = 4;</code>
-     */
-    public java.util.List<? extends chatserver.gen.MessageOrBuilder> 
-         getHistoryOrBuilderList() {
-      if (historyBuilder_ != null) {
-        return historyBuilder_.getMessageOrBuilderList();
-      } else {
-        return java.util.Collections.unmodifiableList(history_);
-      }
-    }
-    /**
-     * <code>repeated .Message history = 4;</code>
-     */
-    public chatserver.gen.Message.Builder addHistoryBuilder() {
-      return getHistoryFieldBuilder().addBuilder(
-          chatserver.gen.Message.getDefaultInstance());
-    }
-    /**
-     * <code>repeated .Message history = 4;</code>
-     */
-    public chatserver.gen.Message.Builder addHistoryBuilder(
-        int index) {
-      return getHistoryFieldBuilder().addBuilder(
-          index, chatserver.gen.Message.getDefaultInstance());
-    }
-    /**
-     * <code>repeated .Message history = 4;</code>
-     */
-    public java.util.List<chatserver.gen.Message.Builder> 
-         getHistoryBuilderList() {
-      return getHistoryFieldBuilder().getBuilderList();
-    }
-    private com.google.protobuf.RepeatedFieldBuilderV3<
-        chatserver.gen.Message, chatserver.gen.Message.Builder, chatserver.gen.MessageOrBuilder> 
-        getHistoryFieldBuilder() {
-      if (historyBuilder_ == null) {
-        historyBuilder_ = new com.google.protobuf.RepeatedFieldBuilderV3<
-            chatserver.gen.Message, chatserver.gen.Message.Builder, chatserver.gen.MessageOrBuilder>(
-                history_,
-                ((bitField0_ & 0x00000001) != 0),
-                getParentForChildren(),
-                isClean());
-        history_ = null;
-      }
-      return historyBuilder_;
     }
     @java.lang.Override
     public final Builder setUnknownFields(

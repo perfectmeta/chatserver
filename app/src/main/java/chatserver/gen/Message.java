@@ -16,9 +16,12 @@ private static final long serialVersionUID = 0L;
     super(builder);
   }
   private Message() {
+    roomId_ = "";
     msgType_ = 0;
     text_ = "";
-    audio_ = com.google.protobuf.ByteString.EMPTY;
+    audioUrl_ = "";
+    imageUrl_ = "";
+    videoUrl_ = "";
   }
 
   @java.lang.Override
@@ -51,6 +54,12 @@ private static final long serialVersionUID = 0L;
           case 0:
             done = true;
             break;
+          case 10: {
+            java.lang.String s = input.readStringRequireUtf8();
+
+            roomId_ = s;
+            break;
+          }
           case 26: {
             chatserver.gen.Author.Builder subBuilder = null;
             if (author_ != null) {
@@ -82,8 +91,21 @@ private static final long serialVersionUID = 0L;
             break;
           }
           case 58: {
+            java.lang.String s = input.readStringRequireUtf8();
 
-            audio_ = input.readBytes();
+            audioUrl_ = s;
+            break;
+          }
+          case 66: {
+            java.lang.String s = input.readStringRequireUtf8();
+
+            imageUrl_ = s;
+            break;
+          }
+          case 74: {
+            java.lang.String s = input.readStringRequireUtf8();
+
+            videoUrl_ = s;
             break;
           }
           default: {
@@ -116,6 +138,44 @@ private static final long serialVersionUID = 0L;
     return chatserver.gen.Chat.internal_static_Message_fieldAccessorTable
         .ensureFieldAccessorsInitialized(
             chatserver.gen.Message.class, chatserver.gen.Message.Builder.class);
+  }
+
+  public static final int ROOMID_FIELD_NUMBER = 1;
+  private volatile java.lang.Object roomId_;
+  /**
+   * <code>string roomId = 1;</code>
+   * @return The roomId.
+   */
+  @java.lang.Override
+  public java.lang.String getRoomId() {
+    java.lang.Object ref = roomId_;
+    if (ref instanceof java.lang.String) {
+      return (java.lang.String) ref;
+    } else {
+      com.google.protobuf.ByteString bs = 
+          (com.google.protobuf.ByteString) ref;
+      java.lang.String s = bs.toStringUtf8();
+      roomId_ = s;
+      return s;
+    }
+  }
+  /**
+   * <code>string roomId = 1;</code>
+   * @return The bytes for roomId.
+   */
+  @java.lang.Override
+  public com.google.protobuf.ByteString
+      getRoomIdBytes() {
+    java.lang.Object ref = roomId_;
+    if (ref instanceof java.lang.String) {
+      com.google.protobuf.ByteString b = 
+          com.google.protobuf.ByteString.copyFromUtf8(
+              (java.lang.String) ref);
+      roomId_ = b;
+      return b;
+    } else {
+      return (com.google.protobuf.ByteString) ref;
+    }
   }
 
   public static final int AUTHOR_FIELD_NUMBER = 3;
@@ -212,19 +272,118 @@ private static final long serialVersionUID = 0L;
     }
   }
 
-  public static final int AUDIO_FIELD_NUMBER = 7;
-  private com.google.protobuf.ByteString audio_;
+  public static final int AUDIOURL_FIELD_NUMBER = 7;
+  private volatile java.lang.Object audioUrl_;
   /**
-   * <pre>
-   * 先直接返回，之后再考虑要不要返回id，来做优化
-   * </pre>
-   *
-   * <code>bytes audio = 7;</code>
-   * @return The audio.
+   * <code>string audioUrl = 7;</code>
+   * @return The audioUrl.
    */
   @java.lang.Override
-  public com.google.protobuf.ByteString getAudio() {
-    return audio_;
+  public java.lang.String getAudioUrl() {
+    java.lang.Object ref = audioUrl_;
+    if (ref instanceof java.lang.String) {
+      return (java.lang.String) ref;
+    } else {
+      com.google.protobuf.ByteString bs = 
+          (com.google.protobuf.ByteString) ref;
+      java.lang.String s = bs.toStringUtf8();
+      audioUrl_ = s;
+      return s;
+    }
+  }
+  /**
+   * <code>string audioUrl = 7;</code>
+   * @return The bytes for audioUrl.
+   */
+  @java.lang.Override
+  public com.google.protobuf.ByteString
+      getAudioUrlBytes() {
+    java.lang.Object ref = audioUrl_;
+    if (ref instanceof java.lang.String) {
+      com.google.protobuf.ByteString b = 
+          com.google.protobuf.ByteString.copyFromUtf8(
+              (java.lang.String) ref);
+      audioUrl_ = b;
+      return b;
+    } else {
+      return (com.google.protobuf.ByteString) ref;
+    }
+  }
+
+  public static final int IMAGEURL_FIELD_NUMBER = 8;
+  private volatile java.lang.Object imageUrl_;
+  /**
+   * <code>string imageUrl = 8;</code>
+   * @return The imageUrl.
+   */
+  @java.lang.Override
+  public java.lang.String getImageUrl() {
+    java.lang.Object ref = imageUrl_;
+    if (ref instanceof java.lang.String) {
+      return (java.lang.String) ref;
+    } else {
+      com.google.protobuf.ByteString bs = 
+          (com.google.protobuf.ByteString) ref;
+      java.lang.String s = bs.toStringUtf8();
+      imageUrl_ = s;
+      return s;
+    }
+  }
+  /**
+   * <code>string imageUrl = 8;</code>
+   * @return The bytes for imageUrl.
+   */
+  @java.lang.Override
+  public com.google.protobuf.ByteString
+      getImageUrlBytes() {
+    java.lang.Object ref = imageUrl_;
+    if (ref instanceof java.lang.String) {
+      com.google.protobuf.ByteString b = 
+          com.google.protobuf.ByteString.copyFromUtf8(
+              (java.lang.String) ref);
+      imageUrl_ = b;
+      return b;
+    } else {
+      return (com.google.protobuf.ByteString) ref;
+    }
+  }
+
+  public static final int VIDEOURL_FIELD_NUMBER = 9;
+  private volatile java.lang.Object videoUrl_;
+  /**
+   * <code>string videoUrl = 9;</code>
+   * @return The videoUrl.
+   */
+  @java.lang.Override
+  public java.lang.String getVideoUrl() {
+    java.lang.Object ref = videoUrl_;
+    if (ref instanceof java.lang.String) {
+      return (java.lang.String) ref;
+    } else {
+      com.google.protobuf.ByteString bs = 
+          (com.google.protobuf.ByteString) ref;
+      java.lang.String s = bs.toStringUtf8();
+      videoUrl_ = s;
+      return s;
+    }
+  }
+  /**
+   * <code>string videoUrl = 9;</code>
+   * @return The bytes for videoUrl.
+   */
+  @java.lang.Override
+  public com.google.protobuf.ByteString
+      getVideoUrlBytes() {
+    java.lang.Object ref = videoUrl_;
+    if (ref instanceof java.lang.String) {
+      com.google.protobuf.ByteString b = 
+          com.google.protobuf.ByteString.copyFromUtf8(
+              (java.lang.String) ref);
+      videoUrl_ = b;
+      return b;
+    } else {
+      return (com.google.protobuf.ByteString) ref;
+    }
   }
 
   private byte memoizedIsInitialized = -1;
@@ -241,20 +400,29 @@ private static final long serialVersionUID = 0L;
   @java.lang.Override
   public void writeTo(com.google.protobuf.CodedOutputStream output)
                       throws java.io.IOException {
+    if (!getRoomIdBytes().isEmpty()) {
+      com.google.protobuf.GeneratedMessageV3.writeString(output, 1, roomId_);
+    }
     if (author_ != null) {
       output.writeMessage(3, getAuthor());
     }
     if (createdTime_ != 0L) {
       output.writeInt64(4, createdTime_);
     }
-    if (msgType_ != chatserver.gen.MsgType.AUDIO_ORIGIN.getNumber()) {
+    if (msgType_ != chatserver.gen.MsgType.AUDIO_WITH_TEXT.getNumber()) {
       output.writeEnum(5, msgType_);
     }
     if (!getTextBytes().isEmpty()) {
       com.google.protobuf.GeneratedMessageV3.writeString(output, 6, text_);
     }
-    if (!audio_.isEmpty()) {
-      output.writeBytes(7, audio_);
+    if (!getAudioUrlBytes().isEmpty()) {
+      com.google.protobuf.GeneratedMessageV3.writeString(output, 7, audioUrl_);
+    }
+    if (!getImageUrlBytes().isEmpty()) {
+      com.google.protobuf.GeneratedMessageV3.writeString(output, 8, imageUrl_);
+    }
+    if (!getVideoUrlBytes().isEmpty()) {
+      com.google.protobuf.GeneratedMessageV3.writeString(output, 9, videoUrl_);
     }
     unknownFields.writeTo(output);
   }
@@ -265,6 +433,9 @@ private static final long serialVersionUID = 0L;
     if (size != -1) return size;
 
     size = 0;
+    if (!getRoomIdBytes().isEmpty()) {
+      size += com.google.protobuf.GeneratedMessageV3.computeStringSize(1, roomId_);
+    }
     if (author_ != null) {
       size += com.google.protobuf.CodedOutputStream
         .computeMessageSize(3, getAuthor());
@@ -273,16 +444,21 @@ private static final long serialVersionUID = 0L;
       size += com.google.protobuf.CodedOutputStream
         .computeInt64Size(4, createdTime_);
     }
-    if (msgType_ != chatserver.gen.MsgType.AUDIO_ORIGIN.getNumber()) {
+    if (msgType_ != chatserver.gen.MsgType.AUDIO_WITH_TEXT.getNumber()) {
       size += com.google.protobuf.CodedOutputStream
         .computeEnumSize(5, msgType_);
     }
     if (!getTextBytes().isEmpty()) {
       size += com.google.protobuf.GeneratedMessageV3.computeStringSize(6, text_);
     }
-    if (!audio_.isEmpty()) {
-      size += com.google.protobuf.CodedOutputStream
-        .computeBytesSize(7, audio_);
+    if (!getAudioUrlBytes().isEmpty()) {
+      size += com.google.protobuf.GeneratedMessageV3.computeStringSize(7, audioUrl_);
+    }
+    if (!getImageUrlBytes().isEmpty()) {
+      size += com.google.protobuf.GeneratedMessageV3.computeStringSize(8, imageUrl_);
+    }
+    if (!getVideoUrlBytes().isEmpty()) {
+      size += com.google.protobuf.GeneratedMessageV3.computeStringSize(9, videoUrl_);
     }
     size += unknownFields.getSerializedSize();
     memoizedSize = size;
@@ -299,6 +475,8 @@ private static final long serialVersionUID = 0L;
     }
     chatserver.gen.Message other = (chatserver.gen.Message) obj;
 
+    if (!getRoomId()
+        .equals(other.getRoomId())) return false;
     if (hasAuthor() != other.hasAuthor()) return false;
     if (hasAuthor()) {
       if (!getAuthor()
@@ -309,8 +487,12 @@ private static final long serialVersionUID = 0L;
     if (msgType_ != other.msgType_) return false;
     if (!getText()
         .equals(other.getText())) return false;
-    if (!getAudio()
-        .equals(other.getAudio())) return false;
+    if (!getAudioUrl()
+        .equals(other.getAudioUrl())) return false;
+    if (!getImageUrl()
+        .equals(other.getImageUrl())) return false;
+    if (!getVideoUrl()
+        .equals(other.getVideoUrl())) return false;
     if (!unknownFields.equals(other.unknownFields)) return false;
     return true;
   }
@@ -322,6 +504,8 @@ private static final long serialVersionUID = 0L;
     }
     int hash = 41;
     hash = (19 * hash) + getDescriptor().hashCode();
+    hash = (37 * hash) + ROOMID_FIELD_NUMBER;
+    hash = (53 * hash) + getRoomId().hashCode();
     if (hasAuthor()) {
       hash = (37 * hash) + AUTHOR_FIELD_NUMBER;
       hash = (53 * hash) + getAuthor().hashCode();
@@ -333,8 +517,12 @@ private static final long serialVersionUID = 0L;
     hash = (53 * hash) + msgType_;
     hash = (37 * hash) + TEXT_FIELD_NUMBER;
     hash = (53 * hash) + getText().hashCode();
-    hash = (37 * hash) + AUDIO_FIELD_NUMBER;
-    hash = (53 * hash) + getAudio().hashCode();
+    hash = (37 * hash) + AUDIOURL_FIELD_NUMBER;
+    hash = (53 * hash) + getAudioUrl().hashCode();
+    hash = (37 * hash) + IMAGEURL_FIELD_NUMBER;
+    hash = (53 * hash) + getImageUrl().hashCode();
+    hash = (37 * hash) + VIDEOURL_FIELD_NUMBER;
+    hash = (53 * hash) + getVideoUrl().hashCode();
     hash = (29 * hash) + unknownFields.hashCode();
     memoizedHashCode = hash;
     return hash;
@@ -468,6 +656,8 @@ private static final long serialVersionUID = 0L;
     @java.lang.Override
     public Builder clear() {
       super.clear();
+      roomId_ = "";
+
       if (authorBuilder_ == null) {
         author_ = null;
       } else {
@@ -480,7 +670,11 @@ private static final long serialVersionUID = 0L;
 
       text_ = "";
 
-      audio_ = com.google.protobuf.ByteString.EMPTY;
+      audioUrl_ = "";
+
+      imageUrl_ = "";
+
+      videoUrl_ = "";
 
       return this;
     }
@@ -508,6 +702,7 @@ private static final long serialVersionUID = 0L;
     @java.lang.Override
     public chatserver.gen.Message buildPartial() {
       chatserver.gen.Message result = new chatserver.gen.Message(this);
+      result.roomId_ = roomId_;
       if (authorBuilder_ == null) {
         result.author_ = author_;
       } else {
@@ -516,7 +711,9 @@ private static final long serialVersionUID = 0L;
       result.createdTime_ = createdTime_;
       result.msgType_ = msgType_;
       result.text_ = text_;
-      result.audio_ = audio_;
+      result.audioUrl_ = audioUrl_;
+      result.imageUrl_ = imageUrl_;
+      result.videoUrl_ = videoUrl_;
       onBuilt();
       return result;
     }
@@ -565,6 +762,10 @@ private static final long serialVersionUID = 0L;
 
     public Builder mergeFrom(chatserver.gen.Message other) {
       if (other == chatserver.gen.Message.getDefaultInstance()) return this;
+      if (!other.getRoomId().isEmpty()) {
+        roomId_ = other.roomId_;
+        onChanged();
+      }
       if (other.hasAuthor()) {
         mergeAuthor(other.getAuthor());
       }
@@ -578,8 +779,17 @@ private static final long serialVersionUID = 0L;
         text_ = other.text_;
         onChanged();
       }
-      if (other.getAudio() != com.google.protobuf.ByteString.EMPTY) {
-        setAudio(other.getAudio());
+      if (!other.getAudioUrl().isEmpty()) {
+        audioUrl_ = other.audioUrl_;
+        onChanged();
+      }
+      if (!other.getImageUrl().isEmpty()) {
+        imageUrl_ = other.imageUrl_;
+        onChanged();
+      }
+      if (!other.getVideoUrl().isEmpty()) {
+        videoUrl_ = other.videoUrl_;
+        onChanged();
       }
       this.mergeUnknownFields(other.unknownFields);
       onChanged();
@@ -607,6 +817,82 @@ private static final long serialVersionUID = 0L;
           mergeFrom(parsedMessage);
         }
       }
+      return this;
+    }
+
+    private java.lang.Object roomId_ = "";
+    /**
+     * <code>string roomId = 1;</code>
+     * @return The roomId.
+     */
+    public java.lang.String getRoomId() {
+      java.lang.Object ref = roomId_;
+      if (!(ref instanceof java.lang.String)) {
+        com.google.protobuf.ByteString bs =
+            (com.google.protobuf.ByteString) ref;
+        java.lang.String s = bs.toStringUtf8();
+        roomId_ = s;
+        return s;
+      } else {
+        return (java.lang.String) ref;
+      }
+    }
+    /**
+     * <code>string roomId = 1;</code>
+     * @return The bytes for roomId.
+     */
+    public com.google.protobuf.ByteString
+        getRoomIdBytes() {
+      java.lang.Object ref = roomId_;
+      if (ref instanceof String) {
+        com.google.protobuf.ByteString b = 
+            com.google.protobuf.ByteString.copyFromUtf8(
+                (java.lang.String) ref);
+        roomId_ = b;
+        return b;
+      } else {
+        return (com.google.protobuf.ByteString) ref;
+      }
+    }
+    /**
+     * <code>string roomId = 1;</code>
+     * @param value The roomId to set.
+     * @return This builder for chaining.
+     */
+    public Builder setRoomId(
+        java.lang.String value) {
+      if (value == null) {
+    throw new NullPointerException();
+  }
+  
+      roomId_ = value;
+      onChanged();
+      return this;
+    }
+    /**
+     * <code>string roomId = 1;</code>
+     * @return This builder for chaining.
+     */
+    public Builder clearRoomId() {
+      
+      roomId_ = getDefaultInstance().getRoomId();
+      onChanged();
+      return this;
+    }
+    /**
+     * <code>string roomId = 1;</code>
+     * @param value The bytes for roomId to set.
+     * @return This builder for chaining.
+     */
+    public Builder setRoomIdBytes(
+        com.google.protobuf.ByteString value) {
+      if (value == null) {
+    throw new NullPointerException();
+  }
+  checkByteStringIsUtf8(value);
+      
+      roomId_ = value;
+      onChanged();
       return this;
     }
 
@@ -890,48 +1176,230 @@ private static final long serialVersionUID = 0L;
       return this;
     }
 
-    private com.google.protobuf.ByteString audio_ = com.google.protobuf.ByteString.EMPTY;
+    private java.lang.Object audioUrl_ = "";
     /**
-     * <pre>
-     * 先直接返回，之后再考虑要不要返回id，来做优化
-     * </pre>
-     *
-     * <code>bytes audio = 7;</code>
-     * @return The audio.
+     * <code>string audioUrl = 7;</code>
+     * @return The audioUrl.
      */
-    @java.lang.Override
-    public com.google.protobuf.ByteString getAudio() {
-      return audio_;
+    public java.lang.String getAudioUrl() {
+      java.lang.Object ref = audioUrl_;
+      if (!(ref instanceof java.lang.String)) {
+        com.google.protobuf.ByteString bs =
+            (com.google.protobuf.ByteString) ref;
+        java.lang.String s = bs.toStringUtf8();
+        audioUrl_ = s;
+        return s;
+      } else {
+        return (java.lang.String) ref;
+      }
     }
     /**
-     * <pre>
-     * 先直接返回，之后再考虑要不要返回id，来做优化
-     * </pre>
-     *
-     * <code>bytes audio = 7;</code>
-     * @param value The audio to set.
+     * <code>string audioUrl = 7;</code>
+     * @return The bytes for audioUrl.
+     */
+    public com.google.protobuf.ByteString
+        getAudioUrlBytes() {
+      java.lang.Object ref = audioUrl_;
+      if (ref instanceof String) {
+        com.google.protobuf.ByteString b = 
+            com.google.protobuf.ByteString.copyFromUtf8(
+                (java.lang.String) ref);
+        audioUrl_ = b;
+        return b;
+      } else {
+        return (com.google.protobuf.ByteString) ref;
+      }
+    }
+    /**
+     * <code>string audioUrl = 7;</code>
+     * @param value The audioUrl to set.
      * @return This builder for chaining.
      */
-    public Builder setAudio(com.google.protobuf.ByteString value) {
+    public Builder setAudioUrl(
+        java.lang.String value) {
       if (value == null) {
     throw new NullPointerException();
   }
   
-      audio_ = value;
+      audioUrl_ = value;
       onChanged();
       return this;
     }
     /**
-     * <pre>
-     * 先直接返回，之后再考虑要不要返回id，来做优化
-     * </pre>
-     *
-     * <code>bytes audio = 7;</code>
+     * <code>string audioUrl = 7;</code>
      * @return This builder for chaining.
      */
-    public Builder clearAudio() {
+    public Builder clearAudioUrl() {
       
-      audio_ = getDefaultInstance().getAudio();
+      audioUrl_ = getDefaultInstance().getAudioUrl();
+      onChanged();
+      return this;
+    }
+    /**
+     * <code>string audioUrl = 7;</code>
+     * @param value The bytes for audioUrl to set.
+     * @return This builder for chaining.
+     */
+    public Builder setAudioUrlBytes(
+        com.google.protobuf.ByteString value) {
+      if (value == null) {
+    throw new NullPointerException();
+  }
+  checkByteStringIsUtf8(value);
+      
+      audioUrl_ = value;
+      onChanged();
+      return this;
+    }
+
+    private java.lang.Object imageUrl_ = "";
+    /**
+     * <code>string imageUrl = 8;</code>
+     * @return The imageUrl.
+     */
+    public java.lang.String getImageUrl() {
+      java.lang.Object ref = imageUrl_;
+      if (!(ref instanceof java.lang.String)) {
+        com.google.protobuf.ByteString bs =
+            (com.google.protobuf.ByteString) ref;
+        java.lang.String s = bs.toStringUtf8();
+        imageUrl_ = s;
+        return s;
+      } else {
+        return (java.lang.String) ref;
+      }
+    }
+    /**
+     * <code>string imageUrl = 8;</code>
+     * @return The bytes for imageUrl.
+     */
+    public com.google.protobuf.ByteString
+        getImageUrlBytes() {
+      java.lang.Object ref = imageUrl_;
+      if (ref instanceof String) {
+        com.google.protobuf.ByteString b = 
+            com.google.protobuf.ByteString.copyFromUtf8(
+                (java.lang.String) ref);
+        imageUrl_ = b;
+        return b;
+      } else {
+        return (com.google.protobuf.ByteString) ref;
+      }
+    }
+    /**
+     * <code>string imageUrl = 8;</code>
+     * @param value The imageUrl to set.
+     * @return This builder for chaining.
+     */
+    public Builder setImageUrl(
+        java.lang.String value) {
+      if (value == null) {
+    throw new NullPointerException();
+  }
+  
+      imageUrl_ = value;
+      onChanged();
+      return this;
+    }
+    /**
+     * <code>string imageUrl = 8;</code>
+     * @return This builder for chaining.
+     */
+    public Builder clearImageUrl() {
+      
+      imageUrl_ = getDefaultInstance().getImageUrl();
+      onChanged();
+      return this;
+    }
+    /**
+     * <code>string imageUrl = 8;</code>
+     * @param value The bytes for imageUrl to set.
+     * @return This builder for chaining.
+     */
+    public Builder setImageUrlBytes(
+        com.google.protobuf.ByteString value) {
+      if (value == null) {
+    throw new NullPointerException();
+  }
+  checkByteStringIsUtf8(value);
+      
+      imageUrl_ = value;
+      onChanged();
+      return this;
+    }
+
+    private java.lang.Object videoUrl_ = "";
+    /**
+     * <code>string videoUrl = 9;</code>
+     * @return The videoUrl.
+     */
+    public java.lang.String getVideoUrl() {
+      java.lang.Object ref = videoUrl_;
+      if (!(ref instanceof java.lang.String)) {
+        com.google.protobuf.ByteString bs =
+            (com.google.protobuf.ByteString) ref;
+        java.lang.String s = bs.toStringUtf8();
+        videoUrl_ = s;
+        return s;
+      } else {
+        return (java.lang.String) ref;
+      }
+    }
+    /**
+     * <code>string videoUrl = 9;</code>
+     * @return The bytes for videoUrl.
+     */
+    public com.google.protobuf.ByteString
+        getVideoUrlBytes() {
+      java.lang.Object ref = videoUrl_;
+      if (ref instanceof String) {
+        com.google.protobuf.ByteString b = 
+            com.google.protobuf.ByteString.copyFromUtf8(
+                (java.lang.String) ref);
+        videoUrl_ = b;
+        return b;
+      } else {
+        return (com.google.protobuf.ByteString) ref;
+      }
+    }
+    /**
+     * <code>string videoUrl = 9;</code>
+     * @param value The videoUrl to set.
+     * @return This builder for chaining.
+     */
+    public Builder setVideoUrl(
+        java.lang.String value) {
+      if (value == null) {
+    throw new NullPointerException();
+  }
+  
+      videoUrl_ = value;
+      onChanged();
+      return this;
+    }
+    /**
+     * <code>string videoUrl = 9;</code>
+     * @return This builder for chaining.
+     */
+    public Builder clearVideoUrl() {
+      
+      videoUrl_ = getDefaultInstance().getVideoUrl();
+      onChanged();
+      return this;
+    }
+    /**
+     * <code>string videoUrl = 9;</code>
+     * @param value The bytes for videoUrl to set.
+     * @return This builder for chaining.
+     */
+    public Builder setVideoUrlBytes(
+        com.google.protobuf.ByteString value) {
+      if (value == null) {
+    throw new NullPointerException();
+  }
+  checkByteStringIsUtf8(value);
+      
+      videoUrl_ = value;
       onChanged();
       return this;
     }
