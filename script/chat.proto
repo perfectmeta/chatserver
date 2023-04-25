@@ -30,34 +30,40 @@ message TextAudioStream {
 }
 
 message Message {
+  string roomId = 1;
   Author author = 3;
   int64 createdTime = 4;
   MsgType msgType = 5;
   string text = 6;
-  bytes audio = 7;  // 先直接返回，之后再考虑要不要返回id，来做优化
+  string audioUrl = 7;
+  string imageUrl = 8;
+  string videoUrl = 9;
 }
 
 enum MsgType {
-  AUDIO_ORIGIN = 0;  // 真人语音聊天
-  TEXT_ORIGIN = 1;   // chatgpt回复的
-  TEXT_ONLY = 2;     // 真人打字聊天
+  AUDIO_WITH_TEXT = 0;    // 真人语音聊天
+  TEXT_WITH_AUDIO = 1;    // chatgpt回复的
+  TEXT = 2;               // 真人打字聊天
+
+  IMAGE = 3;
+  VIDEO = 4;
 }
 
 message RoomInfo {
   string roomId = 1;
   Author you = 2;  // 先写死，只支持2个人
   Author ai = 3;
-  repeated Message history = 4;
 }
 
-message RoomId {
-  string roomId = 1;
+message Hello {
 }
 
 //////////////////////////////////////
 
 service ChatService {
-  rpc EnterRoom(RoomId) returns (RoomInfo);
+  rpc ListRoom(Hello) returns (stream RoomInfo);
+  rpc GetMessageStream(Hello) returns (stream Message);
+
   rpc SpeechRecognize(stream AudioStream) returns (stream TextStream);
   rpc Chat(TextMessage) returns (stream TextAudioStream);
 }
