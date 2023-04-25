@@ -2,6 +2,7 @@ package third.asr;
 
 import org.java_websocket.handshake.ServerHandshake;
 
+import java.io.InputStream;
 import java.net.URI;
 import java.util.logging.Logger;
 
@@ -9,7 +10,7 @@ public class XFYASRSession extends org.java_websocket.client.WebSocketClient imp
     public static final Logger logger = Logger.getLogger(XFYASRSession.class.getName());
     private boolean isValid = false;
 
-    public XFYASRSession(URI serverUri) {
+    public XFYASRSession(URI serverUri, InputStream audioStream) {
         super(serverUri);
     }
 

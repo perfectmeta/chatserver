@@ -60,8 +60,9 @@ public class App {
      * Main method.  This comment makes the linter happy.
      */
     public static void main(String[] args) throws Exception {
-        var content =  XFYtts.request("你好，中国");
-        System.out.println(content);
+        // var content =  XFYtts.request("你好，中国");
+        XFYtts.makeSession("None");
+        // System.out.println(content);
         // XFYasr.makeSession();
 //        App server = new App(8980);
 //        server.start();

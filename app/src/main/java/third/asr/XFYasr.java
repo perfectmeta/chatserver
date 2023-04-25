@@ -3,6 +3,9 @@ package third.asr;
 import security.KeyManager;
 import security.authentication.xfy.AuthURLEncoder;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.net.URI;
 import java.util.logging.Logger;
 
@@ -20,7 +23,12 @@ public class XFYasr {
         }
         url = url.replace("https:", "wss:");
         logger.info(url);
-        var session = new XFYASRSession(URI.create(url));
+        XFYASRSession session = null;
+        try {
+            session = new XFYASRSession(URI.create(url), new FileInputStream(new File("")));
+        } catch (FileNotFoundException e) {
+            throw new RuntimeException(e);
+        }
         session.connect();
         return session;
     }

@@ -7,6 +7,7 @@ import okhttp3.*;
 import security.KeyManager;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.net.URI;
 import java.nio.ByteBuffer;
 import java.nio.charset.StandardCharsets;
@@ -74,7 +75,7 @@ public class XFYtts {
     }
 
     // 流式API，走的是websocket协议，使用讯飞流式tts api接口
-    public static XFYTTSSession makeSession(String content) {
+    public static InputStream makeSession(String content) {
         String url;
         try {
             url = AuthURLEncoder.encodeXFYAuthorUrl(ttsHost, KeyManager.XFY_API_KEY, KeyManager.XFY_API_SECRET, "GET");
@@ -82,9 +83,9 @@ public class XFYtts {
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
-        var session = new XFYTTSSession(URI.create(url));
+        var session = new XFYTTSSession(URI.create(url), content);
         session.connect();
-        return session;
+        return session.getInputStream();
     }
 
     // 请求响应式TTS，走的是http请求，采用一次提交多次查询的方式来获取回应
