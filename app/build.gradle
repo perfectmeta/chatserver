@@ -53,16 +53,19 @@ java {
 }
 
 application {
-    // Define the main class for the application.
-    mainClass = 'chatserver.App'
+    mainClass = 'chatserver.ServerApp'
 }
 
 tasks.withType(JavaCompile).forEach {
     it.options.compilerArgs += "--enable-preview"
 }
 
+run {
+    jvmArgs += ['--enable-preview']
+}
 
 tasks.named('test') {
     // Use JUnit Platform for unit tests.
     useJUnitPlatform()
+    jvmArgs += ['--enable-preview']
 }
