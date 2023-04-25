@@ -16,7 +16,6 @@ private static final long serialVersionUID = 0L;
     super(builder);
   }
   private AudioStream() {
-    roomId_ = "";
     audio_ = com.google.protobuf.ByteString.EMPTY;
   }
 
@@ -50,10 +49,9 @@ private static final long serialVersionUID = 0L;
           case 0:
             done = true;
             break;
-          case 10: {
-            java.lang.String s = input.readStringRequireUtf8();
+          case 8: {
 
-            roomId_ = s;
+            roomId_ = input.readInt64();
             break;
           }
           case 34: {
@@ -94,41 +92,14 @@ private static final long serialVersionUID = 0L;
   }
 
   public static final int ROOMID_FIELD_NUMBER = 1;
-  private volatile java.lang.Object roomId_;
+  private long roomId_;
   /**
-   * <code>string roomId = 1;</code>
+   * <code>int64 roomId = 1;</code>
    * @return The roomId.
    */
   @java.lang.Override
-  public java.lang.String getRoomId() {
-    java.lang.Object ref = roomId_;
-    if (ref instanceof java.lang.String) {
-      return (java.lang.String) ref;
-    } else {
-      com.google.protobuf.ByteString bs = 
-          (com.google.protobuf.ByteString) ref;
-      java.lang.String s = bs.toStringUtf8();
-      roomId_ = s;
-      return s;
-    }
-  }
-  /**
-   * <code>string roomId = 1;</code>
-   * @return The bytes for roomId.
-   */
-  @java.lang.Override
-  public com.google.protobuf.ByteString
-      getRoomIdBytes() {
-    java.lang.Object ref = roomId_;
-    if (ref instanceof java.lang.String) {
-      com.google.protobuf.ByteString b = 
-          com.google.protobuf.ByteString.copyFromUtf8(
-              (java.lang.String) ref);
-      roomId_ = b;
-      return b;
-    } else {
-      return (com.google.protobuf.ByteString) ref;
-    }
+  public long getRoomId() {
+    return roomId_;
   }
 
   public static final int AUDIO_FIELD_NUMBER = 4;
@@ -160,8 +131,8 @@ private static final long serialVersionUID = 0L;
   @java.lang.Override
   public void writeTo(com.google.protobuf.CodedOutputStream output)
                       throws java.io.IOException {
-    if (!getRoomIdBytes().isEmpty()) {
-      com.google.protobuf.GeneratedMessageV3.writeString(output, 1, roomId_);
+    if (roomId_ != 0L) {
+      output.writeInt64(1, roomId_);
     }
     if (!audio_.isEmpty()) {
       output.writeBytes(4, audio_);
@@ -175,8 +146,9 @@ private static final long serialVersionUID = 0L;
     if (size != -1) return size;
 
     size = 0;
-    if (!getRoomIdBytes().isEmpty()) {
-      size += com.google.protobuf.GeneratedMessageV3.computeStringSize(1, roomId_);
+    if (roomId_ != 0L) {
+      size += com.google.protobuf.CodedOutputStream
+        .computeInt64Size(1, roomId_);
     }
     if (!audio_.isEmpty()) {
       size += com.google.protobuf.CodedOutputStream
@@ -197,8 +169,8 @@ private static final long serialVersionUID = 0L;
     }
     chatserver.gen.AudioStream other = (chatserver.gen.AudioStream) obj;
 
-    if (!getRoomId()
-        .equals(other.getRoomId())) return false;
+    if (getRoomId()
+        != other.getRoomId()) return false;
     if (!getAudio()
         .equals(other.getAudio())) return false;
     if (!unknownFields.equals(other.unknownFields)) return false;
@@ -213,7 +185,8 @@ private static final long serialVersionUID = 0L;
     int hash = 41;
     hash = (19 * hash) + getDescriptor().hashCode();
     hash = (37 * hash) + ROOMID_FIELD_NUMBER;
-    hash = (53 * hash) + getRoomId().hashCode();
+    hash = (53 * hash) + com.google.protobuf.Internal.hashLong(
+        getRoomId());
     hash = (37 * hash) + AUDIO_FIELD_NUMBER;
     hash = (53 * hash) + getAudio().hashCode();
     hash = (29 * hash) + unknownFields.hashCode();
@@ -349,7 +322,7 @@ private static final long serialVersionUID = 0L;
     @java.lang.Override
     public Builder clear() {
       super.clear();
-      roomId_ = "";
+      roomId_ = 0L;
 
       audio_ = com.google.protobuf.ByteString.EMPTY;
 
@@ -429,9 +402,8 @@ private static final long serialVersionUID = 0L;
 
     public Builder mergeFrom(chatserver.gen.AudioStream other) {
       if (other == chatserver.gen.AudioStream.getDefaultInstance()) return this;
-      if (!other.getRoomId().isEmpty()) {
-        roomId_ = other.roomId_;
-        onChanged();
+      if (other.getRoomId() != 0L) {
+        setRoomId(other.getRoomId());
       }
       if (other.getAudio() != com.google.protobuf.ByteString.EMPTY) {
         setAudio(other.getAudio());
@@ -465,78 +437,33 @@ private static final long serialVersionUID = 0L;
       return this;
     }
 
-    private java.lang.Object roomId_ = "";
+    private long roomId_ ;
     /**
-     * <code>string roomId = 1;</code>
+     * <code>int64 roomId = 1;</code>
      * @return The roomId.
      */
-    public java.lang.String getRoomId() {
-      java.lang.Object ref = roomId_;
-      if (!(ref instanceof java.lang.String)) {
-        com.google.protobuf.ByteString bs =
-            (com.google.protobuf.ByteString) ref;
-        java.lang.String s = bs.toStringUtf8();
-        roomId_ = s;
-        return s;
-      } else {
-        return (java.lang.String) ref;
-      }
+    @java.lang.Override
+    public long getRoomId() {
+      return roomId_;
     }
     /**
-     * <code>string roomId = 1;</code>
-     * @return The bytes for roomId.
-     */
-    public com.google.protobuf.ByteString
-        getRoomIdBytes() {
-      java.lang.Object ref = roomId_;
-      if (ref instanceof String) {
-        com.google.protobuf.ByteString b = 
-            com.google.protobuf.ByteString.copyFromUtf8(
-                (java.lang.String) ref);
-        roomId_ = b;
-        return b;
-      } else {
-        return (com.google.protobuf.ByteString) ref;
-      }
-    }
-    /**
-     * <code>string roomId = 1;</code>
+     * <code>int64 roomId = 1;</code>
      * @param value The roomId to set.
      * @return This builder for chaining.
      */
-    public Builder setRoomId(
-        java.lang.String value) {
-      if (value == null) {
-    throw new NullPointerException();
-  }
-  
+    public Builder setRoomId(long value) {
+      
       roomId_ = value;
       onChanged();
       return this;
     }
     /**
-     * <code>string roomId = 1;</code>
+     * <code>int64 roomId = 1;</code>
      * @return This builder for chaining.
      */
     public Builder clearRoomId() {
       
-      roomId_ = getDefaultInstance().getRoomId();
-      onChanged();
-      return this;
-    }
-    /**
-     * <code>string roomId = 1;</code>
-     * @param value The bytes for roomId to set.
-     * @return This builder for chaining.
-     */
-    public Builder setRoomIdBytes(
-        com.google.protobuf.ByteString value) {
-      if (value == null) {
-    throw new NullPointerException();
-  }
-  checkByteStringIsUtf8(value);
-      
-      roomId_ = value;
+      roomId_ = 0L;
       onChanged();
       return this;
     }

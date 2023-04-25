@@ -1,6 +1,5 @@
 package chatserver.logic;
 
-import chatserver.controller.UserController;
 import chatserver.gen.*;
 import io.grpc.stub.StreamObserver;
 import org.lognet.springboot.grpc.GRpcService;
@@ -8,20 +7,23 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 @GRpcService
 public class ChatService extends ChatServiceGrpc.ChatServiceImplBase {
+
     @Autowired
-    private UserController users;
+    private GetRoomList getRoomList;
 
     @Override
-    public void listRoom(Hello request, StreamObserver<RoomInfo> responseObserver) {
-        users.findByUserId(1234);
-        RoomInfo ri = RoomInfo.newBuilder().setRoomId("test room id").build();
-        responseObserver.onNext(ri);
-        responseObserver.onCompleted();
+    public void getRoomList(Hello request, StreamObserver<RoomInfo> responseObserver) {
+        getRoomList.run(request, responseObserver);
     }
 
     @Override
-    public void getMessageStream(Hello request, StreamObserver<Message> responseObserver) {
-        super.getMessageStream(request, responseObserver);
+    public void getNewMessageStream(Hello request, StreamObserver<Message> responseObserver) {
+        super.getNewMessageStream(request, responseObserver);
+    }
+
+    @Override
+    public void enterRoom(EnterRoomReq request, StreamObserver<Message> responseObserver) {
+        super.enterRoom(request, responseObserver);
     }
 
     @Override

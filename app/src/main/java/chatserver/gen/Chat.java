@@ -54,6 +54,11 @@ public final class Chat {
   static final 
     com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
       internal_static_Hello_fieldAccessorTable;
+  static final com.google.protobuf.Descriptors.Descriptor
+    internal_static_EnterRoomReq_descriptor;
+  static final 
+    com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
+      internal_static_EnterRoomReq_fieldAccessorTable;
 
   public static com.google.protobuf.Descriptors.FileDescriptor
       getDescriptor() {
@@ -63,25 +68,31 @@ public final class Chat {
       descriptor;
   static {
     java.lang.String[] descriptorData = {
-      "\n\nchat.proto\"$\n\006Author\022\014\n\004type\030\001 \001(\005\022\014\n\004" +
-      "name\030\003 \001(\t\",\n\013AudioStream\022\016\n\006roomId\030\001 \001(" +
-      "\t\022\r\n\005audio\030\004 \001(\014\"\032\n\nTextStream\022\014\n\004text\030\004" +
-      " \001(\t\"+\n\013TextMessage\022\016\n\006roomId\030\001 \001(\t\022\014\n\004t" +
-      "ext\030\003 \001(\t\".\n\017TextAudioStream\022\014\n\004text\030\004 \001" +
-      "(\t\022\r\n\005audio\030\005 \001(\014\"\246\001\n\007Message\022\016\n\006roomId\030" +
-      "\001 \001(\t\022\027\n\006author\030\003 \001(\0132\007.Author\022\023\n\013create" +
-      "dTime\030\004 \001(\003\022\031\n\007msgType\030\005 \001(\0162\010.MsgType\022\014" +
-      "\n\004text\030\006 \001(\t\022\020\n\010audioUrl\030\007 \001(\t\022\020\n\010imageU" +
-      "rl\030\010 \001(\t\022\020\n\010videoUrl\030\t \001(\t\"E\n\010RoomInfo\022\016" +
-      "\n\006roomId\030\001 \001(\t\022\024\n\003you\030\002 \001(\0132\007.Author\022\023\n\002" +
-      "ai\030\003 \001(\0132\007.Author\"\007\n\005Hello*S\n\007MsgType\022\023\n" +
-      "\017AUDIO_WITH_TEXT\020\000\022\023\n\017TEXT_WITH_AUDIO\020\001\022" +
-      "\010\n\004TEXT\020\002\022\t\n\005IMAGE\020\003\022\t\n\005VIDEO\020\0042\262\001\n\013Chat" +
-      "Service\022\037\n\010ListRoom\022\006.Hello\032\t.RoomInfo0\001" +
-      "\022&\n\020GetMessageStream\022\006.Hello\032\010.Message0\001" +
-      "\0220\n\017SpeechRecognize\022\014.AudioStream\032\013.Text" +
-      "Stream(\0010\001\022(\n\004Chat\022\014.TextMessage\032\020.TextA" +
-      "udioStream0\001B\022\n\016chatserver.genP\001b\006proto3"
+      "\n\nchat.proto\"4\n\006Author\022\014\n\004type\030\001 \001(\005\022\016\n\006" +
+      "userId\030\002 \001(\003\022\014\n\004name\030\003 \001(\t\",\n\013AudioStrea" +
+      "m\022\016\n\006roomId\030\001 \001(\003\022\r\n\005audio\030\004 \001(\014\"\032\n\nText" +
+      "Stream\022\014\n\004text\030\004 \001(\t\"+\n\013TextMessage\022\016\n\006r" +
+      "oomId\030\001 \001(\003\022\014\n\004text\030\003 \001(\t\".\n\017TextAudioSt" +
+      "ream\022\014\n\004text\030\004 \001(\t\022\r\n\005audio\030\005 \001(\014\"\246\001\n\007Me" +
+      "ssage\022\016\n\006roomId\030\001 \001(\003\022\027\n\006author\030\003 \001(\0132\007." +
+      "Author\022\023\n\013createdTime\030\004 \001(\003\022\031\n\007msgType\030\005" +
+      " \001(\0162\010.MsgType\022\014\n\004text\030\006 \001(\t\022\020\n\010audioUrl" +
+      "\030\007 \001(\t\022\020\n\010imageUrl\030\010 \001(\t\022\020\n\010videoUrl\030\t \001" +
+      "(\t\"\233\001\n\010RoomInfo\022\016\n\006roomId\030\001 \001(\003\022\020\n\010roomN" +
+      "ame\030\002 \001(\t\022\024\n\003you\030\003 \001(\0132\007.Author\022\023\n\002ai\030\004 " +
+      "\001(\0132\007.Author\022\023\n\013createdTime\030\005 \001(\003\022\026\n\016fir" +
+      "stMessageId\030\006 \001(\003\022\025\n\rlastMessageId\030\007 \001(\003" +
+      "\"\007\n\005Hello\"5\n\014EnterRoomReq\022\016\n\006roomId\030\001 \001(" +
+      "\003\022\025\n\rlastMessageId\030\002 \001(\003*S\n\007MsgType\022\023\n\017A" +
+      "UDIO_WITH_TEXT\020\000\022\023\n\017TEXT_WITH_AUDIO\020\001\022\010\n" +
+      "\004TEXT\020\002\022\t\n\005IMAGE\020\003\022\t\n\005VIDEO\020\0042\340\001\n\013ChatSe" +
+      "rvice\022\"\n\013GetRoomList\022\006.Hello\032\t.RoomInfo0" +
+      "\001\022)\n\023GetNewMessageStream\022\006.Hello\032\010.Messa" +
+      "ge0\001\022&\n\tEnterRoom\022\r.EnterRoomReq\032\010.Messa" +
+      "ge0\001\0220\n\017SpeechRecognize\022\014.AudioStream\032\013." +
+      "TextStream(\0010\001\022(\n\004Chat\022\014.TextMessage\032\020.T" +
+      "extAudioStream0\001B\022\n\016chatserver.genP\001b\006pr" +
+      "oto3"
     };
     descriptor = com.google.protobuf.Descriptors.FileDescriptor
       .internalBuildGeneratedFileFrom(descriptorData,
@@ -92,7 +103,7 @@ public final class Chat {
     internal_static_Author_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_Author_descriptor,
-        new java.lang.String[] { "Type", "Name", });
+        new java.lang.String[] { "Type", "UserId", "Name", });
     internal_static_AudioStream_descriptor =
       getDescriptor().getMessageTypes().get(1);
     internal_static_AudioStream_fieldAccessorTable = new
@@ -128,13 +139,19 @@ public final class Chat {
     internal_static_RoomInfo_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_RoomInfo_descriptor,
-        new java.lang.String[] { "RoomId", "You", "Ai", });
+        new java.lang.String[] { "RoomId", "RoomName", "You", "Ai", "CreatedTime", "FirstMessageId", "LastMessageId", });
     internal_static_Hello_descriptor =
       getDescriptor().getMessageTypes().get(7);
     internal_static_Hello_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_Hello_descriptor,
         new java.lang.String[] { });
+    internal_static_EnterRoomReq_descriptor =
+      getDescriptor().getMessageTypes().get(8);
+    internal_static_EnterRoomReq_fieldAccessorTable = new
+      com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
+        internal_static_EnterRoomReq_descriptor,
+        new java.lang.String[] { "RoomId", "LastMessageId", });
   }
 
   // @@protoc_insertion_point(outer_class_scope)

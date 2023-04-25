@@ -1,4 +1,4 @@
-package chatserver.controller;
+package chatserver.service;
 
 import chatserver.dao.User;
 import chatserver.dao.UserRepository;
@@ -7,10 +7,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.cache.annotation.Caching;
-import org.springframework.stereotype.Controller;
+import org.springframework.stereotype.Service;
 
-@Controller
-public class UserController {  // 不抽象成接口，直接用，因为这里不太可能会有扩展
+@Service
+public class UserService {  // 不抽象成接口，直接用，因为这里不太可能会有扩展
 
     @Autowired
     private UserRepository users;

@@ -7,7 +7,6 @@
  */
 
 plugins {
-    // Apply the application plugin to add support for building a CLI application in Java.
     id 'application'
     id 'org.springframework.boot' version '3.0.6'
     id 'io.spring.dependency-management' version '1.1.0'
@@ -30,10 +29,6 @@ dependencies {
     implementation 'com.fasterxml.jackson.core:jackson-databind:2.12.7.1'
     implementation 'com.squareup.okhttp3:okhttp:4.9.1'
     implementation 'com.google.guava:guava:31.1-jre'
-
-//    runtimeOnly 'io.grpc:grpc-netty-shaded:1.54.0'
-//    implementation 'io.grpc:grpc-protobuf:1.54.0'
-//    implementation 'io.grpc:grpc-stub:1.54.0'
 
     implementation 'org.springframework.boot:spring-boot-starter'
     implementation 'org.springframework.boot:spring-boot-starter-cache'

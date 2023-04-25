@@ -1,6 +1,6 @@
 package chatserver.logic;
 
-import chatserver.controller.UserController;
+import chatserver.service.UserService;
 import chatserver.dao.User;
 import io.grpc.*;
 import io.grpc.Metadata.Key;
@@ -12,7 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 public class AuthTokenInterceptor implements ServerInterceptor {
 
     @Autowired
-    private UserController users;  // 不够service层了，直接用repo
+    private UserService users;  // 不够service层了，直接用repo
 
     public static final Context.Key<User> USER = Context.key("user");
 

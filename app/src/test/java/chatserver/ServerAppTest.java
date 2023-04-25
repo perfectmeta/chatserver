@@ -26,7 +26,7 @@ import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
 
 @SpringBootTest
-class AppTest {
+class ServerAppTest {
 
 
     public static class AuthTokenClientInterceptor implements ClientInterceptor {
@@ -66,7 +66,7 @@ class AppTest {
 
     @Test
     void listRoom() {
-        blockingStub.listRoom(Hello.newBuilder().build()).forEachRemaining(
+        blockingStub.getRoomList(Hello.newBuilder().build()).forEachRemaining(
                 roomInfo -> System.out.print("blocking enter room ok: " + roomInfo.toString()));
 
     }
@@ -93,7 +93,7 @@ class AppTest {
                 finishLatch.countDown();
             }
         };
-        asyncStub.listRoom(Hello.newBuilder().build(), observer);
+        asyncStub.getRoomList(Hello.newBuilder().build(), observer);
 
         if (!finishLatch.await(1, TimeUnit.SECONDS)) {
             System.out.println("exit! do not wait");
