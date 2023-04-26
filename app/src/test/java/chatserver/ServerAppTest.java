@@ -3,29 +3,22 @@
  */
 package chatserver;
 
-import chatserver.gen.ChatServiceGrpc;
-import chatserver.gen.Hello;
-import chatserver.gen.RoomInfo;
-import io.grpc.ClientInterceptor;
-import io.grpc.Grpc;
-import io.grpc.InsecureChannelCredentials;
-import io.grpc.ManagedChannel;
-import io.grpc.stub.StreamObserver;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
-import io.grpc.CallOptions;
-import io.grpc.Channel;
-import io.grpc.ClientCall;
-import io.grpc.ForwardingClientCall;
-import io.grpc.Metadata;
+import chatserver.gen.*;
+import io.grpc.*;
 import io.grpc.Metadata.Key;
-import io.grpc.MethodDescriptor;
+import io.grpc.stub.StreamObserver;
+import org.checkerframework.dataflow.qual.TerminatesExecution;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestInstance;
 import org.springframework.boot.test.context.SpringBootTest;
 
+import java.util.Iterator;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
 
 @SpringBootTest
+@TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class ServerAppTest {
 
 
@@ -54,7 +47,7 @@ class ServerAppTest {
     private ChatServiceGrpc.ChatServiceStub asyncStub;
 
 
-    @BeforeEach
+    @BeforeAll
     void init() {
         String target = "localhost:8080";
         ManagedChannel channel = Grpc.newChannelBuilder(target, InsecureChannelCredentials.create())
@@ -67,17 +60,17 @@ class ServerAppTest {
     @Test
     void listRoom() {
         blockingStub.getRoomList(Hello.newBuilder().build()).forEachRemaining(
-                roomInfo -> System.out.print("blocking enter room ok: " + roomInfo.toString()));
+                roomInfo -> System.out.print("blocking list room ok: " + roomInfo.toString()));
     }
 
     @Test
-    public void asyncListRoom() throws InterruptedException {
+    void asyncListRoom() throws InterruptedException {
         CountDownLatch finishLatch = new CountDownLatch(1);
         StreamObserver<RoomInfo> observer = new StreamObserver<>() {
 
             @Override
             public void onNext(RoomInfo value) {
-                System.out.print("async enter room ok: " + value);
+                System.out.print("async list room ok: " + value);
             }
 
             @Override
@@ -88,7 +81,7 @@ class ServerAppTest {
 
             @Override
             public void onCompleted() {
-                System.out.println("async enter room completed");
+                System.out.println("async list room completed");
                 finishLatch.countDown();
             }
         };
@@ -97,6 +90,15 @@ class ServerAppTest {
         if (!finishLatch.await(1, TimeUnit.SECONDS)) {
             System.out.println("exit! do not wait");
         }
+    }
+
+    @Test
+    void chat() {
+        TextMessage msg = TextMessage.newBuilder().setRoomId(1).setText("are you ok?").build();
+        Iterator<TextAudioStream> chat = blockingStub.chat(msg);
+        chat.forEachRemaining(textAudioStream -> {
+            System.out.print(textAudioStream.getText() + " - ");
+        });
     }
 
 }
