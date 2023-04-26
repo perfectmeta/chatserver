@@ -35,7 +35,7 @@ public class KeyManager {
         if (Strings.isNullOrEmpty(configFile)
                 || !Files.exists(Paths.get(configFile).toAbsolutePath())
                 || !Files.isRegularFile(Paths.get(configFile).toAbsolutePath())) {
-            configFile = System.getProperty("user.dir") + File.separator + ".." + File.separator + "key.properties";
+            configFile = System.getProperty("user.dir") + File.separator + "key.properties";
         }
         var properties = new Properties();
         try (var fileInputStream = new FileInputStream(configFile)) {

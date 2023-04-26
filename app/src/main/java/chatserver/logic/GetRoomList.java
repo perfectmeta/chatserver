@@ -1,6 +1,7 @@
 package chatserver.logic;
 
 import chatserver.dao.Room;
+import chatserver.dao.User;
 import chatserver.gen.Author;
 import chatserver.gen.Hello;
 import chatserver.gen.RoomInfo;
@@ -19,7 +20,27 @@ public class GetRoomList {
 
     public void run(Hello request, StreamObserver<RoomInfo> responseObserver) {
 
-        List<Room> byUserId = roomService.findByUserId(AuthTokenInterceptor.USER.get().getUserId());
+        User user = AuthTokenInterceptor.USER.get();
+        List<Room> byUserId = roomService.findByUserId(user.getUserId());
+
+        if (byUserId.isEmpty()) {
+            Room newRoom = new Room();
+            newRoom.setRoomName("english classroom");
+            newRoom.setUserType(Msg.UT_HUMAN);
+            newRoom.setUserId(user.getUserId());
+            newRoom.setUserShowName(user.getNickName());
+            newRoom.setAiType(Msg.UT_AI_TEACHER);
+            newRoom.setAiUserId(-1);  // TODO 给它id
+            newRoom.setAiShowName("lisa");
+            newRoom.setCreatedTime(System.currentTimeMillis());
+            newRoom.setFirstMessageId(-1);
+            newRoom.setLastMessageId(-1);
+            roomService.addRoom(newRoom);
+
+            byUserId = roomService.findByUserId(user.getUserId());
+        }
+
+
         for (Room room : byUserId) {
             RoomInfo.Builder b = RoomInfo.newBuilder();
             b.setRoomId(room.getRoomId());

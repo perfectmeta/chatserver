@@ -16,11 +16,13 @@ public class Room {
 
     private String roomName;
 
+    private long userType;
     private long userId;
     private String userShowName;
 
+    private long aiType;
 
-    private int aiUserId;  // 1: 英语老师, 2：虚拟朋友
+    private int aiUserId;
 
     private String aiShowName;
 
@@ -51,6 +53,14 @@ public class Room {
         this.roomName = roomName;
     }
 
+    public long getUserType() {
+        return userType;
+    }
+
+    public void setUserType(long userType) {
+        this.userType = userType;
+    }
+
     public long getUserId() {
         return userId;
     }
@@ -65,6 +75,14 @@ public class Room {
 
     public void setUserShowName(String userShowName) {
         this.userShowName = userShowName;
+    }
+
+    public long getAiType() {
+        return aiType;
+    }
+
+    public void setAiType(long aiType) {
+        this.aiType = aiType;
     }
 
     public int getAiUserId() {
@@ -106,5 +124,6 @@ public class Room {
     public void setLastMessageId(long lastMessageId) {
         this.lastMessageId = lastMessageId;
     }
+
 
 }

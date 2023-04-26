@@ -74,6 +74,9 @@ public class Chat {
                     if (chatCompletionChunk.getChoices().size() > 0) {
                         ChatCompletionChoice choice = chatCompletionChunk.getChoices().get(0);
                         String content = choice.getMessage().getContent();
+                        if (content == null) { // 不知道为什么会这样
+                            content = "";
+                        }
                         gptReturn.append(content);
                         TextAudioStream t = TextAudioStream.newBuilder().setText(content).build();
                         responseObserver.onNext(t);
