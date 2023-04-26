@@ -22,7 +22,6 @@ public class XFYasr {
             throw new RuntimeException(e);
         }
         url = url.replace("https:", "wss:");
-        logger.info(url);
         XFYASRSession session = null;
         try {
             session = new XFYASRSession(URI.create(url), new FileInputStream(new File("")));

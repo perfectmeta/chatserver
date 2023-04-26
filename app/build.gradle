@@ -58,6 +58,7 @@ application {
 
 tasks.withType(JavaCompile).forEach {
     it.options.compilerArgs += "--enable-preview"
+    // it.options.compilerArgs += "-Xlint:preview"
 }
 
 run {

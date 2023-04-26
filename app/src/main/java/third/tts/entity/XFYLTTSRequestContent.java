@@ -1,6 +1,8 @@
 package third.tts.entity;
 
 
+import util.RecordBuilder;
+
 import java.util.Objects;
 
 record RequestHeader(String app_id) {

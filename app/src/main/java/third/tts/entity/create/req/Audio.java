@@ -1,6 +1,6 @@
 package third.tts.entity.create.req;
 
-import third.tts.entity.RecordBuilder;
+import util.RecordBuilder;
 
 public record Audio(String encoding, int sample_rate) {
     public static class Builder implements RecordBuilder<Audio> {

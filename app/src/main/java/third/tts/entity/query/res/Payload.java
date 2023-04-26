@@ -1,6 +1,6 @@
 package third.tts.entity.query.res;
 
-import third.tts.entity.RecordBuilder;
+import util.RecordBuilder;
 
 public record Payload(Audio audio, Pybuf pybuf) {
     public static class Builder implements RecordBuilder<Payload> {
