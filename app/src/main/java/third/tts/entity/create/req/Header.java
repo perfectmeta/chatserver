@@ -1,6 +1,6 @@
 package third.tts.entity.create.req;
 
-import third.tts.entity.RecordBuilder;
+import util.RecordBuilder;
 
 public record Header(String app_id) {
     public static class Builder implements RecordBuilder<Header> {

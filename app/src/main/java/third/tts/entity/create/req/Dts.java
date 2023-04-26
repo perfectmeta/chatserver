@@ -1,6 +1,6 @@
 package third.tts.entity.create.req;
 
-import third.tts.entity.RecordBuilder;
+import util.RecordBuilder;
 
 public record Dts(String vcn, String language, int speed, int volume, int pitch, int rhy,
                   Audio audio, Pybuf pybuf) {

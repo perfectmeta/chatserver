@@ -1,6 +1,6 @@
 package third.tts.entity.create.req;
 
-import third.tts.entity.RecordBuilder;
+import util.RecordBuilder;
 
 record Payload(Text text) {
     public static class Builder implements RecordBuilder<Payload> {

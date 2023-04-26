@@ -68,7 +68,6 @@ class ServerAppTest {
     void listRoom() {
         blockingStub.getRoomList(Hello.newBuilder().build()).forEachRemaining(
                 roomInfo -> System.out.print("blocking enter room ok: " + roomInfo.toString()));
-
     }
 
     @Test

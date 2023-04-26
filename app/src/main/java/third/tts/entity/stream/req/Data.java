@@ -1,6 +1,6 @@
 package third.tts.entity.stream.req;
 
-import third.tts.entity.RecordBuilder;
+import util.RecordBuilder;
 
 public record Data(String text, int status) {
     public static class Builder implements RecordBuilder<Data> {

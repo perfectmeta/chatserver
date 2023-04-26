@@ -1,6 +1,6 @@
 package third.tts.entity.query.req;
 
-import third.tts.entity.RecordBuilder;
+import util.RecordBuilder;
 
 record Header(String app_id, String task_id) {
     public static class Builder implements RecordBuilder<Header> {
