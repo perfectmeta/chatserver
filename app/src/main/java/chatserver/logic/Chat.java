@@ -13,7 +13,7 @@ import com.theokanning.openai.service.OpenAiService;
 import io.grpc.stub.StreamObserver;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-import security.KeyManager;
+import chatserver.security.KeyManager;
 
 import java.util.ArrayList;
 import java.util.List;
