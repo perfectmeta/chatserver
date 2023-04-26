@@ -16,6 +16,8 @@ public class KeyManager {
     public static String OPENAI_KEY = "";
     public static String TEST_KEY = "";
 
+    public static String TEACHER_PROMPT = "";
+
     static {
         loadKey();
     }
@@ -48,6 +50,8 @@ public class KeyManager {
         ASR_KEY = properties.getProperty("asr.key");
         OPENAI_KEY = properties.getProperty("openai.key");
         TEST_KEY = properties.getProperty("test.key");
+        TEACHER_PROMPT = properties.getProperty("teacher.prompt");
+
     }
 
 }

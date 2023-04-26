@@ -4,6 +4,7 @@ option java_multiple_files = true;
 option java_package = "chatserver.gen";
 
 //////////////////////////////////////聊天模型
+// 现在id都用的int64，未来可能会改为string
 
 message Author {
   int32 type = 1; // 0: 真人，1：AI英语老师, 2：AI女友
@@ -26,7 +27,7 @@ message TextMessage {
 }
 
 message TextAudioStream {
-  string text = 4;  // chatgpt生成
+  string text = 4; // chatgpt生成
   bytes audio = 5; // tts生成
 }
 

@@ -6,3 +6,4 @@ build
 /app/out
 .idea
 .idea/*
+/key.properties

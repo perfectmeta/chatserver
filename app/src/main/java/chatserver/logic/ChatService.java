@@ -11,6 +11,19 @@ public class ChatService extends ChatServiceGrpc.ChatServiceImplBase {
     @Autowired
     private GetRoomList getRoomList;
 
+    @Autowired
+    private GetNewMessageStream getNewMessageStream;
+
+    @Autowired
+    private EnterRoom enterRoom;
+
+    @Autowired
+    private SpeechRecognize speechRecognize;
+
+    @Autowired
+    private Chat chat;
+
+
     @Override
     public void getRoomList(Hello request, StreamObserver<RoomInfo> responseObserver) {
         getRoomList.run(request, responseObserver);
@@ -18,21 +31,21 @@ public class ChatService extends ChatServiceGrpc.ChatServiceImplBase {
 
     @Override
     public void getNewMessageStream(Hello request, StreamObserver<Message> responseObserver) {
-        super.getNewMessageStream(request, responseObserver);
+        getNewMessageStream.run(request, responseObserver);
     }
 
     @Override
     public void enterRoom(EnterRoomReq request, StreamObserver<Message> responseObserver) {
-        super.enterRoom(request, responseObserver);
+        enterRoom.run(request, responseObserver);
     }
 
     @Override
     public StreamObserver<AudioStream> speechRecognize(StreamObserver<TextStream> responseObserver) {
-        return super.speechRecognize(responseObserver);
+        return speechRecognize.run(responseObserver);
     }
 
     @Override
     public void chat(TextMessage request, StreamObserver<TextAudioStream> responseObserver) {
-        super.chat(request, responseObserver);
+        chat.run(request, responseObserver);
     }
 }
