@@ -11,11 +11,13 @@ public class User {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long userId;
+    private long userId;
 
     private String phone;
 
     private String email;
+
+    private int userType; // 0: human, 1:robot
 
     @Override
     public String toString() {
@@ -59,5 +61,13 @@ public class User {
 
     public void setNickName(String nickName) {
         this.nickName = nickName;
+    }
+
+    public int getUserType() {
+        return userType;
+    }
+
+    public void setUserType(int userType) {
+        this.userType = userType;
     }
 }

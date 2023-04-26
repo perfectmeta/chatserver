@@ -4,26 +4,25 @@
 package chatserver.gen;
 
 /**
- * Protobuf type {@code Author}
+ * Protobuf type {@code EnterRoomReq}
  */
-public final class Author extends
+public final class EnterRoomReq extends
     com.google.protobuf.GeneratedMessageV3 implements
-    // @@protoc_insertion_point(message_implements:Author)
-    AuthorOrBuilder {
+    // @@protoc_insertion_point(message_implements:EnterRoomReq)
+    EnterRoomReqOrBuilder {
 private static final long serialVersionUID = 0L;
-  // Use Author.newBuilder() to construct.
-  private Author(com.google.protobuf.GeneratedMessageV3.Builder<?> builder) {
+  // Use EnterRoomReq.newBuilder() to construct.
+  private EnterRoomReq(com.google.protobuf.GeneratedMessageV3.Builder<?> builder) {
     super(builder);
   }
-  private Author() {
-    name_ = "";
+  private EnterRoomReq() {
   }
 
   @java.lang.Override
   @SuppressWarnings({"unused"})
   protected java.lang.Object newInstance(
       UnusedPrivateParameter unused) {
-    return new Author();
+    return new EnterRoomReq();
   }
 
   @java.lang.Override
@@ -31,7 +30,7 @@ private static final long serialVersionUID = 0L;
   getUnknownFields() {
     return this.unknownFields;
   }
-  private Author(
+  private EnterRoomReq(
       com.google.protobuf.CodedInputStream input,
       com.google.protobuf.ExtensionRegistryLite extensionRegistry)
       throws com.google.protobuf.InvalidProtocolBufferException {
@@ -51,18 +50,12 @@ private static final long serialVersionUID = 0L;
             break;
           case 8: {
 
-            type_ = input.readInt32();
+            roomId_ = input.readInt64();
             break;
           }
           case 16: {
 
-            userId_ = input.readInt64();
-            break;
-          }
-          case 26: {
-            java.lang.String s = input.readStringRequireUtf8();
-
-            name_ = s;
+            lastMessageId_ = input.readInt64();
             break;
           }
           default: {
@@ -86,79 +79,37 @@ private static final long serialVersionUID = 0L;
   }
   public static final com.google.protobuf.Descriptors.Descriptor
       getDescriptor() {
-    return chatserver.gen.Chat.internal_static_Author_descriptor;
+    return chatserver.gen.Chat.internal_static_EnterRoomReq_descriptor;
   }
 
   @java.lang.Override
   protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
       internalGetFieldAccessorTable() {
-    return chatserver.gen.Chat.internal_static_Author_fieldAccessorTable
+    return chatserver.gen.Chat.internal_static_EnterRoomReq_fieldAccessorTable
         .ensureFieldAccessorsInitialized(
-            chatserver.gen.Author.class, chatserver.gen.Author.Builder.class);
+            chatserver.gen.EnterRoomReq.class, chatserver.gen.EnterRoomReq.Builder.class);
   }
 
-  public static final int TYPE_FIELD_NUMBER = 1;
-  private int type_;
+  public static final int ROOMID_FIELD_NUMBER = 1;
+  private long roomId_;
   /**
-   * <pre>
-   * 0: 真人，1：AI英语老师, 2：AI女友
-   * </pre>
-   *
-   * <code>int32 type = 1;</code>
-   * @return The type.
+   * <code>int64 roomId = 1;</code>
+   * @return The roomId.
    */
   @java.lang.Override
-  public int getType() {
-    return type_;
+  public long getRoomId() {
+    return roomId_;
   }
 
-  public static final int USERID_FIELD_NUMBER = 2;
-  private long userId_;
+  public static final int LASTMESSAGEID_FIELD_NUMBER = 2;
+  private long lastMessageId_;
   /**
-   * <code>int64 userId = 2;</code>
-   * @return The userId.
+   * <code>int64 lastMessageId = 2;</code>
+   * @return The lastMessageId.
    */
   @java.lang.Override
-  public long getUserId() {
-    return userId_;
-  }
-
-  public static final int NAME_FIELD_NUMBER = 3;
-  private volatile java.lang.Object name_;
-  /**
-   * <code>string name = 3;</code>
-   * @return The name.
-   */
-  @java.lang.Override
-  public java.lang.String getName() {
-    java.lang.Object ref = name_;
-    if (ref instanceof java.lang.String) {
-      return (java.lang.String) ref;
-    } else {
-      com.google.protobuf.ByteString bs = 
-          (com.google.protobuf.ByteString) ref;
-      java.lang.String s = bs.toStringUtf8();
-      name_ = s;
-      return s;
-    }
-  }
-  /**
-   * <code>string name = 3;</code>
-   * @return The bytes for name.
-   */
-  @java.lang.Override
-  public com.google.protobuf.ByteString
-      getNameBytes() {
-    java.lang.Object ref = name_;
-    if (ref instanceof java.lang.String) {
-      com.google.protobuf.ByteString b = 
-          com.google.protobuf.ByteString.copyFromUtf8(
-              (java.lang.String) ref);
-      name_ = b;
-      return b;
-    } else {
-      return (com.google.protobuf.ByteString) ref;
-    }
+  public long getLastMessageId() {
+    return lastMessageId_;
   }
 
   private byte memoizedIsInitialized = -1;
@@ -175,14 +126,11 @@ private static final long serialVersionUID = 0L;
   @java.lang.Override
   public void writeTo(com.google.protobuf.CodedOutputStream output)
                       throws java.io.IOException {
-    if (type_ != 0) {
-      output.writeInt32(1, type_);
+    if (roomId_ != 0L) {
+      output.writeInt64(1, roomId_);
     }
-    if (userId_ != 0L) {
-      output.writeInt64(2, userId_);
-    }
-    if (!getNameBytes().isEmpty()) {
-      com.google.protobuf.GeneratedMessageV3.writeString(output, 3, name_);
+    if (lastMessageId_ != 0L) {
+      output.writeInt64(2, lastMessageId_);
     }
     unknownFields.writeTo(output);
   }
@@ -193,16 +141,13 @@ private static final long serialVersionUID = 0L;
     if (size != -1) return size;
 
     size = 0;
-    if (type_ != 0) {
+    if (roomId_ != 0L) {
       size += com.google.protobuf.CodedOutputStream
-        .computeInt32Size(1, type_);
+        .computeInt64Size(1, roomId_);
     }
-    if (userId_ != 0L) {
+    if (lastMessageId_ != 0L) {
       size += com.google.protobuf.CodedOutputStream
-        .computeInt64Size(2, userId_);
-    }
-    if (!getNameBytes().isEmpty()) {
-      size += com.google.protobuf.GeneratedMessageV3.computeStringSize(3, name_);
+        .computeInt64Size(2, lastMessageId_);
     }
     size += unknownFields.getSerializedSize();
     memoizedSize = size;
@@ -214,17 +159,15 @@ private static final long serialVersionUID = 0L;
     if (obj == this) {
      return true;
     }
-    if (!(obj instanceof chatserver.gen.Author)) {
+    if (!(obj instanceof chatserver.gen.EnterRoomReq)) {
       return super.equals(obj);
     }
-    chatserver.gen.Author other = (chatserver.gen.Author) obj;
+    chatserver.gen.EnterRoomReq other = (chatserver.gen.EnterRoomReq) obj;
 
-    if (getType()
-        != other.getType()) return false;
-    if (getUserId()
-        != other.getUserId()) return false;
-    if (!getName()
-        .equals(other.getName())) return false;
+    if (getRoomId()
+        != other.getRoomId()) return false;
+    if (getLastMessageId()
+        != other.getLastMessageId()) return false;
     if (!unknownFields.equals(other.unknownFields)) return false;
     return true;
   }
@@ -236,81 +179,80 @@ private static final long serialVersionUID = 0L;
     }
     int hash = 41;
     hash = (19 * hash) + getDescriptor().hashCode();
-    hash = (37 * hash) + TYPE_FIELD_NUMBER;
-    hash = (53 * hash) + getType();
-    hash = (37 * hash) + USERID_FIELD_NUMBER;
+    hash = (37 * hash) + ROOMID_FIELD_NUMBER;
     hash = (53 * hash) + com.google.protobuf.Internal.hashLong(
-        getUserId());
-    hash = (37 * hash) + NAME_FIELD_NUMBER;
-    hash = (53 * hash) + getName().hashCode();
+        getRoomId());
+    hash = (37 * hash) + LASTMESSAGEID_FIELD_NUMBER;
+    hash = (53 * hash) + com.google.protobuf.Internal.hashLong(
+        getLastMessageId());
     hash = (29 * hash) + unknownFields.hashCode();
     memoizedHashCode = hash;
     return hash;
   }
 
-  public static chatserver.gen.Author parseFrom(
+  public static chatserver.gen.EnterRoomReq parseFrom(
       java.nio.ByteBuffer data)
       throws com.google.protobuf.InvalidProtocolBufferException {
     return PARSER.parseFrom(data);
   }
-  public static chatserver.gen.Author parseFrom(
+  public static chatserver.gen.EnterRoomReq parseFrom(
       java.nio.ByteBuffer data,
       com.google.protobuf.ExtensionRegistryLite extensionRegistry)
       throws com.google.protobuf.InvalidProtocolBufferException {
     return PARSER.parseFrom(data, extensionRegistry);
   }
-  public static chatserver.gen.Author parseFrom(
+  public static chatserver.gen.EnterRoomReq parseFrom(
       com.google.protobuf.ByteString data)
       throws com.google.protobuf.InvalidProtocolBufferException {
     return PARSER.parseFrom(data);
   }
-  public static chatserver.gen.Author parseFrom(
+  public static chatserver.gen.EnterRoomReq parseFrom(
       com.google.protobuf.ByteString data,
       com.google.protobuf.ExtensionRegistryLite extensionRegistry)
       throws com.google.protobuf.InvalidProtocolBufferException {
     return PARSER.parseFrom(data, extensionRegistry);
   }
-  public static chatserver.gen.Author parseFrom(byte[] data)
+  public static chatserver.gen.EnterRoomReq parseFrom(byte[] data)
       throws com.google.protobuf.InvalidProtocolBufferException {
     return PARSER.parseFrom(data);
   }
-  public static chatserver.gen.Author parseFrom(
+  public static chatserver.gen.EnterRoomReq parseFrom(
       byte[] data,
       com.google.protobuf.ExtensionRegistryLite extensionRegistry)
       throws com.google.protobuf.InvalidProtocolBufferException {
     return PARSER.parseFrom(data, extensionRegistry);
   }
-  public static chatserver.gen.Author parseFrom(java.io.InputStream input)
+  public static chatserver.gen.EnterRoomReq parseFrom(java.io.InputStream input)
       throws java.io.IOException {
     return com.google.protobuf.GeneratedMessageV3
         .parseWithIOException(PARSER, input);
   }
-  public static chatserver.gen.Author parseFrom(
+  public static chatserver.gen.EnterRoomReq parseFrom(
       java.io.InputStream input,
       com.google.protobuf.ExtensionRegistryLite extensionRegistry)
       throws java.io.IOException {
     return com.google.protobuf.GeneratedMessageV3
         .parseWithIOException(PARSER, input, extensionRegistry);
   }
-  public static chatserver.gen.Author parseDelimitedFrom(java.io.InputStream input)
+  public static chatserver.gen.EnterRoomReq parseDelimitedFrom(java.io.InputStream input)
       throws java.io.IOException {
     return com.google.protobuf.GeneratedMessageV3
         .parseDelimitedWithIOException(PARSER, input);
   }
-  public static chatserver.gen.Author parseDelimitedFrom(
+  public static chatserver.gen.EnterRoomReq parseDelimitedFrom(
       java.io.InputStream input,
       com.google.protobuf.ExtensionRegistryLite extensionRegistry)
       throws java.io.IOException {
     return com.google.protobuf.GeneratedMessageV3
         .parseDelimitedWithIOException(PARSER, input, extensionRegistry);
   }
-  public static chatserver.gen.Author parseFrom(
+  public static chatserver.gen.EnterRoomReq parseFrom(
       com.google.protobuf.CodedInputStream input)
       throws java.io.IOException {
     return com.google.protobuf.GeneratedMessageV3
         .parseWithIOException(PARSER, input);
   }
-  public static chatserver.gen.Author parseFrom(
+  public static chatserver.gen.EnterRoomReq parseFrom(
       com.google.protobuf.CodedInputStream input,
       com.google.protobuf.ExtensionRegistryLite extensionRegistry)
       throws java.io.IOException {
@@ -323,7 +265,7 @@ private static final long serialVersionUID = 0L;
   public static Builder newBuilder() {
     return DEFAULT_INSTANCE.toBuilder();
   }
-  public static Builder newBuilder(chatserver.gen.Author prototype) {
+  public static Builder newBuilder(chatserver.gen.EnterRoomReq prototype) {
     return DEFAULT_INSTANCE.toBuilder().mergeFrom(prototype);
   }
   @java.lang.Override
@@ -339,26 +281,26 @@ private static final long serialVersionUID = 0L;
     return builder;
   }
   /**
-   * Protobuf type {@code Author}
+   * Protobuf type {@code EnterRoomReq}
    */
   public static final class Builder extends
       com.google.protobuf.GeneratedMessageV3.Builder<Builder> implements
-      // @@protoc_insertion_point(builder_implements:Author)
-      chatserver.gen.AuthorOrBuilder {
+      // @@protoc_insertion_point(builder_implements:EnterRoomReq)
+      chatserver.gen.EnterRoomReqOrBuilder {
     public static final com.google.protobuf.Descriptors.Descriptor
         getDescriptor() {
-      return chatserver.gen.Chat.internal_static_Author_descriptor;
+      return chatserver.gen.Chat.internal_static_EnterRoomReq_descriptor;
     }
 
     @java.lang.Override
     protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
         internalGetFieldAccessorTable() {
-      return chatserver.gen.Chat.internal_static_Author_fieldAccessorTable
+      return chatserver.gen.Chat.internal_static_EnterRoomReq_fieldAccessorTable
           .ensureFieldAccessorsInitialized(
-              chatserver.gen.Author.class, chatserver.gen.Author.Builder.class);
+              chatserver.gen.EnterRoomReq.class, chatserver.gen.EnterRoomReq.Builder.class);
     }
 
-    // Construct using chatserver.gen.Author.newBuilder()
+    // Construct using chatserver.gen.EnterRoomReq.newBuilder()
     private Builder() {
       maybeForceBuilderInitialization();
     }
@@ -376,11 +318,9 @@ private static final long serialVersionUID = 0L;
     @java.lang.Override
     public Builder clear() {
       super.clear();
-      type_ = 0;
+      roomId_ = 0L;
 
-      userId_ = 0L;
-
-      name_ = "";
+      lastMessageId_ = 0L;
 
       return this;
     }
@@ -388,17 +328,17 @@ private static final long serialVersionUID = 0L;
     @java.lang.Override
     public com.google.protobuf.Descriptors.Descriptor
         getDescriptorForType() {
-      return chatserver.gen.Chat.internal_static_Author_descriptor;
+      return chatserver.gen.Chat.internal_static_EnterRoomReq_descriptor;
     }
 
     @java.lang.Override
-    public chatserver.gen.Author getDefaultInstanceForType() {
-      return chatserver.gen.Author.getDefaultInstance();
+    public chatserver.gen.EnterRoomReq getDefaultInstanceForType() {
+      return chatserver.gen.EnterRoomReq.getDefaultInstance();
     }
 
     @java.lang.Override
-    public chatserver.gen.Author build() {
-      chatserver.gen.Author result = buildPartial();
+    public chatserver.gen.EnterRoomReq build() {
+      chatserver.gen.EnterRoomReq result = buildPartial();
       if (!result.isInitialized()) {
         throw newUninitializedMessageException(result);
       }
@@ -406,11 +346,10 @@ private static final long serialVersionUID = 0L;
     }
 
     @java.lang.Override
-    public chatserver.gen.Author buildPartial() {
-      chatserver.gen.Author result = new chatserver.gen.Author(this);
-      result.type_ = type_;
-      result.userId_ = userId_;
-      result.name_ = name_;
+    public chatserver.gen.EnterRoomReq buildPartial() {
+      chatserver.gen.EnterRoomReq result = new chatserver.gen.EnterRoomReq(this);
+      result.roomId_ = roomId_;
+      result.lastMessageId_ = lastMessageId_;
       onBuilt();
       return result;
     }
@@ -449,25 +388,21 @@ private static final long serialVersionUID = 0L;
     }
     @java.lang.Override
     public Builder mergeFrom(com.google.protobuf.Message other) {
-      if (other instanceof chatserver.gen.Author) {
-        return mergeFrom((chatserver.gen.Author)other);
+      if (other instanceof chatserver.gen.EnterRoomReq) {
+        return mergeFrom((chatserver.gen.EnterRoomReq)other);
       } else {
         super.mergeFrom(other);
         return this;
       }
     }
 
-    public Builder mergeFrom(chatserver.gen.Author other) {
-      if (other == chatserver.gen.Author.getDefaultInstance()) return this;
-      if (other.getType() != 0) {
-        setType(other.getType());
+    public Builder mergeFrom(chatserver.gen.EnterRoomReq other) {
+      if (other == chatserver.gen.EnterRoomReq.getDefaultInstance()) return this;
+      if (other.getRoomId() != 0L) {
+        setRoomId(other.getRoomId());
       }
-      if (other.getUserId() != 0L) {
-        setUserId(other.getUserId());
-      }
-      if (!other.getName().isEmpty()) {
-        name_ = other.name_;
-        onChanged();
+      if (other.getLastMessageId() != 0L) {
+        setLastMessageId(other.getLastMessageId());
       }
       this.mergeUnknownFields(other.unknownFields);
       onChanged();
@@ -484,11 +419,11 @@ private static final long serialVersionUID = 0L;
         com.google.protobuf.CodedInputStream input,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws java.io.IOException {
-      chatserver.gen.Author parsedMessage = null;
+      chatserver.gen.EnterRoomReq parsedMessage = null;
       try {
         parsedMessage = PARSER.parsePartialFrom(input, extensionRegistry);
       } catch (com.google.protobuf.InvalidProtocolBufferException e) {
-        parsedMessage = (chatserver.gen.Author) e.getUnfinishedMessage();
+        parsedMessage = (chatserver.gen.EnterRoomReq) e.getUnfinishedMessage();
         throw e.unwrapIOException();
       } finally {
         if (parsedMessage != null) {
@@ -498,152 +433,64 @@ private static final long serialVersionUID = 0L;
       return this;
     }
 
-    private int type_ ;
+    private long roomId_ ;
     /**
-     * <pre>
-     * 0: 真人，1：AI英语老师, 2：AI女友
-     * </pre>
-     *
-     * <code>int32 type = 1;</code>
-     * @return The type.
+     * <code>int64 roomId = 1;</code>
+     * @return The roomId.
      */
     @java.lang.Override
-    public int getType() {
-      return type_;
+    public long getRoomId() {
+      return roomId_;
     }
     /**
-     * <pre>
-     * 0: 真人，1：AI英语老师, 2：AI女友
-     * </pre>
-     *
-     * <code>int32 type = 1;</code>
-     * @param value The type to set.
+     * <code>int64 roomId = 1;</code>
+     * @param value The roomId to set.
      * @return This builder for chaining.
      */
-    public Builder setType(int value) {
+    public Builder setRoomId(long value) {
       
-      type_ = value;
+      roomId_ = value;
       onChanged();
       return this;
     }
     /**
-     * <pre>
-     * 0: 真人，1：AI英语老师, 2：AI女友
-     * </pre>
-     *
-     * <code>int32 type = 1;</code>
+     * <code>int64 roomId = 1;</code>
      * @return This builder for chaining.
      */
-    public Builder clearType() {
+    public Builder clearRoomId() {
       
-      type_ = 0;
+      roomId_ = 0L;
       onChanged();
       return this;
     }
 
-    private long userId_ ;
+    private long lastMessageId_ ;
     /**
-     * <code>int64 userId = 2;</code>
-     * @return The userId.
+     * <code>int64 lastMessageId = 2;</code>
+     * @return The lastMessageId.
      */
     @java.lang.Override
-    public long getUserId() {
-      return userId_;
+    public long getLastMessageId() {
+      return lastMessageId_;
     }
     /**
-     * <code>int64 userId = 2;</code>
-     * @param value The userId to set.
+     * <code>int64 lastMessageId = 2;</code>
+     * @param value The lastMessageId to set.
      * @return This builder for chaining.
      */
-    public Builder setUserId(long value) {
+    public Builder setLastMessageId(long value) {
       
-      userId_ = value;
+      lastMessageId_ = value;
       onChanged();
       return this;
     }
     /**
-     * <code>int64 userId = 2;</code>
+     * <code>int64 lastMessageId = 2;</code>
      * @return This builder for chaining.
      */
-    public Builder clearUserId() {
+    public Builder clearLastMessageId() {
       
-      userId_ = 0L;
-      onChanged();
-      return this;
-    }
-
-    private java.lang.Object name_ = "";
-    /**
-     * <code>string name = 3;</code>
-     * @return The name.
-     */
-    public java.lang.String getName() {
-      java.lang.Object ref = name_;
-      if (!(ref instanceof java.lang.String)) {
-        com.google.protobuf.ByteString bs =
-            (com.google.protobuf.ByteString) ref;
-        java.lang.String s = bs.toStringUtf8();
-        name_ = s;
-        return s;
-      } else {
-        return (java.lang.String) ref;
-      }
-    }
-    /**
-     * <code>string name = 3;</code>
-     * @return The bytes for name.
-     */
-    public com.google.protobuf.ByteString
-        getNameBytes() {
-      java.lang.Object ref = name_;
-      if (ref instanceof String) {
-        com.google.protobuf.ByteString b = 
-            com.google.protobuf.ByteString.copyFromUtf8(
-                (java.lang.String) ref);
-        name_ = b;
-        return b;
-      } else {
-        return (com.google.protobuf.ByteString) ref;
-      }
-    }
-    /**
-     * <code>string name = 3;</code>
-     * @param value The name to set.
-     * @return This builder for chaining.
-     */
-    public Builder setName(
-        java.lang.String value) {
-      if (value == null) {
-    throw new NullPointerException();
-  }
-  
-      name_ = value;
-      onChanged();
-      return this;
-    }
-    /**
-     * <code>string name = 3;</code>
-     * @return This builder for chaining.
-     */
-    public Builder clearName() {
-      
-      name_ = getDefaultInstance().getName();
-      onChanged();
-      return this;
-    }
-    /**
-     * <code>string name = 3;</code>
-     * @param value The bytes for name to set.
-     * @return This builder for chaining.
-     */
-    public Builder setNameBytes(
-        com.google.protobuf.ByteString value) {
-      if (value == null) {
-    throw new NullPointerException();
-  }
-  checkByteStringIsUtf8(value);
-      
-      name_ = value;
+      lastMessageId_ = 0L;
       onChanged();
       return this;
     }
@@ -660,41 +507,41 @@ private static final long serialVersionUID = 0L;
     }
 
 
-    // @@protoc_insertion_point(builder_scope:Author)
+    // @@protoc_insertion_point(builder_scope:EnterRoomReq)
   }
 
-  // @@protoc_insertion_point(class_scope:Author)
-  private static final chatserver.gen.Author DEFAULT_INSTANCE;
+  // @@protoc_insertion_point(class_scope:EnterRoomReq)
+  private static final chatserver.gen.EnterRoomReq DEFAULT_INSTANCE;
   static {
-    DEFAULT_INSTANCE = new chatserver.gen.Author();
+    DEFAULT_INSTANCE = new chatserver.gen.EnterRoomReq();
   }
 
-  public static chatserver.gen.Author getDefaultInstance() {
+  public static chatserver.gen.EnterRoomReq getDefaultInstance() {
     return DEFAULT_INSTANCE;
   }
 
-  private static final com.google.protobuf.Parser<Author>
-      PARSER = new com.google.protobuf.AbstractParser<Author>() {
+  private static final com.google.protobuf.Parser<EnterRoomReq>
+      PARSER = new com.google.protobuf.AbstractParser<EnterRoomReq>() {
     @java.lang.Override
-    public Author parsePartialFrom(
+    public EnterRoomReq parsePartialFrom(
         com.google.protobuf.CodedInputStream input,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws com.google.protobuf.InvalidProtocolBufferException {
-      return new Author(input, extensionRegistry);
+      return new EnterRoomReq(input, extensionRegistry);
     }
   };
 
-  public static com.google.protobuf.Parser<Author> parser() {
+  public static com.google.protobuf.Parser<EnterRoomReq> parser() {
     return PARSER;
   }
 
   @java.lang.Override
-  public com.google.protobuf.Parser<Author> getParserForType() {
+  public com.google.protobuf.Parser<EnterRoomReq> getParserForType() {
     return PARSER;
   }
 
   @java.lang.Override
-  public chatserver.gen.Author getDefaultInstanceForType() {
+  public chatserver.gen.EnterRoomReq getDefaultInstanceForType() {
     return DEFAULT_INSTANCE;
   }
 

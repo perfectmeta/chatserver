@@ -18,6 +18,12 @@ public interface AuthorOrBuilder extends
   int getType();
 
   /**
+   * <code>int64 userId = 2;</code>
+   * @return The userId.
+   */
+  long getUserId();
+
+  /**
    * <code>string name = 3;</code>
    * @return The name.
    */

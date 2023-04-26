@@ -8,16 +8,10 @@ public interface TextMessageOrBuilder extends
     com.google.protobuf.MessageOrBuilder {
 
   /**
-   * <code>string roomId = 1;</code>
+   * <code>int64 roomId = 1;</code>
    * @return The roomId.
    */
-  java.lang.String getRoomId();
-  /**
-   * <code>string roomId = 1;</code>
-   * @return The bytes for roomId.
-   */
-  com.google.protobuf.ByteString
-      getRoomIdBytes();
+  long getRoomId();
 
   /**
    * <code>string text = 3;</code>

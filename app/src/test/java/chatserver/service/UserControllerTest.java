@@ -1,4 +1,4 @@
-package chatserver.controller;
+package chatserver.service;
 
 import chatserver.dao.User;
 import org.junit.jupiter.api.Test;
@@ -9,7 +9,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 class UserControllerTest {
 
     @Autowired
-    private UserController users;
+    private UserService users;
 
     @Test
     void findByPhone() {

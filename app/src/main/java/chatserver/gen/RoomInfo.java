@@ -16,7 +16,7 @@ private static final long serialVersionUID = 0L;
     super(builder);
   }
   private RoomInfo() {
-    roomId_ = "";
+    roomName_ = "";
   }
 
   @java.lang.Override
@@ -49,13 +49,18 @@ private static final long serialVersionUID = 0L;
           case 0:
             done = true;
             break;
-          case 10: {
-            java.lang.String s = input.readStringRequireUtf8();
+          case 8: {
 
-            roomId_ = s;
+            roomId_ = input.readInt64();
             break;
           }
           case 18: {
+            java.lang.String s = input.readStringRequireUtf8();
+
+            roomName_ = s;
+            break;
+          }
+          case 26: {
             chatserver.gen.Author.Builder subBuilder = null;
             if (you_ != null) {
               subBuilder = you_.toBuilder();
@@ -68,7 +73,7 @@ private static final long serialVersionUID = 0L;
 
             break;
           }
-          case 26: {
+          case 34: {
             chatserver.gen.Author.Builder subBuilder = null;
             if (ai_ != null) {
               subBuilder = ai_.toBuilder();
@@ -79,6 +84,21 @@ private static final long serialVersionUID = 0L;
               ai_ = subBuilder.buildPartial();
             }
 
+            break;
+          }
+          case 40: {
+
+            createdTime_ = input.readInt64();
+            break;
+          }
+          case 48: {
+
+            firstMessageId_ = input.readInt64();
+            break;
+          }
+          case 56: {
+
+            lastMessageId_ = input.readInt64();
             break;
           }
           default: {
@@ -114,51 +134,62 @@ private static final long serialVersionUID = 0L;
   }
 
   public static final int ROOMID_FIELD_NUMBER = 1;
-  private volatile java.lang.Object roomId_;
+  private long roomId_;
   /**
-   * <code>string roomId = 1;</code>
+   * <code>int64 roomId = 1;</code>
    * @return The roomId.
    */
   @java.lang.Override
-  public java.lang.String getRoomId() {
-    java.lang.Object ref = roomId_;
+  public long getRoomId() {
+    return roomId_;
+  }
+
+  public static final int ROOMNAME_FIELD_NUMBER = 2;
+  private volatile java.lang.Object roomName_;
+  /**
+   * <code>string roomName = 2;</code>
+   * @return The roomName.
+   */
+  @java.lang.Override
+  public java.lang.String getRoomName() {
+    java.lang.Object ref = roomName_;
     if (ref instanceof java.lang.String) {
       return (java.lang.String) ref;
     } else {
       com.google.protobuf.ByteString bs = 
           (com.google.protobuf.ByteString) ref;
       java.lang.String s = bs.toStringUtf8();
-      roomId_ = s;
+      roomName_ = s;
       return s;
     }
   }
   /**
-   * <code>string roomId = 1;</code>
-   * @return The bytes for roomId.
+   * <code>string roomName = 2;</code>
+   * @return The bytes for roomName.
    */
   @java.lang.Override
   public com.google.protobuf.ByteString
-      getRoomIdBytes() {
-    java.lang.Object ref = roomId_;
+      getRoomNameBytes() {
+    java.lang.Object ref = roomName_;
     if (ref instanceof java.lang.String) {
       com.google.protobuf.ByteString b = 
           com.google.protobuf.ByteString.copyFromUtf8(
               (java.lang.String) ref);
-      roomId_ = b;
+      roomName_ = b;
       return b;
     } else {
       return (com.google.protobuf.ByteString) ref;
     }
   }
 
-  public static final int YOU_FIELD_NUMBER = 2;
+  public static final int YOU_FIELD_NUMBER = 3;
   private chatserver.gen.Author you_;
   /**
    * <pre>
    * 先写死，只支持2个人
    * </pre>
    *
-   * <code>.Author you = 2;</code>
+   * <code>.Author you = 3;</code>
    * @return Whether the you field is set.
    */
   @java.lang.Override
@@ -170,7 +201,7 @@ private static final long serialVersionUID = 0L;
    * 先写死，只支持2个人
    * </pre>
    *
-   * <code>.Author you = 2;</code>
+   * <code>.Author you = 3;</code>
    * @return The you.
    */
   @java.lang.Override
@@ -182,17 +213,17 @@ private static final long serialVersionUID = 0L;
    * 先写死，只支持2个人
    * </pre>
    *
-   * <code>.Author you = 2;</code>
+   * <code>.Author you = 3;</code>
    */
   @java.lang.Override
   public chatserver.gen.AuthorOrBuilder getYouOrBuilder() {
     return getYou();
   }
 
-  public static final int AI_FIELD_NUMBER = 3;
+  public static final int AI_FIELD_NUMBER = 4;
   private chatserver.gen.Author ai_;
   /**
-   * <code>.Author ai = 3;</code>
+   * <code>.Author ai = 4;</code>
    * @return Whether the ai field is set.
    */
   @java.lang.Override
@@ -200,7 +231,7 @@ private static final long serialVersionUID = 0L;
     return ai_ != null;
   }
   /**
-   * <code>.Author ai = 3;</code>
+   * <code>.Author ai = 4;</code>
    * @return The ai.
    */
   @java.lang.Override
@@ -208,11 +239,44 @@ private static final long serialVersionUID = 0L;
     return ai_ == null ? chatserver.gen.Author.getDefaultInstance() : ai_;
   }
   /**
-   * <code>.Author ai = 3;</code>
+   * <code>.Author ai = 4;</code>
    */
   @java.lang.Override
   public chatserver.gen.AuthorOrBuilder getAiOrBuilder() {
     return getAi();
+  }
+
+  public static final int CREATEDTIME_FIELD_NUMBER = 5;
+  private long createdTime_;
+  /**
+   * <code>int64 createdTime = 5;</code>
+   * @return The createdTime.
+   */
+  @java.lang.Override
+  public long getCreatedTime() {
+    return createdTime_;
+  }
+
+  public static final int FIRSTMESSAGEID_FIELD_NUMBER = 6;
+  private long firstMessageId_;
+  /**
+   * <code>int64 firstMessageId = 6;</code>
+   * @return The firstMessageId.
+   */
+  @java.lang.Override
+  public long getFirstMessageId() {
+    return firstMessageId_;
+  }
+
+  public static final int LASTMESSAGEID_FIELD_NUMBER = 7;
+  private long lastMessageId_;
+  /**
+   * <code>int64 lastMessageId = 7;</code>
+   * @return The lastMessageId.
+   */
+  @java.lang.Override
+  public long getLastMessageId() {
+    return lastMessageId_;
   }
 
   private byte memoizedIsInitialized = -1;
@@ -229,14 +293,26 @@ private static final long serialVersionUID = 0L;
   @java.lang.Override
   public void writeTo(com.google.protobuf.CodedOutputStream output)
                       throws java.io.IOException {
-    if (!getRoomIdBytes().isEmpty()) {
-      com.google.protobuf.GeneratedMessageV3.writeString(output, 1, roomId_);
+    if (roomId_ != 0L) {
+      output.writeInt64(1, roomId_);
+    }
+    if (!getRoomNameBytes().isEmpty()) {
+      com.google.protobuf.GeneratedMessageV3.writeString(output, 2, roomName_);
     }
     if (you_ != null) {
-      output.writeMessage(2, getYou());
+      output.writeMessage(3, getYou());
     }
     if (ai_ != null) {
-      output.writeMessage(3, getAi());
+      output.writeMessage(4, getAi());
+    }
+    if (createdTime_ != 0L) {
+      output.writeInt64(5, createdTime_);
+    }
+    if (firstMessageId_ != 0L) {
+      output.writeInt64(6, firstMessageId_);
+    }
+    if (lastMessageId_ != 0L) {
+      output.writeInt64(7, lastMessageId_);
     }
     unknownFields.writeTo(output);
   }
@@ -247,16 +323,32 @@ private static final long serialVersionUID = 0L;
     if (size != -1) return size;
 
     size = 0;
-    if (!getRoomIdBytes().isEmpty()) {
-      size += com.google.protobuf.GeneratedMessageV3.computeStringSize(1, roomId_);
+    if (roomId_ != 0L) {
+      size += com.google.protobuf.CodedOutputStream
+        .computeInt64Size(1, roomId_);
+    }
+    if (!getRoomNameBytes().isEmpty()) {
+      size += com.google.protobuf.GeneratedMessageV3.computeStringSize(2, roomName_);
     }
     if (you_ != null) {
       size += com.google.protobuf.CodedOutputStream
-        .computeMessageSize(2, getYou());
+        .computeMessageSize(3, getYou());
     }
     if (ai_ != null) {
       size += com.google.protobuf.CodedOutputStream
-        .computeMessageSize(3, getAi());
+        .computeMessageSize(4, getAi());
+    }
+    if (createdTime_ != 0L) {
+      size += com.google.protobuf.CodedOutputStream
+        .computeInt64Size(5, createdTime_);
+    }
+    if (firstMessageId_ != 0L) {
+      size += com.google.protobuf.CodedOutputStream
+        .computeInt64Size(6, firstMessageId_);
+    }
+    if (lastMessageId_ != 0L) {
+      size += com.google.protobuf.CodedOutputStream
+        .computeInt64Size(7, lastMessageId_);
     }
     size += unknownFields.getSerializedSize();
     memoizedSize = size;
@@ -273,8 +365,10 @@ private static final long serialVersionUID = 0L;
     }
     chatserver.gen.RoomInfo other = (chatserver.gen.RoomInfo) obj;
 
-    if (!getRoomId()
-        .equals(other.getRoomId())) return false;
+    if (getRoomId()
+        != other.getRoomId()) return false;
+    if (!getRoomName()
+        .equals(other.getRoomName())) return false;
     if (hasYou() != other.hasYou()) return false;
     if (hasYou()) {
       if (!getYou()
@@ -285,6 +379,12 @@ private static final long serialVersionUID = 0L;
       if (!getAi()
           .equals(other.getAi())) return false;
     }
+    if (getCreatedTime()
+        != other.getCreatedTime()) return false;
+    if (getFirstMessageId()
+        != other.getFirstMessageId()) return false;
+    if (getLastMessageId()
+        != other.getLastMessageId()) return false;
     if (!unknownFields.equals(other.unknownFields)) return false;
     return true;
   }
@@ -297,7 +397,10 @@ private static final long serialVersionUID = 0L;
     int hash = 41;
     hash = (19 * hash) + getDescriptor().hashCode();
     hash = (37 * hash) + ROOMID_FIELD_NUMBER;
-    hash = (53 * hash) + getRoomId().hashCode();
+    hash = (53 * hash) + com.google.protobuf.Internal.hashLong(
+        getRoomId());
+    hash = (37 * hash) + ROOMNAME_FIELD_NUMBER;
+    hash = (53 * hash) + getRoomName().hashCode();
     if (hasYou()) {
       hash = (37 * hash) + YOU_FIELD_NUMBER;
       hash = (53 * hash) + getYou().hashCode();
@@ -306,6 +409,15 @@ private static final long serialVersionUID = 0L;
       hash = (37 * hash) + AI_FIELD_NUMBER;
       hash = (53 * hash) + getAi().hashCode();
     }
+    hash = (37 * hash) + CREATEDTIME_FIELD_NUMBER;
+    hash = (53 * hash) + com.google.protobuf.Internal.hashLong(
+        getCreatedTime());
+    hash = (37 * hash) + FIRSTMESSAGEID_FIELD_NUMBER;
+    hash = (53 * hash) + com.google.protobuf.Internal.hashLong(
+        getFirstMessageId());
+    hash = (37 * hash) + LASTMESSAGEID_FIELD_NUMBER;
+    hash = (53 * hash) + com.google.protobuf.Internal.hashLong(
+        getLastMessageId());
     hash = (29 * hash) + unknownFields.hashCode();
     memoizedHashCode = hash;
     return hash;
@@ -439,7 +551,9 @@ private static final long serialVersionUID = 0L;
     @java.lang.Override
     public Builder clear() {
       super.clear();
-      roomId_ = "";
+      roomId_ = 0L;
+
+      roomName_ = "";
 
       if (youBuilder_ == null) {
         you_ = null;
@@ -453,6 +567,12 @@ private static final long serialVersionUID = 0L;
         ai_ = null;
         aiBuilder_ = null;
       }
+      createdTime_ = 0L;
+
+      firstMessageId_ = 0L;
+
+      lastMessageId_ = 0L;
+
       return this;
     }
 
@@ -480,6 +600,7 @@ private static final long serialVersionUID = 0L;
     public chatserver.gen.RoomInfo buildPartial() {
       chatserver.gen.RoomInfo result = new chatserver.gen.RoomInfo(this);
       result.roomId_ = roomId_;
+      result.roomName_ = roomName_;
       if (youBuilder_ == null) {
         result.you_ = you_;
       } else {
@@ -490,6 +611,9 @@ private static final long serialVersionUID = 0L;
       } else {
         result.ai_ = aiBuilder_.build();
       }
+      result.createdTime_ = createdTime_;
+      result.firstMessageId_ = firstMessageId_;
+      result.lastMessageId_ = lastMessageId_;
       onBuilt();
       return result;
     }
@@ -538,8 +662,11 @@ private static final long serialVersionUID = 0L;
 
     public Builder mergeFrom(chatserver.gen.RoomInfo other) {
       if (other == chatserver.gen.RoomInfo.getDefaultInstance()) return this;
-      if (!other.getRoomId().isEmpty()) {
-        roomId_ = other.roomId_;
+      if (other.getRoomId() != 0L) {
+        setRoomId(other.getRoomId());
+      }
+      if (!other.getRoomName().isEmpty()) {
+        roomName_ = other.roomName_;
         onChanged();
       }
       if (other.hasYou()) {
@@ -547,6 +674,15 @@ private static final long serialVersionUID = 0L;
       }
       if (other.hasAi()) {
         mergeAi(other.getAi());
+      }
+      if (other.getCreatedTime() != 0L) {
+        setCreatedTime(other.getCreatedTime());
+      }
+      if (other.getFirstMessageId() != 0L) {
+        setFirstMessageId(other.getFirstMessageId());
+      }
+      if (other.getLastMessageId() != 0L) {
+        setLastMessageId(other.getLastMessageId());
       }
       this.mergeUnknownFields(other.unknownFields);
       onChanged();
@@ -577,78 +713,109 @@ private static final long serialVersionUID = 0L;
       return this;
     }
 
-    private java.lang.Object roomId_ = "";
+    private long roomId_ ;
     /**
-     * <code>string roomId = 1;</code>
+     * <code>int64 roomId = 1;</code>
      * @return The roomId.
      */
-    public java.lang.String getRoomId() {
-      java.lang.Object ref = roomId_;
+    @java.lang.Override
+    public long getRoomId() {
+      return roomId_;
+    }
+    /**
+     * <code>int64 roomId = 1;</code>
+     * @param value The roomId to set.
+     * @return This builder for chaining.
+     */
+    public Builder setRoomId(long value) {
+      
+      roomId_ = value;
+      onChanged();
+      return this;
+    }
+    /**
+     * <code>int64 roomId = 1;</code>
+     * @return This builder for chaining.
+     */
+    public Builder clearRoomId() {
+      
+      roomId_ = 0L;
+      onChanged();
+      return this;
+    }
+
+    private java.lang.Object roomName_ = "";
+    /**
+     * <code>string roomName = 2;</code>
+     * @return The roomName.
+     */
+    public java.lang.String getRoomName() {
+      java.lang.Object ref = roomName_;
       if (!(ref instanceof java.lang.String)) {
         com.google.protobuf.ByteString bs =
             (com.google.protobuf.ByteString) ref;
         java.lang.String s = bs.toStringUtf8();
-        roomId_ = s;
+        roomName_ = s;
         return s;
       } else {
         return (java.lang.String) ref;
       }
     }
     /**
-     * <code>string roomId = 1;</code>
-     * @return The bytes for roomId.
+     * <code>string roomName = 2;</code>
+     * @return The bytes for roomName.
      */
     public com.google.protobuf.ByteString
-        getRoomIdBytes() {
-      java.lang.Object ref = roomId_;
+        getRoomNameBytes() {
+      java.lang.Object ref = roomName_;
       if (ref instanceof String) {
         com.google.protobuf.ByteString b = 
             com.google.protobuf.ByteString.copyFromUtf8(
                 (java.lang.String) ref);
-        roomId_ = b;
+        roomName_ = b;
         return b;
       } else {
         return (com.google.protobuf.ByteString) ref;
       }
     }
     /**
-     * <code>string roomId = 1;</code>
-     * @param value The roomId to set.
+     * <code>string roomName = 2;</code>
+     * @param value The roomName to set.
      * @return This builder for chaining.
      */
-    public Builder setRoomId(
+    public Builder setRoomName(
         java.lang.String value) {
       if (value == null) {
     throw new NullPointerException();
   }
   
-      roomId_ = value;
+      roomName_ = value;
       onChanged();
       return this;
     }
     /**
-     * <code>string roomId = 1;</code>
+     * <code>string roomName = 2;</code>
      * @return This builder for chaining.
      */
-    public Builder clearRoomId() {
+    public Builder clearRoomName() {
       
-      roomId_ = getDefaultInstance().getRoomId();
+      roomName_ = getDefaultInstance().getRoomName();
       onChanged();
       return this;
     }
     /**
-     * <code>string roomId = 1;</code>
-     * @param value The bytes for roomId to set.
+     * <code>string roomName = 2;</code>
+     * @param value The bytes for roomName to set.
      * @return This builder for chaining.
      */
-    public Builder setRoomIdBytes(
+    public Builder setRoomNameBytes(
         com.google.protobuf.ByteString value) {
       if (value == null) {
     throw new NullPointerException();
   }
   checkByteStringIsUtf8(value);
       
-      roomId_ = value;
+      roomName_ = value;
       onChanged();
       return this;
     }
@@ -661,7 +828,7 @@ private static final long serialVersionUID = 0L;
      * 先写死，只支持2个人
      * </pre>
      *
-     * <code>.Author you = 2;</code>
+     * <code>.Author you = 3;</code>
      * @return Whether the you field is set.
      */
     public boolean hasYou() {
@@ -672,7 +839,7 @@ private static final long serialVersionUID = 0L;
      * 先写死，只支持2个人
      * </pre>
      *
-     * <code>.Author you = 2;</code>
+     * <code>.Author you = 3;</code>
      * @return The you.
      */
     public chatserver.gen.Author getYou() {
@@ -687,7 +854,7 @@ private static final long serialVersionUID = 0L;
      * 先写死，只支持2个人
      * </pre>
      *
-     * <code>.Author you = 2;</code>
+     * <code>.Author you = 3;</code>
      */
     public Builder setYou(chatserver.gen.Author value) {
       if (youBuilder_ == null) {
@@ -707,7 +874,7 @@ private static final long serialVersionUID = 0L;
      * 先写死，只支持2个人
      * </pre>
      *
-     * <code>.Author you = 2;</code>
+     * <code>.Author you = 3;</code>
      */
     public Builder setYou(
         chatserver.gen.Author.Builder builderForValue) {
@@ -725,7 +892,7 @@ private static final long serialVersionUID = 0L;
      * 先写死，只支持2个人
      * </pre>
      *
-     * <code>.Author you = 2;</code>
+     * <code>.Author you = 3;</code>
      */
     public Builder mergeYou(chatserver.gen.Author value) {
       if (youBuilder_ == null) {
@@ -747,7 +914,7 @@ private static final long serialVersionUID = 0L;
      * 先写死，只支持2个人
      * </pre>
      *
-     * <code>.Author you = 2;</code>
+     * <code>.Author you = 3;</code>
      */
     public Builder clearYou() {
       if (youBuilder_ == null) {
@@ -765,7 +932,7 @@ private static final long serialVersionUID = 0L;
      * 先写死，只支持2个人
      * </pre>
      *
-     * <code>.Author you = 2;</code>
+     * <code>.Author you = 3;</code>
      */
     public chatserver.gen.Author.Builder getYouBuilder() {
       
@@ -777,7 +944,7 @@ private static final long serialVersionUID = 0L;
      * 先写死，只支持2个人
      * </pre>
      *
-     * <code>.Author you = 2;</code>
+     * <code>.Author you = 3;</code>
      */
     public chatserver.gen.AuthorOrBuilder getYouOrBuilder() {
       if (youBuilder_ != null) {
@@ -792,7 +959,7 @@ private static final long serialVersionUID = 0L;
      * 先写死，只支持2个人
      * </pre>
      *
-     * <code>.Author you = 2;</code>
+     * <code>.Author you = 3;</code>
      */
     private com.google.protobuf.SingleFieldBuilderV3<
         chatserver.gen.Author, chatserver.gen.Author.Builder, chatserver.gen.AuthorOrBuilder> 
@@ -812,14 +979,14 @@ private static final long serialVersionUID = 0L;
     private com.google.protobuf.SingleFieldBuilderV3<
         chatserver.gen.Author, chatserver.gen.Author.Builder, chatserver.gen.AuthorOrBuilder> aiBuilder_;
     /**
-     * <code>.Author ai = 3;</code>
+     * <code>.Author ai = 4;</code>
      * @return Whether the ai field is set.
      */
     public boolean hasAi() {
       return aiBuilder_ != null || ai_ != null;
     }
     /**
-     * <code>.Author ai = 3;</code>
+     * <code>.Author ai = 4;</code>
      * @return The ai.
      */
     public chatserver.gen.Author getAi() {
@@ -830,7 +997,7 @@ private static final long serialVersionUID = 0L;
       }
     }
     /**
-     * <code>.Author ai = 3;</code>
+     * <code>.Author ai = 4;</code>
      */
     public Builder setAi(chatserver.gen.Author value) {
       if (aiBuilder_ == null) {
@@ -846,7 +1013,7 @@ private static final long serialVersionUID = 0L;
       return this;
     }
     /**
-     * <code>.Author ai = 3;</code>
+     * <code>.Author ai = 4;</code>
      */
     public Builder setAi(
         chatserver.gen.Author.Builder builderForValue) {
@@ -860,7 +1027,7 @@ private static final long serialVersionUID = 0L;
       return this;
     }
     /**
-     * <code>.Author ai = 3;</code>
+     * <code>.Author ai = 4;</code>
      */
     public Builder mergeAi(chatserver.gen.Author value) {
       if (aiBuilder_ == null) {
@@ -878,7 +1045,7 @@ private static final long serialVersionUID = 0L;
       return this;
     }
     /**
-     * <code>.Author ai = 3;</code>
+     * <code>.Author ai = 4;</code>
      */
     public Builder clearAi() {
       if (aiBuilder_ == null) {
@@ -892,7 +1059,7 @@ private static final long serialVersionUID = 0L;
       return this;
     }
     /**
-     * <code>.Author ai = 3;</code>
+     * <code>.Author ai = 4;</code>
      */
     public chatserver.gen.Author.Builder getAiBuilder() {
       
@@ -900,7 +1067,7 @@ private static final long serialVersionUID = 0L;
       return getAiFieldBuilder().getBuilder();
     }
     /**
-     * <code>.Author ai = 3;</code>
+     * <code>.Author ai = 4;</code>
      */
     public chatserver.gen.AuthorOrBuilder getAiOrBuilder() {
       if (aiBuilder_ != null) {
@@ -911,7 +1078,7 @@ private static final long serialVersionUID = 0L;
       }
     }
     /**
-     * <code>.Author ai = 3;</code>
+     * <code>.Author ai = 4;</code>
      */
     private com.google.protobuf.SingleFieldBuilderV3<
         chatserver.gen.Author, chatserver.gen.Author.Builder, chatserver.gen.AuthorOrBuilder> 
@@ -925,6 +1092,99 @@ private static final long serialVersionUID = 0L;
         ai_ = null;
       }
       return aiBuilder_;
+    }
+
+    private long createdTime_ ;
+    /**
+     * <code>int64 createdTime = 5;</code>
+     * @return The createdTime.
+     */
+    @java.lang.Override
+    public long getCreatedTime() {
+      return createdTime_;
+    }
+    /**
+     * <code>int64 createdTime = 5;</code>
+     * @param value The createdTime to set.
+     * @return This builder for chaining.
+     */
+    public Builder setCreatedTime(long value) {
+      
+      createdTime_ = value;
+      onChanged();
+      return this;
+    }
+    /**
+     * <code>int64 createdTime = 5;</code>
+     * @return This builder for chaining.
+     */
+    public Builder clearCreatedTime() {
+      
+      createdTime_ = 0L;
+      onChanged();
+      return this;
+    }
+
+    private long firstMessageId_ ;
+    /**
+     * <code>int64 firstMessageId = 6;</code>
+     * @return The firstMessageId.
+     */
+    @java.lang.Override
+    public long getFirstMessageId() {
+      return firstMessageId_;
+    }
+    /**
+     * <code>int64 firstMessageId = 6;</code>
+     * @param value The firstMessageId to set.
+     * @return This builder for chaining.
+     */
+    public Builder setFirstMessageId(long value) {
+      
+      firstMessageId_ = value;
+      onChanged();
+      return this;
+    }
+    /**
+     * <code>int64 firstMessageId = 6;</code>
+     * @return This builder for chaining.
+     */
+    public Builder clearFirstMessageId() {
+      
+      firstMessageId_ = 0L;
+      onChanged();
+      return this;
+    }
+
+    private long lastMessageId_ ;
+    /**
+     * <code>int64 lastMessageId = 7;</code>
+     * @return The lastMessageId.
+     */
+    @java.lang.Override
+    public long getLastMessageId() {
+      return lastMessageId_;
+    }
+    /**
+     * <code>int64 lastMessageId = 7;</code>
+     * @param value The lastMessageId to set.
+     * @return This builder for chaining.
+     */
+    public Builder setLastMessageId(long value) {
+      
+      lastMessageId_ = value;
+      onChanged();
+      return this;
+    }
+    /**
+     * <code>int64 lastMessageId = 7;</code>
+     * @return This builder for chaining.
+     */
+    public Builder clearLastMessageId() {
+      
+      lastMessageId_ = 0L;
+      onChanged();
+      return this;
     }
     @java.lang.Override
     public final Builder setUnknownFields(

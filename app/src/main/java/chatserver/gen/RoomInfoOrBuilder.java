@@ -8,23 +8,29 @@ public interface RoomInfoOrBuilder extends
     com.google.protobuf.MessageOrBuilder {
 
   /**
-   * <code>string roomId = 1;</code>
+   * <code>int64 roomId = 1;</code>
    * @return The roomId.
    */
-  java.lang.String getRoomId();
+  long getRoomId();
+
   /**
-   * <code>string roomId = 1;</code>
-   * @return The bytes for roomId.
+   * <code>string roomName = 2;</code>
+   * @return The roomName.
+   */
+  java.lang.String getRoomName();
+  /**
+   * <code>string roomName = 2;</code>
+   * @return The bytes for roomName.
    */
   com.google.protobuf.ByteString
-      getRoomIdBytes();
+      getRoomNameBytes();
 
   /**
    * <pre>
    * 先写死，只支持2个人
    * </pre>
    *
-   * <code>.Author you = 2;</code>
+   * <code>.Author you = 3;</code>
    * @return Whether the you field is set.
    */
   boolean hasYou();
@@ -33,7 +39,7 @@ public interface RoomInfoOrBuilder extends
    * 先写死，只支持2个人
    * </pre>
    *
-   * <code>.Author you = 2;</code>
+   * <code>.Author you = 3;</code>
    * @return The you.
    */
   chatserver.gen.Author getYou();
@@ -42,22 +48,40 @@ public interface RoomInfoOrBuilder extends
    * 先写死，只支持2个人
    * </pre>
    *
-   * <code>.Author you = 2;</code>
+   * <code>.Author you = 3;</code>
    */
   chatserver.gen.AuthorOrBuilder getYouOrBuilder();
 
   /**
-   * <code>.Author ai = 3;</code>
+   * <code>.Author ai = 4;</code>
    * @return Whether the ai field is set.
    */
   boolean hasAi();
   /**
-   * <code>.Author ai = 3;</code>
+   * <code>.Author ai = 4;</code>
    * @return The ai.
    */
   chatserver.gen.Author getAi();
   /**
-   * <code>.Author ai = 3;</code>
+   * <code>.Author ai = 4;</code>
    */
   chatserver.gen.AuthorOrBuilder getAiOrBuilder();
+
+  /**
+   * <code>int64 createdTime = 5;</code>
+   * @return The createdTime.
+   */
+  long getCreatedTime();
+
+  /**
+   * <code>int64 firstMessageId = 6;</code>
+   * @return The firstMessageId.
+   */
+  long getFirstMessageId();
+
+  /**
+   * <code>int64 lastMessageId = 7;</code>
+   * @return The lastMessageId.
+   */
+  long getLastMessageId();
 }
