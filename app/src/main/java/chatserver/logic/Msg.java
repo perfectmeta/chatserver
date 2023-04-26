@@ -7,7 +7,7 @@ import chatserver.gen.MsgType;
 public class Msg {
     public static final int UT_HUMAN = 0;  //user type
     public static final int UT_AI_TEACHER = 1;
-    public static final int UT_AI_FRIEND = 2;
+//    public static final int UT_AI_FRIEND = 2;
 
 
     public static Message fromDb(chatserver.dao.Message dm) {

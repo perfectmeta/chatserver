@@ -18,7 +18,7 @@ public class GetRoomList {
     @Autowired
     private RoomService roomService;
 
-    public void run(Hello request, StreamObserver<RoomInfo> responseObserver) {
+    public void run(Hello ignoredRequest, StreamObserver<RoomInfo> responseObserver) {
 
         User user = AuthTokenInterceptor.USER.get();
         List<Room> byUserId = roomService.findByUserId(user.getUserId());

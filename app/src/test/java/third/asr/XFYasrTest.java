@@ -4,7 +4,6 @@ import chatserver.third.asr.XFYasr;
 import org.junit.jupiter.api.Test;
 
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Paths;
@@ -20,8 +19,6 @@ public class XFYasrTest {
             byte[] bytes = ins.readAllBytes();
             var content = new String(bytes, StandardCharsets.UTF_8);
             System.out.println(content);
-        } catch (FileNotFoundException e) {
-            throw new RuntimeException(e);
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
