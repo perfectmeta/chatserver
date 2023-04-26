@@ -74,10 +74,19 @@ message EnterRoomReq {
 //////////////////////////////////////
 
 service ChatService {
+  // 第一步用户登录，取到token后，
+  // 把token放到之后所有的请求的header里，例子见app/src/test/java/chatserver/ServerAppTest.java
+
+  // 登录游戏后立马就发送Hello，取room list，new message stream，这两个可能就是在连接期间一直会发。
   rpc GetRoomList(Hello) returns (stream RoomInfo);
   rpc GetNewMessageStream(Hello) returns (stream Message);
 
+  // 进入房间，发lastMessageId后，服务器同步给客户端这之后的消息
   rpc EnterRoom(EnterRoomReq) returns (stream Message);
+
+  // 流式语音识别
   rpc SpeechRecognize(stream AudioStream) returns (stream TextStream);
+
+  // 聊天，会接受chatgpt发回的文本流，这样响应性更好。当一句话或多句话结束时会服务器会给出语音。
   rpc Chat(TextMessage) returns (stream TextAudioStream);
 }
