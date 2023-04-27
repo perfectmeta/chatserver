@@ -4,18 +4,22 @@
 package chatserver.gen;
 
 /**
- * Protobuf type {@code Message}
+ * <pre>
+ *&#47;////// chat
+ * </pre>
+ *
+ * Protobuf type {@code ChatRequest}
  */
-public final class Message extends
+public final class ChatRequest extends
     com.google.protobuf.GeneratedMessageV3 implements
-    // @@protoc_insertion_point(message_implements:Message)
-    MessageOrBuilder {
+    // @@protoc_insertion_point(message_implements:ChatRequest)
+    ChatRequestOrBuilder {
 private static final long serialVersionUID = 0L;
-  // Use Message.newBuilder() to construct.
-  private Message(com.google.protobuf.GeneratedMessageV3.Builder<?> builder) {
+  // Use ChatRequest.newBuilder() to construct.
+  private ChatRequest(com.google.protobuf.GeneratedMessageV3.Builder<?> builder) {
     super(builder);
   }
-  private Message() {
+  private ChatRequest() {
     msgType_ = 0;
     text_ = "";
     audioUrl_ = "";
@@ -27,7 +31,7 @@ private static final long serialVersionUID = 0L;
   @SuppressWarnings({"unused"})
   protected java.lang.Object newInstance(
       UnusedPrivateParameter unused) {
-    return new Message();
+    return new ChatRequest();
   }
 
   @java.lang.Override
@@ -35,7 +39,7 @@ private static final long serialVersionUID = 0L;
   getUnknownFields() {
     return this.unknownFields;
   }
-  private Message(
+  private ChatRequest(
       com.google.protobuf.CodedInputStream input,
       com.google.protobuf.ExtensionRegistryLite extensionRegistry)
       throws com.google.protobuf.InvalidProtocolBufferException {
@@ -56,24 +60,6 @@ private static final long serialVersionUID = 0L;
           case 8: {
 
             roomId_ = input.readInt64();
-            break;
-          }
-          case 26: {
-            chatserver.gen.Author.Builder subBuilder = null;
-            if (author_ != null) {
-              subBuilder = author_.toBuilder();
-            }
-            author_ = input.readMessage(chatserver.gen.Author.parser(), extensionRegistry);
-            if (subBuilder != null) {
-              subBuilder.mergeFrom(author_);
-              author_ = subBuilder.buildPartial();
-            }
-
-            break;
-          }
-          case 32: {
-
-            createdTime_ = input.readInt64();
             break;
           }
           case 40: {
@@ -127,15 +113,15 @@ private static final long serialVersionUID = 0L;
   }
   public static final com.google.protobuf.Descriptors.Descriptor
       getDescriptor() {
-    return chatserver.gen.Chat.internal_static_Message_descriptor;
+    return chatserver.gen.Chat.internal_static_ChatRequest_descriptor;
   }
 
   @java.lang.Override
   protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
       internalGetFieldAccessorTable() {
-    return chatserver.gen.Chat.internal_static_Message_fieldAccessorTable
+    return chatserver.gen.Chat.internal_static_ChatRequest_fieldAccessorTable
         .ensureFieldAccessorsInitialized(
-            chatserver.gen.Message.class, chatserver.gen.Message.Builder.class);
+            chatserver.gen.ChatRequest.class, chatserver.gen.ChatRequest.Builder.class);
   }
 
   public static final int ROOMID_FIELD_NUMBER = 1;
@@ -147,43 +133,6 @@ private static final long serialVersionUID = 0L;
   @java.lang.Override
   public long getRoomId() {
     return roomId_;
-  }
-
-  public static final int AUTHOR_FIELD_NUMBER = 3;
-  private chatserver.gen.Author author_;
-  /**
-   * <code>.Author author = 3;</code>
-   * @return Whether the author field is set.
-   */
-  @java.lang.Override
-  public boolean hasAuthor() {
-    return author_ != null;
-  }
-  /**
-   * <code>.Author author = 3;</code>
-   * @return The author.
-   */
-  @java.lang.Override
-  public chatserver.gen.Author getAuthor() {
-    return author_ == null ? chatserver.gen.Author.getDefaultInstance() : author_;
-  }
-  /**
-   * <code>.Author author = 3;</code>
-   */
-  @java.lang.Override
-  public chatserver.gen.AuthorOrBuilder getAuthorOrBuilder() {
-    return getAuthor();
-  }
-
-  public static final int CREATEDTIME_FIELD_NUMBER = 4;
-  private long createdTime_;
-  /**
-   * <code>int64 createdTime = 4;</code>
-   * @return The createdTime.
-   */
-  @java.lang.Override
-  public long getCreatedTime() {
-    return createdTime_;
   }
 
   public static final int MSGTYPE_FIELD_NUMBER = 5;
@@ -374,12 +323,6 @@ private static final long serialVersionUID = 0L;
     if (roomId_ != 0L) {
       output.writeInt64(1, roomId_);
     }
-    if (author_ != null) {
-      output.writeMessage(3, getAuthor());
-    }
-    if (createdTime_ != 0L) {
-      output.writeInt64(4, createdTime_);
-    }
     if (msgType_ != chatserver.gen.MsgType.AUDIO_WITH_TEXT.getNumber()) {
       output.writeEnum(5, msgType_);
     }
@@ -408,14 +351,6 @@ private static final long serialVersionUID = 0L;
       size += com.google.protobuf.CodedOutputStream
         .computeInt64Size(1, roomId_);
     }
-    if (author_ != null) {
-      size += com.google.protobuf.CodedOutputStream
-        .computeMessageSize(3, getAuthor());
-    }
-    if (createdTime_ != 0L) {
-      size += com.google.protobuf.CodedOutputStream
-        .computeInt64Size(4, createdTime_);
-    }
     if (msgType_ != chatserver.gen.MsgType.AUDIO_WITH_TEXT.getNumber()) {
       size += com.google.protobuf.CodedOutputStream
         .computeEnumSize(5, msgType_);
@@ -442,20 +377,13 @@ private static final long serialVersionUID = 0L;
     if (obj == this) {
      return true;
     }
-    if (!(obj instanceof chatserver.gen.Message)) {
+    if (!(obj instanceof chatserver.gen.ChatRequest)) {
       return super.equals(obj);
     }
-    chatserver.gen.Message other = (chatserver.gen.Message) obj;
+    chatserver.gen.ChatRequest other = (chatserver.gen.ChatRequest) obj;
 
     if (getRoomId()
         != other.getRoomId()) return false;
-    if (hasAuthor() != other.hasAuthor()) return false;
-    if (hasAuthor()) {
-      if (!getAuthor()
-          .equals(other.getAuthor())) return false;
-    }
-    if (getCreatedTime()
-        != other.getCreatedTime()) return false;
     if (msgType_ != other.msgType_) return false;
     if (!getText()
         .equals(other.getText())) return false;
@@ -479,13 +407,6 @@ private static final long serialVersionUID = 0L;
     hash = (37 * hash) + ROOMID_FIELD_NUMBER;
     hash = (53 * hash) + com.google.protobuf.Internal.hashLong(
         getRoomId());
-    if (hasAuthor()) {
-      hash = (37 * hash) + AUTHOR_FIELD_NUMBER;
-      hash = (53 * hash) + getAuthor().hashCode();
-    }
-    hash = (37 * hash) + CREATEDTIME_FIELD_NUMBER;
-    hash = (53 * hash) + com.google.protobuf.Internal.hashLong(
-        getCreatedTime());
     hash = (37 * hash) + MSGTYPE_FIELD_NUMBER;
     hash = (53 * hash) + msgType_;
     hash = (37 * hash) + TEXT_FIELD_NUMBER;
@@ -501,69 +422,69 @@ private static final long serialVersionUID = 0L;
     return hash;
   }
 
-  public static chatserver.gen.Message parseFrom(
+  public static chatserver.gen.ChatRequest parseFrom(
       java.nio.ByteBuffer data)
       throws com.google.protobuf.InvalidProtocolBufferException {
     return PARSER.parseFrom(data);
   }
-  public static chatserver.gen.Message parseFrom(
+  public static chatserver.gen.ChatRequest parseFrom(
       java.nio.ByteBuffer data,
       com.google.protobuf.ExtensionRegistryLite extensionRegistry)
       throws com.google.protobuf.InvalidProtocolBufferException {
     return PARSER.parseFrom(data, extensionRegistry);
   }
-  public static chatserver.gen.Message parseFrom(
+  public static chatserver.gen.ChatRequest parseFrom(
       com.google.protobuf.ByteString data)
       throws com.google.protobuf.InvalidProtocolBufferException {
     return PARSER.parseFrom(data);
   }
-  public static chatserver.gen.Message parseFrom(
+  public static chatserver.gen.ChatRequest parseFrom(
       com.google.protobuf.ByteString data,
       com.google.protobuf.ExtensionRegistryLite extensionRegistry)
       throws com.google.protobuf.InvalidProtocolBufferException {
     return PARSER.parseFrom(data, extensionRegistry);
   }
-  public static chatserver.gen.Message parseFrom(byte[] data)
+  public static chatserver.gen.ChatRequest parseFrom(byte[] data)
       throws com.google.protobuf.InvalidProtocolBufferException {
     return PARSER.parseFrom(data);
   }
-  public static chatserver.gen.Message parseFrom(
+  public static chatserver.gen.ChatRequest parseFrom(
       byte[] data,
       com.google.protobuf.ExtensionRegistryLite extensionRegistry)
       throws com.google.protobuf.InvalidProtocolBufferException {
     return PARSER.parseFrom(data, extensionRegistry);
   }
-  public static chatserver.gen.Message parseFrom(java.io.InputStream input)
+  public static chatserver.gen.ChatRequest parseFrom(java.io.InputStream input)
       throws java.io.IOException {
     return com.google.protobuf.GeneratedMessageV3
         .parseWithIOException(PARSER, input);
   }
-  public static chatserver.gen.Message parseFrom(
+  public static chatserver.gen.ChatRequest parseFrom(
       java.io.InputStream input,
       com.google.protobuf.ExtensionRegistryLite extensionRegistry)
       throws java.io.IOException {
     return com.google.protobuf.GeneratedMessageV3
         .parseWithIOException(PARSER, input, extensionRegistry);
   }
-  public static chatserver.gen.Message parseDelimitedFrom(java.io.InputStream input)
+  public static chatserver.gen.ChatRequest parseDelimitedFrom(java.io.InputStream input)
       throws java.io.IOException {
     return com.google.protobuf.GeneratedMessageV3
         .parseDelimitedWithIOException(PARSER, input);
   }
-  public static chatserver.gen.Message parseDelimitedFrom(
+  public static chatserver.gen.ChatRequest parseDelimitedFrom(
       java.io.InputStream input,
       com.google.protobuf.ExtensionRegistryLite extensionRegistry)
       throws java.io.IOException {
     return com.google.protobuf.GeneratedMessageV3
         .parseDelimitedWithIOException(PARSER, input, extensionRegistry);
   }
-  public static chatserver.gen.Message parseFrom(
+  public static chatserver.gen.ChatRequest parseFrom(
       com.google.protobuf.CodedInputStream input)
       throws java.io.IOException {
     return com.google.protobuf.GeneratedMessageV3
         .parseWithIOException(PARSER, input);
   }
-  public static chatserver.gen.Message parseFrom(
+  public static chatserver.gen.ChatRequest parseFrom(
       com.google.protobuf.CodedInputStream input,
       com.google.protobuf.ExtensionRegistryLite extensionRegistry)
       throws java.io.IOException {
@@ -576,7 +497,7 @@ private static final long serialVersionUID = 0L;
   public static Builder newBuilder() {
     return DEFAULT_INSTANCE.toBuilder();
   }
-  public static Builder newBuilder(chatserver.gen.Message prototype) {
+  public static Builder newBuilder(chatserver.gen.ChatRequest prototype) {
     return DEFAULT_INSTANCE.toBuilder().mergeFrom(prototype);
   }
   @java.lang.Override
@@ -592,26 +513,30 @@ private static final long serialVersionUID = 0L;
     return builder;
   }
   /**
-   * Protobuf type {@code Message}
+   * <pre>
+   *&#47;////// chat
+   * </pre>
+   *
+   * Protobuf type {@code ChatRequest}
    */
   public static final class Builder extends
       com.google.protobuf.GeneratedMessageV3.Builder<Builder> implements
-      // @@protoc_insertion_point(builder_implements:Message)
-      chatserver.gen.MessageOrBuilder {
+      // @@protoc_insertion_point(builder_implements:ChatRequest)
+      chatserver.gen.ChatRequestOrBuilder {
     public static final com.google.protobuf.Descriptors.Descriptor
         getDescriptor() {
-      return chatserver.gen.Chat.internal_static_Message_descriptor;
+      return chatserver.gen.Chat.internal_static_ChatRequest_descriptor;
     }
 
     @java.lang.Override
     protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
         internalGetFieldAccessorTable() {
-      return chatserver.gen.Chat.internal_static_Message_fieldAccessorTable
+      return chatserver.gen.Chat.internal_static_ChatRequest_fieldAccessorTable
           .ensureFieldAccessorsInitialized(
-              chatserver.gen.Message.class, chatserver.gen.Message.Builder.class);
+              chatserver.gen.ChatRequest.class, chatserver.gen.ChatRequest.Builder.class);
     }
 
-    // Construct using chatserver.gen.Message.newBuilder()
+    // Construct using chatserver.gen.ChatRequest.newBuilder()
     private Builder() {
       maybeForceBuilderInitialization();
     }
@@ -631,14 +556,6 @@ private static final long serialVersionUID = 0L;
       super.clear();
       roomId_ = 0L;
 
-      if (authorBuilder_ == null) {
-        author_ = null;
-      } else {
-        author_ = null;
-        authorBuilder_ = null;
-      }
-      createdTime_ = 0L;
-
       msgType_ = 0;
 
       text_ = "";
@@ -655,17 +572,17 @@ private static final long serialVersionUID = 0L;
     @java.lang.Override
     public com.google.protobuf.Descriptors.Descriptor
         getDescriptorForType() {
-      return chatserver.gen.Chat.internal_static_Message_descriptor;
+      return chatserver.gen.Chat.internal_static_ChatRequest_descriptor;
     }
 
     @java.lang.Override
-    public chatserver.gen.Message getDefaultInstanceForType() {
-      return chatserver.gen.Message.getDefaultInstance();
+    public chatserver.gen.ChatRequest getDefaultInstanceForType() {
+      return chatserver.gen.ChatRequest.getDefaultInstance();
     }
 
     @java.lang.Override
-    public chatserver.gen.Message build() {
-      chatserver.gen.Message result = buildPartial();
+    public chatserver.gen.ChatRequest build() {
+      chatserver.gen.ChatRequest result = buildPartial();
       if (!result.isInitialized()) {
         throw newUninitializedMessageException(result);
       }
@@ -673,15 +590,9 @@ private static final long serialVersionUID = 0L;
     }
 
     @java.lang.Override
-    public chatserver.gen.Message buildPartial() {
-      chatserver.gen.Message result = new chatserver.gen.Message(this);
+    public chatserver.gen.ChatRequest buildPartial() {
+      chatserver.gen.ChatRequest result = new chatserver.gen.ChatRequest(this);
       result.roomId_ = roomId_;
-      if (authorBuilder_ == null) {
-        result.author_ = author_;
-      } else {
-        result.author_ = authorBuilder_.build();
-      }
-      result.createdTime_ = createdTime_;
       result.msgType_ = msgType_;
       result.text_ = text_;
       result.audioUrl_ = audioUrl_;
@@ -725,24 +636,18 @@ private static final long serialVersionUID = 0L;
     }
     @java.lang.Override
     public Builder mergeFrom(com.google.protobuf.Message other) {
-      if (other instanceof chatserver.gen.Message) {
-        return mergeFrom((chatserver.gen.Message)other);
+      if (other instanceof chatserver.gen.ChatRequest) {
+        return mergeFrom((chatserver.gen.ChatRequest)other);
       } else {
         super.mergeFrom(other);
         return this;
       }
     }
 
-    public Builder mergeFrom(chatserver.gen.Message other) {
-      if (other == chatserver.gen.Message.getDefaultInstance()) return this;
+    public Builder mergeFrom(chatserver.gen.ChatRequest other) {
+      if (other == chatserver.gen.ChatRequest.getDefaultInstance()) return this;
       if (other.getRoomId() != 0L) {
         setRoomId(other.getRoomId());
-      }
-      if (other.hasAuthor()) {
-        mergeAuthor(other.getAuthor());
-      }
-      if (other.getCreatedTime() != 0L) {
-        setCreatedTime(other.getCreatedTime());
       }
       if (other.msgType_ != 0) {
         setMsgTypeValue(other.getMsgTypeValue());
@@ -778,11 +683,11 @@ private static final long serialVersionUID = 0L;
         com.google.protobuf.CodedInputStream input,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws java.io.IOException {
-      chatserver.gen.Message parsedMessage = null;
+      chatserver.gen.ChatRequest parsedMessage = null;
       try {
         parsedMessage = PARSER.parsePartialFrom(input, extensionRegistry);
       } catch (com.google.protobuf.InvalidProtocolBufferException e) {
-        parsedMessage = (chatserver.gen.Message) e.getUnfinishedMessage();
+        parsedMessage = (chatserver.gen.ChatRequest) e.getUnfinishedMessage();
         throw e.unwrapIOException();
       } finally {
         if (parsedMessage != null) {
@@ -819,156 +724,6 @@ private static final long serialVersionUID = 0L;
     public Builder clearRoomId() {
       
       roomId_ = 0L;
-      onChanged();
-      return this;
-    }
-
-    private chatserver.gen.Author author_;
-    private com.google.protobuf.SingleFieldBuilderV3<
-        chatserver.gen.Author, chatserver.gen.Author.Builder, chatserver.gen.AuthorOrBuilder> authorBuilder_;
-    /**
-     * <code>.Author author = 3;</code>
-     * @return Whether the author field is set.
-     */
-    public boolean hasAuthor() {
-      return authorBuilder_ != null || author_ != null;
-    }
-    /**
-     * <code>.Author author = 3;</code>
-     * @return The author.
-     */
-    public chatserver.gen.Author getAuthor() {
-      if (authorBuilder_ == null) {
-        return author_ == null ? chatserver.gen.Author.getDefaultInstance() : author_;
-      } else {
-        return authorBuilder_.getMessage();
-      }
-    }
-    /**
-     * <code>.Author author = 3;</code>
-     */
-    public Builder setAuthor(chatserver.gen.Author value) {
-      if (authorBuilder_ == null) {
-        if (value == null) {
-          throw new NullPointerException();
-        }
-        author_ = value;
-        onChanged();
-      } else {
-        authorBuilder_.setMessage(value);
-      }
-
-      return this;
-    }
-    /**
-     * <code>.Author author = 3;</code>
-     */
-    public Builder setAuthor(
-        chatserver.gen.Author.Builder builderForValue) {
-      if (authorBuilder_ == null) {
-        author_ = builderForValue.build();
-        onChanged();
-      } else {
-        authorBuilder_.setMessage(builderForValue.build());
-      }
-
-      return this;
-    }
-    /**
-     * <code>.Author author = 3;</code>
-     */
-    public Builder mergeAuthor(chatserver.gen.Author value) {
-      if (authorBuilder_ == null) {
-        if (author_ != null) {
-          author_ =
-            chatserver.gen.Author.newBuilder(author_).mergeFrom(value).buildPartial();
-        } else {
-          author_ = value;
-        }
-        onChanged();
-      } else {
-        authorBuilder_.mergeFrom(value);
-      }
-
-      return this;
-    }
-    /**
-     * <code>.Author author = 3;</code>
-     */
-    public Builder clearAuthor() {
-      if (authorBuilder_ == null) {
-        author_ = null;
-        onChanged();
-      } else {
-        author_ = null;
-        authorBuilder_ = null;
-      }
-
-      return this;
-    }
-    /**
-     * <code>.Author author = 3;</code>
-     */
-    public chatserver.gen.Author.Builder getAuthorBuilder() {
-      
-      onChanged();
-      return getAuthorFieldBuilder().getBuilder();
-    }
-    /**
-     * <code>.Author author = 3;</code>
-     */
-    public chatserver.gen.AuthorOrBuilder getAuthorOrBuilder() {
-      if (authorBuilder_ != null) {
-        return authorBuilder_.getMessageOrBuilder();
-      } else {
-        return author_ == null ?
-            chatserver.gen.Author.getDefaultInstance() : author_;
-      }
-    }
-    /**
-     * <code>.Author author = 3;</code>
-     */
-    private com.google.protobuf.SingleFieldBuilderV3<
-        chatserver.gen.Author, chatserver.gen.Author.Builder, chatserver.gen.AuthorOrBuilder> 
-        getAuthorFieldBuilder() {
-      if (authorBuilder_ == null) {
-        authorBuilder_ = new com.google.protobuf.SingleFieldBuilderV3<
-            chatserver.gen.Author, chatserver.gen.Author.Builder, chatserver.gen.AuthorOrBuilder>(
-                getAuthor(),
-                getParentForChildren(),
-                isClean());
-        author_ = null;
-      }
-      return authorBuilder_;
-    }
-
-    private long createdTime_ ;
-    /**
-     * <code>int64 createdTime = 4;</code>
-     * @return The createdTime.
-     */
-    @java.lang.Override
-    public long getCreatedTime() {
-      return createdTime_;
-    }
-    /**
-     * <code>int64 createdTime = 4;</code>
-     * @param value The createdTime to set.
-     * @return This builder for chaining.
-     */
-    public Builder setCreatedTime(long value) {
-      
-      createdTime_ = value;
-      onChanged();
-      return this;
-    }
-    /**
-     * <code>int64 createdTime = 4;</code>
-     * @return This builder for chaining.
-     */
-    public Builder clearCreatedTime() {
-      
-      createdTime_ = 0L;
       onChanged();
       return this;
     }
@@ -1343,41 +1098,41 @@ private static final long serialVersionUID = 0L;
     }
 
 
-    // @@protoc_insertion_point(builder_scope:Message)
+    // @@protoc_insertion_point(builder_scope:ChatRequest)
   }
 
-  // @@protoc_insertion_point(class_scope:Message)
-  private static final chatserver.gen.Message DEFAULT_INSTANCE;
+  // @@protoc_insertion_point(class_scope:ChatRequest)
+  private static final chatserver.gen.ChatRequest DEFAULT_INSTANCE;
   static {
-    DEFAULT_INSTANCE = new chatserver.gen.Message();
+    DEFAULT_INSTANCE = new chatserver.gen.ChatRequest();
   }
 
-  public static chatserver.gen.Message getDefaultInstance() {
+  public static chatserver.gen.ChatRequest getDefaultInstance() {
     return DEFAULT_INSTANCE;
   }
 
-  private static final com.google.protobuf.Parser<Message>
-      PARSER = new com.google.protobuf.AbstractParser<Message>() {
+  private static final com.google.protobuf.Parser<ChatRequest>
+      PARSER = new com.google.protobuf.AbstractParser<ChatRequest>() {
     @java.lang.Override
-    public Message parsePartialFrom(
+    public ChatRequest parsePartialFrom(
         com.google.protobuf.CodedInputStream input,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws com.google.protobuf.InvalidProtocolBufferException {
-      return new Message(input, extensionRegistry);
+      return new ChatRequest(input, extensionRegistry);
     }
   };
 
-  public static com.google.protobuf.Parser<Message> parser() {
+  public static com.google.protobuf.Parser<ChatRequest> parser() {
     return PARSER;
   }
 
   @java.lang.Override
-  public com.google.protobuf.Parser<Message> getParserForType() {
+  public com.google.protobuf.Parser<ChatRequest> getParserForType() {
     return PARSER;
   }
 
   @java.lang.Override
-  public chatserver.gen.Message getDefaultInstanceForType() {
+  public chatserver.gen.ChatRequest getDefaultInstanceForType() {
     return DEFAULT_INSTANCE;
   }
 

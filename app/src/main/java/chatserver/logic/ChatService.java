@@ -35,7 +35,7 @@ public class ChatService extends ChatServiceGrpc.ChatServiceImplBase {
     }
 
     @Override
-    public void enterRoom(EnterRoomReq request, StreamObserver<Message> responseObserver) {
+    public void enterRoom(EnterRoomRequest request, StreamObserver<Message> responseObserver) {
         enterRoom.run(request, responseObserver);
     }
 
@@ -45,7 +45,7 @@ public class ChatService extends ChatServiceGrpc.ChatServiceImplBase {
     }
 
     @Override
-    public void chat(TextMessage request, StreamObserver<TextAudioStream> responseObserver) {
+    public void chat(ChatRequest request, StreamObserver<ChatResponseStream> responseObserver) {
         chat.run(request, responseObserver);
     }
 }

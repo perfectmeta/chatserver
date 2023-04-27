@@ -1,6 +1,6 @@
 package chatserver.logic;
 
-import chatserver.gen.EnterRoomReq;
+import chatserver.gen.EnterRoomRequest;
 import chatserver.gen.Message;
 import chatserver.service.RoomService;
 import io.grpc.stub.StreamObserver;
@@ -14,7 +14,7 @@ public class EnterRoom {
     @Autowired
     private RoomService roomService;
 
-    public void run(EnterRoomReq request, StreamObserver<Message> responseObserver) {
+    public void run(EnterRoomRequest request, StreamObserver<Message> responseObserver) {
         List<chatserver.dao.Message> messageHistory =
                 roomService.getMessageHistorySince(request.getRoomId(), request.getLastMessageId());
 

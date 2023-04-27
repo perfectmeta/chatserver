@@ -1,9 +1,9 @@
 package chatserver.logic;
 
 import chatserver.dao.Message;
+import chatserver.gen.ChatRequest;
+import chatserver.gen.ChatResponseStream;
 import chatserver.gen.MsgType;
-import chatserver.gen.TextAudioStream;
-import chatserver.gen.TextMessage;
 import chatserver.service.RoomService;
 import com.theokanning.openai.completion.chat.ChatCompletionChoice;
 import com.theokanning.openai.completion.chat.ChatCompletionRequest;
@@ -24,7 +24,7 @@ public class Chat {
     @Autowired
     private RoomService roomService;
 
-    public void run(TextMessage request, StreamObserver<TextAudioStream> responseObserver) {
+    public void run(ChatRequest request, StreamObserver<ChatResponseStream> responseObserver) {
         OpenAiService service = new OpenAiService(KeyManager.OPENAI_KEY);
 
         List<Message> messageHistory = roomService.getMessageHistory(request.getRoomId());
@@ -37,8 +37,13 @@ public class Chat {
         newUserMsg.setCreatedTime(System.currentTimeMillis());
         newUserMsg.setMsgType(MsgType.TEXT_VALUE);
         newUserMsg.setText(request.getText());
-        roomService.addMessage(newUserMsg);
+        newUserMsg = roomService.addMessage(newUserMsg);
 
+        chatserver.gen.Message requestMessage = Msg.fromDb(newUserMsg);
+
+
+        ChatResponseStream firstResponse = ChatResponseStream.newBuilder().setRequestMessage(requestMessage).build();
+        responseObserver.onNext(firstResponse);
 
         final List<ChatMessage> messages = new ArrayList<>();
         final ChatMessage systemMessage = new ChatMessage(ChatMessageRole.SYSTEM.value(), KeyManager.TEACHER_PROMPT);
@@ -78,8 +83,10 @@ public class Chat {
                             content = "";
                         }
                         gptReturn.append(content);
-                        TextAudioStream t = TextAudioStream.newBuilder().setText(content).build();
-                        responseObserver.onNext(t);
+                        ChatResponseStream text = ChatResponseStream.newBuilder().setText(content).build();
+                        responseObserver.onNext(text);
+
+                        // TODO: tts
                     }
                 });
 
