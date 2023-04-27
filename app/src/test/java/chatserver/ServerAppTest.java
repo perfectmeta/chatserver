@@ -93,8 +93,8 @@ class ServerAppTest {
 
     @Test
     void chat() {
-        TextMessage msg = TextMessage.newBuilder().setRoomId(1).setText("are you ok?").build();
-        Iterator<TextAudioStream> chat = blockingStub.chat(msg);
+        ChatRequest msg = ChatRequest.newBuilder().setRoomId(1).setText("are you ok?").build();
+        Iterator<ChatResponseStream> chat = blockingStub.chat(msg);
         chat.forEachRemaining(textAudioStream -> {
             System.out.print(textAudioStream.getText() + " - ");
         });

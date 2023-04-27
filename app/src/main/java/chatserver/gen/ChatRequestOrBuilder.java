@@ -3,8 +3,8 @@
 
 package chatserver.gen;
 
-public interface MessageOrBuilder extends
-    // @@protoc_insertion_point(interface_extends:Message)
+public interface ChatRequestOrBuilder extends
+    // @@protoc_insertion_point(interface_extends:ChatRequest)
     com.google.protobuf.MessageOrBuilder {
 
   /**
@@ -12,27 +12,6 @@ public interface MessageOrBuilder extends
    * @return The roomId.
    */
   long getRoomId();
-
-  /**
-   * <code>.Author author = 3;</code>
-   * @return Whether the author field is set.
-   */
-  boolean hasAuthor();
-  /**
-   * <code>.Author author = 3;</code>
-   * @return The author.
-   */
-  chatserver.gen.Author getAuthor();
-  /**
-   * <code>.Author author = 3;</code>
-   */
-  chatserver.gen.AuthorOrBuilder getAuthorOrBuilder();
-
-  /**
-   * <code>int64 createdTime = 4;</code>
-   * @return The createdTime.
-   */
-  long getCreatedTime();
 
   /**
    * <code>.MsgType msgType = 5;</code>

@@ -3,8 +3,8 @@
 
 package chatserver.gen;
 
-public interface EnterRoomReqOrBuilder extends
-    // @@protoc_insertion_point(interface_extends:EnterRoomReq)
+public interface EnterRoomRequestOrBuilder extends
+    // @@protoc_insertion_point(interface_extends:EnterRoomRequest)
     com.google.protobuf.MessageOrBuilder {
 
   /**
