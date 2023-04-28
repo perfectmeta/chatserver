@@ -3,14 +3,16 @@ package chatserver.security;
 import com.google.common.base.Strings;
 
 import java.io.*;
+import java.nio.file.FileSystems;
 import java.nio.file.Files;
+import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Properties;
 
 public class KeyManager {
     public static String XFY_APPID = "";
-    public static String XFY_API_SECRET ="";
-    public static String XFY_API_KEY ="";
+    public static String XFY_API_SECRET = "";
+    public static String XFY_API_KEY = "";
     public static String TTS_KEY = "";
     public static String ASR_KEY = "";
     public static String OPENAI_KEY = "";
@@ -31,12 +33,14 @@ public class KeyManager {
     }
 
     public static void reload(String path) {
-        var configFile = Strings.isNullOrEmpty(path) ? System.getenv("CHAT_KEY_FILE") : path;
-        if (Strings.isNullOrEmpty(configFile)
-                || !Files.exists(Paths.get(configFile).toAbsolutePath())
-                || !Files.isRegularFile(Paths.get(configFile).toAbsolutePath())) {
-            configFile = System.getProperty("user.dir") + File.separator + "key.properties";
+        String configFile = path;
+        if (Strings.isNullOrEmpty(configFile)) {
+            configFile = System.getProperty("chatserver.keyfile");
+            if (Strings.isNullOrEmpty(configFile)) {
+                configFile = "key.properties";
+            }
         }
+
         var properties = new Properties();
         try (var fileInputStream = new FileInputStream(configFile)) {
             properties.load(fileInputStream);

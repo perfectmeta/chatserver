@@ -1,4 +1,4 @@
-package third.asr;
+package chatserver.asr;
 
 import chatserver.third.asr.XFYasr;
 import org.junit.jupiter.api.Test;
