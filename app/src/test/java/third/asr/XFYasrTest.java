@@ -3,24 +3,33 @@ package third.asr;
 import chatserver.third.asr.XFYasr;
 import org.junit.jupiter.api.Test;
 
+import javax.sound.midi.SysexMessage;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Paths;
 
 public class XFYasrTest {
+    // @Test
+    public void asrTest() throws IOException {
+        var audioPath = Paths.get("src/test/resources/iat_speex_wideband_8k.speex").toAbsolutePath();
+        System.out.println(audioPath);
+        FileInputStream fis = new FileInputStream(audioPath.toFile());
+        var ins = XFYasr.makeSession(fis);
+        byte[] bytes = ins.readAllBytes();
+        var content = new String(bytes, StandardCharsets.UTF_8);
+        System.out.println(content);
+    }
+
     @Test
-    public void asrTest() {
-        try {
-            var audioPath = Paths.get("src/test/resources/iat_speex_wideband_8k.speex").toAbsolutePath();
-            System.out.println(audioPath);
-            FileInputStream fis = new FileInputStream(audioPath.toFile());
-            var ins = XFYasr.makeSession(fis);
-            byte[] bytes = ins.readAllBytes();
-            var content = new String(bytes, StandardCharsets.UTF_8);
-            System.out.println(content);
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
+    public void sdkInterfaceTest() throws IOException {
+        var audioPath = Paths.get("src/test/resources/iat_speex_wideband_8k.speex").toAbsolutePath();
+        System.out.println(audioPath);
+        FileInputStream fis = new FileInputStream(audioPath.toFile());
+        InputStream resultStream = XFYasr.listen(fis);
+        var result = new String(resultStream.readAllBytes(), StandardCharsets.UTF_8) ;
+        System.out.println(result);
     }
 }
