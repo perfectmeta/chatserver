@@ -10,7 +10,7 @@ public class XFYttsTest {
     @Test
     public void ttsStreamTest() throws IOException {
         try (var inputStream = XFYtts.makeSession("你好,中国");
-             var fos = new FileOutputStream("testAudio")) {
+            var fos = new FileOutputStream("testAudio")) {
             byte[] content = inputStream.readAllBytes();
             fos.write(content);
             fos.flush();

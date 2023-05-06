@@ -62,7 +62,11 @@ tasks.withType(JavaCompile).forEach {
 }
 
 run {
-    jvmArgs += ['--enable-preview']
+    jvmArgs += ['--enable-preview', '-Djava.library.path=./src/main/resources/lib/']
+}
+
+test {
+    jvmArgs += ['--enable-preview', '-Djava.library.path=./src/main/resources/lib/']
 }
 
 tasks.named('test') {

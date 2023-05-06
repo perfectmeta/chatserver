@@ -2,6 +2,7 @@ package chatserver.third.asr;
 
 import chatserver.third.asr.entity.stream.req.Request;
 import chatserver.third.asr.entity.stream.res.Response;
+import chatserver.third.asr.entity.stream.res.Result;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.java_websocket.handshake.ServerHandshake;
@@ -9,12 +10,13 @@ import chatserver.security.KeyManager;
 
 import java.io.*;
 import java.net.URI;
+import java.nio.charset.StandardCharsets;
 import java.util.Base64;
 import java.util.logging.Logger;
 
 public class XFYASRSession extends org.java_websocket.client.WebSocketClient implements ASRSession {
     public static final Logger logger = Logger.getLogger(XFYASRSession.class.getName());
-    public static final int AUDIO_BUFFER_SIZE = 1024 * 1024;
+    public static final int AUDIO_BUFFER_SIZE = 1280;
 
     enum SessionStatus {
         CREATE,
@@ -56,12 +58,16 @@ public class XFYASRSession extends org.java_websocket.client.WebSocketClient imp
                     var content_ = new byte[AUDIO_BUFFER_SIZE];
                     System.arraycopy(audioBuffer, 0, content_, 0, size);
                     var requestContent = makeRequest(content_, first);
+                    logger.info("content: " + requestContent);
                     first = false;
                     send(requestContent);
+                    Thread.sleep(40);
                 }
-                send(makeEndRequest());
+                var lastRequest = makeEndRequest();
+                logger.info("content: " + lastRequest);
+                send(lastRequest);
                 status = SessionStatus.WAITING_FOR_REMOTE;
-            } catch (IOException e) {
+            } catch (IOException | InterruptedException e) {
                 throw new RuntimeException(e);
             }
         });
@@ -69,11 +75,11 @@ public class XFYASRSession extends org.java_websocket.client.WebSocketClient imp
 
     @Override
     public void onMessage(String message) {
-        logger.info("message" + message);
+        logger.info("message " + message);
         var om = new ObjectMapper();
         try {
             var obj = om.readValue(message, Response.class);
-            textOutputStream.write(obj.data().result().bg());
+            textOutputStream.write(getFragmentText(obj.data().result()).getBytes(StandardCharsets.UTF_8));
             if (obj.data().status() == 2  || obj.data().result().ls()) {
                 textOutputStream.flush();
                 textOutputStream.close();
@@ -81,6 +87,17 @@ public class XFYASRSession extends org.java_websocket.client.WebSocketClient imp
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
+    }
+
+    private String getFragmentText(Result result) {
+        StringBuilder sb = new StringBuilder();
+        for (var ws : result.ws()) {
+            for (var cw : ws.cw()) {
+                sb.append(cw.w());
+            }
+        }
+
+        return sb.toString();
     }
 
     @Override
@@ -129,11 +146,11 @@ public class XFYASRSession extends org.java_websocket.client.WebSocketClient imp
         builder.business.rlang = "zh-cn";
         builder.business.vinfo = 0;
         builder.business.nunum = 1;
-        builder.business.speex_size = 1;
+        builder.business.speex_size = 0;
         builder.business.nbest = 1;     //暂时先用一个候选句子
         builder.business.wbest = 1;     //暂时先用一个候选词
-        builder.data.format = "audio/L16;rate=8000";
-        builder.data.encoding = "speex";
+        builder.data.format = "audio/L16;rate=16000";
+        builder.data.encoding = "raw";
 
         return builder;
     }
