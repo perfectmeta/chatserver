@@ -42,5 +42,5 @@ public class UserService {  // 不抽象成接口，直接用，因为这里不�
 
     public void deleteByUserId(long userId) { users.deleteById(userId);}
 
-    public User deleteByPhone(String phone) { return users.deleteByPhone(phone);}
+    public int deleteByPhone(String phone) { return users.deleteByPhone(phone);}
 }

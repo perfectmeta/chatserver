@@ -35,7 +35,7 @@ public class KeyManager {
     public static void reload(String path) {
         String configFile = path;
         if (Strings.isNullOrEmpty(configFile)) {
-            configFile = System.getProperty("chatserver.keyfile");
+            configFile = System.getenv("CHAT_KEY_FILE");
             if (Strings.isNullOrEmpty(configFile)) {
                 configFile = "key.properties";
             }

@@ -20,6 +20,8 @@ import java.util.logging.Logger;
 public class LoginTest {
     private ChatServiceGrpc.ChatServiceStub stub;
 
+    private List<RoomInfo> rooms = new ArrayList<>();
+
     @Autowired
     private UserService userService;
     private static final Logger logger = Logger.getLogger(LoginTest.class.getName());
@@ -63,13 +65,14 @@ public class LoginTest {
                 logger.info(" onCompleted");
             }
         });
+
         Thread.sleep(3000);
         Assertions.assertEquals(1, results.size());
         Assertions.assertEquals(0, results.get(0).getStatusCode());
     }
 
     @Test
-    void chatTest() throws InterruptedException {
+    void getRoomListTest() throws InterruptedException {
         Hello hello = Hello.newBuilder().build();
         Thread.sleep(3000);
         List<RoomInfo> result = new ArrayList<>();
@@ -95,5 +98,40 @@ public class LoginTest {
         Thread.sleep(3000);
         Assertions.assertEquals(1, result.size());
         Assertions.assertEquals("nick", result.get(0).getYou().getName());
+        rooms = result;
+    }
+
+    @Test
+    void enterRoomTest() throws InterruptedException {
+        var firstRoom = rooms.get(0);
+        var enterRoomRequest = EnterRoomRequest.newBuilder()
+                .setRoomId(firstRoom.getRoomId())
+                .setLastMessageId(firstRoom.getLastMessageId()).build();
+        var messages = new ArrayList<>();
+        stub.enterRoom(enterRoomRequest, new StreamObserver<>() {
+            @Override
+            public void onNext(Message value) {
+                logger.info("new message received: " + value);
+                messages.add(value);
+            }
+
+            @Override
+            public void onError(Throwable t) {
+                logger.warning("onError: " + t.getMessage());
+            }
+
+            @Override
+            public void onCompleted() {
+                logger.warning("onComplete: ");
+            }
+        });
+        logger.info("finished");
+        Thread.sleep(3000);
+        Assertions.assertEquals(0, messages.size());
+    }
+
+    @Test
+    void sendMessageTest() {
+
     }
 }

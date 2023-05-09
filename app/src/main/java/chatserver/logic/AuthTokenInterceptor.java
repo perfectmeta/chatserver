@@ -8,8 +8,11 @@ import io.grpc.ServerCall.Listener;
 import org.lognet.springboot.grpc.GRpcGlobalInterceptor;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import java.util.logging.Logger;
+
 @GRpcGlobalInterceptor
 public class AuthTokenInterceptor implements ServerInterceptor {
+    private static final Logger logger = Logger.getLogger(AuthTokenInterceptor.class.getName());
 
     @Autowired
     private UserService users;  // 不够service层了，直接用repo
@@ -22,14 +25,19 @@ public class AuthTokenInterceptor implements ServerInterceptor {
                                                       final Metadata metadata,
                                                       final ServerCallHandler<ReqT, RespT> serverCallHandler) {
 
+        MethodDescriptor<ReqT, RespT> methodDescriptor = serverCall.getMethodDescriptor();
+        var methodName = methodDescriptor.getFullMethodName();
+        if (ignoreValidate(methodName)) {
+            logger.info("request handler " + methodName + "ignore validation");
+            return serverCallHandler.startCall(serverCall, metadata);
+        }
         final String authToken = metadata.get(Key.of("auth_token", Metadata.ASCII_STRING_MARSHALLER));
-
         final User user = validate(authToken);
 
         if (user == null) {
+            logger.warning("validation failed when access " + methodName);
             serverCall.close(Status.PERMISSION_DENIED, new Metadata());
-            return new ServerCall.Listener<>() {
-            };
+            return new ServerCall.Listener<>() {};
         }
 
         Context context = Context.current().withValue(USER, user);
@@ -39,5 +47,12 @@ public class AuthTokenInterceptor implements ServerInterceptor {
 
     private User validate(String authToken) {
         return users.findByUserId(Long.parseLong(authToken));
+    }
+
+    private boolean ignoreValidate(String methodName) {
+        return switch (methodName) {
+            case "ChatService/Signup" -> true;
+            default -> false;
+        };
     }
 }

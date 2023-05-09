@@ -27,6 +27,7 @@ message ChatRequest {// 临时显示在聊天窗口里的message
   string audioUrl = 7;
   string imageUrl = 8;
   string videoUrl = 9;
+  string sequence = 10;
 }
 
 message ChatResponseStream {
