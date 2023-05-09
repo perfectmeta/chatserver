@@ -21,8 +21,18 @@ public class ChatService extends ChatServiceGrpc.ChatServiceImplBase {
     private SpeechRecognize speechRecognize;
 
     @Autowired
+    private TextToSound textToSound;
+
+    @Autowired
     private Chat chat;
 
+    @Autowired
+    private Signup signup;
+
+    @Override
+    public void signup(RegisterInfo request, StreamObserver<RegisterFeedback> responseObserver) {
+        signup.run(request, responseObserver);
+    }
 
     @Override
     public void getRoomList(Hello request, StreamObserver<RoomInfo> responseObserver) {

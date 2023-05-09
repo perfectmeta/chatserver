@@ -3,10 +3,6 @@ package chatserver.gen;
 import static io.grpc.MethodDescriptor.generateFullMethodName;
 
 /**
- * <pre>
- * 第一步用户登录，取到token后，
- * 把token放到之后所有的请求的header里，例子见app/src/test/java/chatserver/ServerAppTest.java
- * </pre>
  */
 @javax.annotation.Generated(
     value = "by gRPC proto compiler (version 1.54.1)",
@@ -19,6 +15,37 @@ public final class ChatServiceGrpc {
   public static final String SERVICE_NAME = "ChatService";
 
   // Static method descriptors that strictly reflect the proto.
+  private static volatile io.grpc.MethodDescriptor<chatserver.gen.RegisterInfo,
+      chatserver.gen.RegisterFeedback> getSignupMethod;
+
+  @io.grpc.stub.annotations.RpcMethod(
+      fullMethodName = SERVICE_NAME + '/' + "Signup",
+      requestType = chatserver.gen.RegisterInfo.class,
+      responseType = chatserver.gen.RegisterFeedback.class,
+      methodType = io.grpc.MethodDescriptor.MethodType.UNARY)
+  public static io.grpc.MethodDescriptor<chatserver.gen.RegisterInfo,
+      chatserver.gen.RegisterFeedback> getSignupMethod() {
+    io.grpc.MethodDescriptor<chatserver.gen.RegisterInfo, chatserver.gen.RegisterFeedback> getSignupMethod;
+    if ((getSignupMethod = ChatServiceGrpc.getSignupMethod) == null) {
+      synchronized (ChatServiceGrpc.class) {
+        if ((getSignupMethod = ChatServiceGrpc.getSignupMethod) == null) {
+          ChatServiceGrpc.getSignupMethod = getSignupMethod =
+              io.grpc.MethodDescriptor.<chatserver.gen.RegisterInfo, chatserver.gen.RegisterFeedback>newBuilder()
+              .setType(io.grpc.MethodDescriptor.MethodType.UNARY)
+              .setFullMethodName(generateFullMethodName(SERVICE_NAME, "Signup"))
+              .setSampledToLocalTracing(true)
+              .setRequestMarshaller(io.grpc.protobuf.ProtoUtils.marshaller(
+                  chatserver.gen.RegisterInfo.getDefaultInstance()))
+              .setResponseMarshaller(io.grpc.protobuf.ProtoUtils.marshaller(
+                  chatserver.gen.RegisterFeedback.getDefaultInstance()))
+              .setSchemaDescriptor(new ChatServiceMethodDescriptorSupplier("Signup"))
+              .build();
+        }
+      }
+    }
+    return getSignupMethod;
+  }
+
   private static volatile io.grpc.MethodDescriptor<chatserver.gen.Hello,
       chatserver.gen.RoomInfo> getGetRoomListMethod;
 
@@ -219,12 +246,19 @@ public final class ChatServiceGrpc {
   }
 
   /**
-   * <pre>
-   * 第一步用户登录，取到token后，
-   * 把token放到之后所有的请求的header里，例子见app/src/test/java/chatserver/ServerAppTest.java
-   * </pre>
    */
   public interface AsyncService {
+
+    /**
+     * <pre>
+     * 第一步用户登录，取到token后，
+     * 把token放到之后所有的请求的header里，例子见app/src/test/java/chatserver/ServerAppTest.java
+     * </pre>
+     */
+    default void signup(chatserver.gen.RegisterInfo request,
+        io.grpc.stub.StreamObserver<chatserver.gen.RegisterFeedback> responseObserver) {
+      io.grpc.stub.ServerCalls.asyncUnimplementedUnaryCall(getSignupMethod(), responseObserver);
+    }
 
     /**
      * <pre>
@@ -279,10 +313,6 @@ public final class ChatServiceGrpc {
 
   /**
    * Base class for the server implementation of the service ChatService.
-   * <pre>
-   * 第一步用户登录，取到token后，
-   * 把token放到之后所有的请求的header里，例子见app/src/test/java/chatserver/ServerAppTest.java
-   * </pre>
    */
   public static abstract class ChatServiceImplBase
       implements io.grpc.BindableService, AsyncService {
@@ -294,10 +324,6 @@ public final class ChatServiceGrpc {
 
   /**
    * A stub to allow clients to do asynchronous rpc calls to service ChatService.
-   * <pre>
-   * 第一步用户登录，取到token后，
-   * 把token放到之后所有的请求的header里，例子见app/src/test/java/chatserver/ServerAppTest.java
-   * </pre>
    */
   public static final class ChatServiceStub
       extends io.grpc.stub.AbstractAsyncStub<ChatServiceStub> {
@@ -310,6 +336,18 @@ public final class ChatServiceGrpc {
     protected ChatServiceStub build(
         io.grpc.Channel channel, io.grpc.CallOptions callOptions) {
       return new ChatServiceStub(channel, callOptions);
+    }
+
+    /**
+     * <pre>
+     * 第一步用户登录，取到token后，
+     * 把token放到之后所有的请求的header里，例子见app/src/test/java/chatserver/ServerAppTest.java
+     * </pre>
+     */
+    public void signup(chatserver.gen.RegisterInfo request,
+        io.grpc.stub.StreamObserver<chatserver.gen.RegisterFeedback> responseObserver) {
+      io.grpc.stub.ClientCalls.asyncUnaryCall(
+          getChannel().newCall(getSignupMethod(), getCallOptions()), request, responseObserver);
     }
 
     /**
@@ -370,10 +408,6 @@ public final class ChatServiceGrpc {
 
   /**
    * A stub to allow clients to do synchronous rpc calls to service ChatService.
-   * <pre>
-   * 第一步用户登录，取到token后，
-   * 把token放到之后所有的请求的header里，例子见app/src/test/java/chatserver/ServerAppTest.java
-   * </pre>
    */
   public static final class ChatServiceBlockingStub
       extends io.grpc.stub.AbstractBlockingStub<ChatServiceBlockingStub> {
@@ -386,6 +420,17 @@ public final class ChatServiceGrpc {
     protected ChatServiceBlockingStub build(
         io.grpc.Channel channel, io.grpc.CallOptions callOptions) {
       return new ChatServiceBlockingStub(channel, callOptions);
+    }
+
+    /**
+     * <pre>
+     * 第一步用户登录，取到token后，
+     * 把token放到之后所有的请求的header里，例子见app/src/test/java/chatserver/ServerAppTest.java
+     * </pre>
+     */
+    public chatserver.gen.RegisterFeedback signup(chatserver.gen.RegisterInfo request) {
+      return io.grpc.stub.ClientCalls.blockingUnaryCall(
+          getChannel(), getSignupMethod(), getCallOptions(), request);
     }
 
     /**
@@ -435,10 +480,6 @@ public final class ChatServiceGrpc {
 
   /**
    * A stub to allow clients to do ListenableFuture-style rpc calls to service ChatService.
-   * <pre>
-   * 第一步用户登录，取到token后，
-   * 把token放到之后所有的请求的header里，例子见app/src/test/java/chatserver/ServerAppTest.java
-   * </pre>
    */
   public static final class ChatServiceFutureStub
       extends io.grpc.stub.AbstractFutureStub<ChatServiceFutureStub> {
@@ -452,13 +493,26 @@ public final class ChatServiceGrpc {
         io.grpc.Channel channel, io.grpc.CallOptions callOptions) {
       return new ChatServiceFutureStub(channel, callOptions);
     }
+
+    /**
+     * <pre>
+     * 第一步用户登录，取到token后，
+     * 把token放到之后所有的请求的header里，例子见app/src/test/java/chatserver/ServerAppTest.java
+     * </pre>
+     */
+    public com.google.common.util.concurrent.ListenableFuture<chatserver.gen.RegisterFeedback> signup(
+        chatserver.gen.RegisterInfo request) {
+      return io.grpc.stub.ClientCalls.futureUnaryCall(
+          getChannel().newCall(getSignupMethod(), getCallOptions()), request);
+    }
   }
 
-  private static final int METHODID_GET_ROOM_LIST = 0;
-  private static final int METHODID_GET_NEW_MESSAGE_STREAM = 1;
-  private static final int METHODID_ENTER_ROOM = 2;
-  private static final int METHODID_CHAT = 3;
-  private static final int METHODID_SPEECH_RECOGNIZE = 4;
+  private static final int METHODID_SIGNUP = 0;
+  private static final int METHODID_GET_ROOM_LIST = 1;
+  private static final int METHODID_GET_NEW_MESSAGE_STREAM = 2;
+  private static final int METHODID_ENTER_ROOM = 3;
+  private static final int METHODID_CHAT = 4;
+  private static final int METHODID_SPEECH_RECOGNIZE = 5;
 
   private static final class MethodHandlers<Req, Resp> implements
       io.grpc.stub.ServerCalls.UnaryMethod<Req, Resp>,
@@ -477,6 +531,10 @@ public final class ChatServiceGrpc {
     @java.lang.SuppressWarnings("unchecked")
     public void invoke(Req request, io.grpc.stub.StreamObserver<Resp> responseObserver) {
       switch (methodId) {
+        case METHODID_SIGNUP:
+          serviceImpl.signup((chatserver.gen.RegisterInfo) request,
+              (io.grpc.stub.StreamObserver<chatserver.gen.RegisterFeedback>) responseObserver);
+          break;
         case METHODID_GET_ROOM_LIST:
           serviceImpl.getRoomList((chatserver.gen.Hello) request,
               (io.grpc.stub.StreamObserver<chatserver.gen.RoomInfo>) responseObserver);
@@ -514,6 +572,13 @@ public final class ChatServiceGrpc {
 
   public static final io.grpc.ServerServiceDefinition bindService(AsyncService service) {
     return io.grpc.ServerServiceDefinition.builder(getServiceDescriptor())
+        .addMethod(
+          getSignupMethod(),
+          io.grpc.stub.ServerCalls.asyncUnaryCall(
+            new MethodHandlers<
+              chatserver.gen.RegisterInfo,
+              chatserver.gen.RegisterFeedback>(
+                service, METHODID_SIGNUP)))
         .addMethod(
           getGetRoomListMethod(),
           io.grpc.stub.ServerCalls.asyncServerStreamingCall(
@@ -597,6 +662,7 @@ public final class ChatServiceGrpc {
         if (result == null) {
           serviceDescriptor = result = io.grpc.ServiceDescriptor.newBuilder(SERVICE_NAME)
               .setSchemaDescriptor(new ChatServiceFileDescriptorSupplier())
+              .addMethod(getSignupMethod())
               .addMethod(getGetRoomListMethod())
               .addMethod(getGetNewMessageStreamMethod())
               .addMethod(getEnterRoomMethod())

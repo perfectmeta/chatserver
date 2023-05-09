@@ -16,6 +16,7 @@ private static final long serialVersionUID = 0L;
     super(builder);
   }
   private Hello() {
+    whoami_ = "";
   }
 
   @java.lang.Override
@@ -48,6 +49,12 @@ private static final long serialVersionUID = 0L;
           case 0:
             done = true;
             break;
+          case 10: {
+            java.lang.String s = input.readStringRequireUtf8();
+
+            whoami_ = s;
+            break;
+          }
           default: {
             if (!parseUnknownField(
                 input, unknownFields, extensionRegistry, tag)) {
@@ -80,6 +87,44 @@ private static final long serialVersionUID = 0L;
             chatserver.gen.Hello.class, chatserver.gen.Hello.Builder.class);
   }
 
+  public static final int WHOAMI_FIELD_NUMBER = 1;
+  private volatile java.lang.Object whoami_;
+  /**
+   * <code>string whoami = 1;</code>
+   * @return The whoami.
+   */
+  @java.lang.Override
+  public java.lang.String getWhoami() {
+    java.lang.Object ref = whoami_;
+    if (ref instanceof java.lang.String) {
+      return (java.lang.String) ref;
+    } else {
+      com.google.protobuf.ByteString bs = 
+          (com.google.protobuf.ByteString) ref;
+      java.lang.String s = bs.toStringUtf8();
+      whoami_ = s;
+      return s;
+    }
+  }
+  /**
+   * <code>string whoami = 1;</code>
+   * @return The bytes for whoami.
+   */
+  @java.lang.Override
+  public com.google.protobuf.ByteString
+      getWhoamiBytes() {
+    java.lang.Object ref = whoami_;
+    if (ref instanceof java.lang.String) {
+      com.google.protobuf.ByteString b = 
+          com.google.protobuf.ByteString.copyFromUtf8(
+              (java.lang.String) ref);
+      whoami_ = b;
+      return b;
+    } else {
+      return (com.google.protobuf.ByteString) ref;
+    }
+  }
+
   private byte memoizedIsInitialized = -1;
   @java.lang.Override
   public final boolean isInitialized() {
@@ -94,6 +139,9 @@ private static final long serialVersionUID = 0L;
   @java.lang.Override
   public void writeTo(com.google.protobuf.CodedOutputStream output)
                       throws java.io.IOException {
+    if (!getWhoamiBytes().isEmpty()) {
+      com.google.protobuf.GeneratedMessageV3.writeString(output, 1, whoami_);
+    }
     unknownFields.writeTo(output);
   }
 
@@ -103,6 +151,9 @@ private static final long serialVersionUID = 0L;
     if (size != -1) return size;
 
     size = 0;
+    if (!getWhoamiBytes().isEmpty()) {
+      size += com.google.protobuf.GeneratedMessageV3.computeStringSize(1, whoami_);
+    }
     size += unknownFields.getSerializedSize();
     memoizedSize = size;
     return size;
@@ -118,6 +169,8 @@ private static final long serialVersionUID = 0L;
     }
     chatserver.gen.Hello other = (chatserver.gen.Hello) obj;
 
+    if (!getWhoami()
+        .equals(other.getWhoami())) return false;
     if (!unknownFields.equals(other.unknownFields)) return false;
     return true;
   }
@@ -129,6 +182,8 @@ private static final long serialVersionUID = 0L;
     }
     int hash = 41;
     hash = (19 * hash) + getDescriptor().hashCode();
+    hash = (37 * hash) + WHOAMI_FIELD_NUMBER;
+    hash = (53 * hash) + getWhoami().hashCode();
     hash = (29 * hash) + unknownFields.hashCode();
     memoizedHashCode = hash;
     return hash;
@@ -262,6 +317,8 @@ private static final long serialVersionUID = 0L;
     @java.lang.Override
     public Builder clear() {
       super.clear();
+      whoami_ = "";
+
       return this;
     }
 
@@ -288,6 +345,7 @@ private static final long serialVersionUID = 0L;
     @java.lang.Override
     public chatserver.gen.Hello buildPartial() {
       chatserver.gen.Hello result = new chatserver.gen.Hello(this);
+      result.whoami_ = whoami_;
       onBuilt();
       return result;
     }
@@ -336,6 +394,10 @@ private static final long serialVersionUID = 0L;
 
     public Builder mergeFrom(chatserver.gen.Hello other) {
       if (other == chatserver.gen.Hello.getDefaultInstance()) return this;
+      if (!other.getWhoami().isEmpty()) {
+        whoami_ = other.whoami_;
+        onChanged();
+      }
       this.mergeUnknownFields(other.unknownFields);
       onChanged();
       return this;
@@ -362,6 +424,82 @@ private static final long serialVersionUID = 0L;
           mergeFrom(parsedMessage);
         }
       }
+      return this;
+    }
+
+    private java.lang.Object whoami_ = "";
+    /**
+     * <code>string whoami = 1;</code>
+     * @return The whoami.
+     */
+    public java.lang.String getWhoami() {
+      java.lang.Object ref = whoami_;
+      if (!(ref instanceof java.lang.String)) {
+        com.google.protobuf.ByteString bs =
+            (com.google.protobuf.ByteString) ref;
+        java.lang.String s = bs.toStringUtf8();
+        whoami_ = s;
+        return s;
+      } else {
+        return (java.lang.String) ref;
+      }
+    }
+    /**
+     * <code>string whoami = 1;</code>
+     * @return The bytes for whoami.
+     */
+    public com.google.protobuf.ByteString
+        getWhoamiBytes() {
+      java.lang.Object ref = whoami_;
+      if (ref instanceof String) {
+        com.google.protobuf.ByteString b = 
+            com.google.protobuf.ByteString.copyFromUtf8(
+                (java.lang.String) ref);
+        whoami_ = b;
+        return b;
+      } else {
+        return (com.google.protobuf.ByteString) ref;
+      }
+    }
+    /**
+     * <code>string whoami = 1;</code>
+     * @param value The whoami to set.
+     * @return This builder for chaining.
+     */
+    public Builder setWhoami(
+        java.lang.String value) {
+      if (value == null) {
+    throw new NullPointerException();
+  }
+  
+      whoami_ = value;
+      onChanged();
+      return this;
+    }
+    /**
+     * <code>string whoami = 1;</code>
+     * @return This builder for chaining.
+     */
+    public Builder clearWhoami() {
+      
+      whoami_ = getDefaultInstance().getWhoami();
+      onChanged();
+      return this;
+    }
+    /**
+     * <code>string whoami = 1;</code>
+     * @param value The bytes for whoami to set.
+     * @return This builder for chaining.
+     */
+    public Builder setWhoamiBytes(
+        com.google.protobuf.ByteString value) {
+      if (value == null) {
+    throw new NullPointerException();
+  }
+  checkByteStringIsUtf8(value);
+      
+      whoami_ = value;
+      onChanged();
       return this;
     }
     @java.lang.Override

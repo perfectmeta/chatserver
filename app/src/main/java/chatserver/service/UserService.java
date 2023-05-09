@@ -39,4 +39,8 @@ public class UserService {  // 不抽象成接口，直接用，因为这里不�
     public User findByEmail(String email){
         return users.findByEmail(email);
     }
+
+    public void deleteByUserId(long userId) { users.deleteById(userId);}
+
+    public User deleteByPhone(String phone) { return users.deleteByPhone(phone);}
 }

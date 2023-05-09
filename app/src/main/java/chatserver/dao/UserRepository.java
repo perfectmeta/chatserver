@@ -1,11 +1,13 @@
 package chatserver.dao;
 
+import jakarta.transaction.Transactional;
+import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
 
 
 @Repository
-public interface UserRepository extends CrudRepository<User, Long> {
+public interface UserRepository extends JpaRepository<User, Long> {
 
     User findByUserId(long userId);
 
@@ -13,4 +15,6 @@ public interface UserRepository extends CrudRepository<User, Long> {
 
     User findByEmail(String email);
 
+    @Transactional
+    User deleteByPhone(String phone);
 }

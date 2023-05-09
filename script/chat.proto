@@ -80,6 +80,7 @@ message RoomInfo {
 }
 
 message Hello {
+  string whoami = 1;
 }
 
 message EnterRoomRequest {
@@ -87,11 +88,35 @@ message EnterRoomRequest {
   int64 lastMessageId = 2;
 }
 
+message RegisterInfo {
+  string email = 1;
+  string nickname = 2;
+  string phone = 3;
+}
+
+message RegisterFeedback {
+  enum StatusCode {
+    OK = 0;
+    NICKNAME_INVALID = 1;
+    NICKNAME_CONFLICT = 2;
+    PHONE_INVALID = 3;
+    PHONE_CONFLICT = 4;
+    EMAIL_INVALID = 5;
+    EMAIL_CONFLICT = 6;
+    OTHER_ERROR = 7;
+  }
+
+  int32 statusCode = 1;
+  string message = 2;
+  int32 user_id = 3;
+}
+
 //////////////////////////////////////
 
 service ChatService {
   // 第一步用户登录，取到token后，
   // 把token放到之后所有的请求的header里，例子见app/src/test/java/chatserver/ServerAppTest.java
+  rpc Signup(RegisterInfo) returns (RegisterFeedback);
 
   // 登录游戏后立马就发送Hello，取room list，new message stream，这两个可能就是在连接期间一直会发。
   rpc GetRoomList(Hello) returns (stream RoomInfo);

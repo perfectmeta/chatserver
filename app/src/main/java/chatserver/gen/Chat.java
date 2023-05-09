@@ -59,6 +59,16 @@ public final class Chat {
   static final 
     com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
       internal_static_EnterRoomRequest_fieldAccessorTable;
+  static final com.google.protobuf.Descriptors.Descriptor
+    internal_static_RegisterInfo_descriptor;
+  static final 
+    com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
+      internal_static_RegisterInfo_fieldAccessorTable;
+  static final com.google.protobuf.Descriptors.Descriptor
+    internal_static_RegisterFeedback_descriptor;
+  static final 
+    com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
+      internal_static_RegisterFeedback_fieldAccessorTable;
 
   public static com.google.protobuf.Descriptors.FileDescriptor
       getDescriptor() {
@@ -87,17 +97,26 @@ public final class Chat {
       "\020\n\010roomName\030\002 \001(\t\022\024\n\003you\030\003 \001(\0132\007.Author\022" +
       "\023\n\002ai\030\004 \001(\0132\007.Author\022\023\n\013createdTime\030\005 \001(" +
       "\003\022\026\n\016firstMessageId\030\006 \001(\003\022\025\n\rlastMessage" +
-      "Id\030\007 \001(\003\"\007\n\005Hello\"9\n\020EnterRoomRequest\022\016\n" +
-      "\006roomId\030\001 \001(\003\022\025\n\rlastMessageId\030\002 \001(\003*S\n\007" +
-      "MsgType\022\023\n\017AUDIO_WITH_TEXT\020\000\022\023\n\017TEXT_WIT" +
-      "H_AUDIO\020\001\022\010\n\004TEXT\020\002\022\t\n\005IMAGE\020\003\022\t\n\005VIDEO\020" +
-      "\0042\347\001\n\013ChatService\022\"\n\013GetRoomList\022\006.Hello" +
-      "\032\t.RoomInfo0\001\022)\n\023GetNewMessageStream\022\006.H" +
-      "ello\032\010.Message0\001\022*\n\tEnterRoom\022\021.EnterRoo" +
-      "mRequest\032\010.Message0\001\0220\n\017SpeechRecognize\022" +
-      "\014.AudioStream\032\013.TextStream(\0010\001\022+\n\004Chat\022\014" +
-      ".ChatRequest\032\023.ChatResponseStream0\001B\022\n\016c" +
-      "hatserver.genP\001b\006proto3"
+      "Id\030\007 \001(\003\"\027\n\005Hello\022\016\n\006whoami\030\001 \001(\t\"9\n\020Ent" +
+      "erRoomRequest\022\016\n\006roomId\030\001 \001(\003\022\025\n\rlastMes" +
+      "sageId\030\002 \001(\003\">\n\014RegisterInfo\022\r\n\005email\030\001 " +
+      "\001(\t\022\020\n\010nickname\030\002 \001(\t\022\r\n\005phone\030\003 \001(\t\"\353\001\n" +
+      "\020RegisterFeedback\022\022\n\nstatusCode\030\001 \001(\005\022\017\n" +
+      "\007message\030\002 \001(\t\022\017\n\007user_id\030\003 \001(\005\"\240\001\n\nStat" +
+      "usCode\022\006\n\002OK\020\000\022\024\n\020NICKNAME_INVALID\020\001\022\025\n\021" +
+      "NICKNAME_CONFLICT\020\002\022\021\n\rPHONE_INVALID\020\003\022\022" +
+      "\n\016PHONE_CONFLICT\020\004\022\021\n\rEMAIL_INVALID\020\005\022\022\n" +
+      "\016EMAIL_CONFLICT\020\006\022\017\n\013OTHER_ERROR\020\007*S\n\007Ms" +
+      "gType\022\023\n\017AUDIO_WITH_TEXT\020\000\022\023\n\017TEXT_WITH_" +
+      "AUDIO\020\001\022\010\n\004TEXT\020\002\022\t\n\005IMAGE\020\003\022\t\n\005VIDEO\020\0042" +
+      "\223\002\n\013ChatService\022*\n\006Signup\022\r.RegisterInfo" +
+      "\032\021.RegisterFeedback\022\"\n\013GetRoomList\022\006.Hel" +
+      "lo\032\t.RoomInfo0\001\022)\n\023GetNewMessageStream\022\006" +
+      ".Hello\032\010.Message0\001\022*\n\tEnterRoom\022\021.EnterR" +
+      "oomRequest\032\010.Message0\001\0220\n\017SpeechRecogniz" +
+      "e\022\014.AudioStream\032\013.TextStream(\0010\001\022+\n\004Chat" +
+      "\022\014.ChatRequest\032\023.ChatResponseStream0\001B\022\n" +
+      "\016chatserver.genP\001b\006proto3"
     };
     descriptor = com.google.protobuf.Descriptors.FileDescriptor
       .internalBuildGeneratedFileFrom(descriptorData,
@@ -150,13 +169,25 @@ public final class Chat {
     internal_static_Hello_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_Hello_descriptor,
-        new java.lang.String[] { });
+        new java.lang.String[] { "Whoami", });
     internal_static_EnterRoomRequest_descriptor =
       getDescriptor().getMessageTypes().get(8);
     internal_static_EnterRoomRequest_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_EnterRoomRequest_descriptor,
         new java.lang.String[] { "RoomId", "LastMessageId", });
+    internal_static_RegisterInfo_descriptor =
+      getDescriptor().getMessageTypes().get(9);
+    internal_static_RegisterInfo_fieldAccessorTable = new
+      com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
+        internal_static_RegisterInfo_descriptor,
+        new java.lang.String[] { "Email", "Nickname", "Phone", });
+    internal_static_RegisterFeedback_descriptor =
+      getDescriptor().getMessageTypes().get(10);
+    internal_static_RegisterFeedback_fieldAccessorTable = new
+      com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
+        internal_static_RegisterFeedback_descriptor,
+        new java.lang.String[] { "StatusCode", "Message", "UserId", });
   }
 
   // @@protoc_insertion_point(outer_class_scope)
