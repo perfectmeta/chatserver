@@ -11,6 +11,7 @@ import java.io.*;
 import java.net.URI;
 import java.nio.charset.StandardCharsets;
 import java.util.Base64;
+import java.util.Objects;
 import java.util.logging.Logger;
 
 
@@ -67,6 +68,10 @@ public class XFYTTSSession extends org.java_websocket.client.WebSocketClient {
         try {
             logger.info(message);
             var obj = om.readValue(message, Response.class);
+            if (Objects.isNull(obj.data())) {
+                logger.warning("result have no data field, raw message: " + message);
+                return;
+            }
             var status = obj.data().status();
             var audio = Base64.getDecoder().decode(obj.data().audio());
             resultStream.write(audio);

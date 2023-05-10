@@ -83,6 +83,7 @@ class ChatTest {
         service.streamChatCompletion(chatCompletionRequest)
                 .doOnError(throwable -> {
                     System.out.println(throwable.toString());
+                    throwable.printStackTrace();
                 })
                 .blockingForEach(chatCompletionChunk -> {
                     if (chatCompletionChunk.getChoices().size() > 0) {
