@@ -28,6 +28,8 @@ public class RoomService {
         return rooms.save(room);
     }
 
+    public Room findRoomById(long roomId) { return rooms.findByRoomId(roomId); }
+
     public Message addMessage(@NotNull Message message) {  // message除了没messageId信息，其他都填好了
         Room room = rooms.findByRoomId(message.getRoomId());
         if (room == null) {

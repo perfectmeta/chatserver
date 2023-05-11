@@ -1,6 +1,7 @@
 package chatserver.logic;
 
 import chatserver.dao.Message;
+import chatserver.dao.User;
 import chatserver.gen.ChatRequest;
 import chatserver.gen.ChatResponseStream;
 import chatserver.gen.MsgType;
@@ -48,6 +49,13 @@ public class Chat {
 
     public void run(ChatRequest request, StreamObserver<ChatResponseStream> responseObserver) {
         // check room id first
+        User user = AuthTokenInterceptor.USER.get();
+        var room = roomService.findRoomById(request.getRoomId());
+        if (room == null || room.getUserId() != user.getUserId()) {
+            logger.warning("invalid room id: " + request.getRoomId());
+            responseObserver.onCompleted();
+            return;
+        }
 
         OpenAiService service = makeOpenAiService();
         List<Message> messageHistory = roomService.getMessageHistory(request.getRoomId());
@@ -118,8 +126,9 @@ public class Chat {
         }
 
         if (!hasError[0]) {
-            responseObserver.onCompleted();
+            logger.warning("chat gpt returned error");
         }
+        responseObserver.onCompleted();
 
         Message gptMsg = new Message();
         gptMsg.setRoomId(request.getRoomId());

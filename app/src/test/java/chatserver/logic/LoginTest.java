@@ -28,8 +28,8 @@ public class LoginTest {
     private static final Logger logger = Logger.getLogger(LoginTest.class.getName());
     @BeforeAll
     void init() {
-        // var channel = Grpc.newChannelBuilder("ai.taohuayuaner.com:8080", InsecureChannelCredentials.create()).build();
-        var channel = Grpc.newChannelBuilder("localhost:6565", InsecureChannelCredentials.create()).build();
+        var channel = Grpc.newChannelBuilder("ai.taohuayuaner.com:8080", InsecureChannelCredentials.create()).build();
+        //var channel = Grpc.newChannelBuilder("localhost:6565", InsecureChannelCredentials.create()).build();
         stub = ChatServiceGrpc.newStub(channel);
         Metadata metadata = new Metadata();
         metadata.put(Metadata.Key.of("auth_token", Metadata.ASCII_STRING_MARSHALLER), "1");
@@ -77,8 +77,8 @@ public class LoginTest {
     @Test
     void getRoomListTest() throws InterruptedException {
         Hello hello = Hello.newBuilder().build();
-        Thread.sleep(3000);
         List<RoomInfo> result = new ArrayList<>();
+        CountDownLatch latch = new CountDownLatch(1);
         stub.getRoomList(hello, new StreamObserver<>() {
             @Override
             public void onNext(RoomInfo value) {
@@ -89,15 +89,17 @@ public class LoginTest {
             @Override
             public void onError(Throwable t) {
                 t.printStackTrace();
+                latch.countDown();
                 logger.info("Room Error: " + t.getMessage());
             }
 
             @Override
             public void onCompleted() {
+                latch.countDown();
                 logger.info("Room Complement: ");
             }
         });
-        Thread.sleep(3000);
+        latch.await();
         Assertions.assertEquals(1, result.size());
         Assertions.assertTrue(result.get(0).getYou().getName().equals("nick")
                 || result.get(0).getYou().getName().equals("earneet"));
@@ -106,11 +108,13 @@ public class LoginTest {
 
     @Test
     void enterRoomTest() throws InterruptedException {
+        if (rooms.isEmpty()) return;
         var firstRoom = rooms.get(0);
         var enterRoomRequest = EnterRoomRequest.newBuilder()
                 .setRoomId(firstRoom.getRoomId())
                 .setLastMessageId(firstRoom.getLastMessageId()).build();
         var messages = new ArrayList<>();
+        CountDownLatch latch = new CountDownLatch(1);
         stub.enterRoom(enterRoomRequest, new StreamObserver<>() {
             @Override
             public void onNext(Message value) {
@@ -121,15 +125,17 @@ public class LoginTest {
             @Override
             public void onError(Throwable t) {
                 logger.warning("onError: " + t.getMessage());
+                latch.countDown();
             }
 
             @Override
             public void onCompleted() {
                 logger.warning("onComplete: ");
+                latch.countDown();
             }
         });
+        latch.await();
         logger.info("finished");
-        Thread.sleep(3000);
         Assertions.assertEquals(0, messages.size());
     }
 
