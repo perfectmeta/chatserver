@@ -25,6 +25,7 @@ private static final long serialVersionUID = 0L;
     audioUrl_ = "";
     imageUrl_ = "";
     videoUrl_ = "";
+    seq_ = "";
   }
 
   @java.lang.Override
@@ -108,6 +109,12 @@ private static final long serialVersionUID = 0L;
             java.lang.String s = input.readStringRequireUtf8();
 
             videoUrl_ = s;
+            break;
+          }
+          case 82: {
+            java.lang.String s = input.readStringRequireUtf8();
+
+            seq_ = s;
             break;
           }
           default: {
@@ -361,6 +368,44 @@ private static final long serialVersionUID = 0L;
     }
   }
 
+  public static final int SEQ_FIELD_NUMBER = 10;
+  private volatile java.lang.Object seq_;
+  /**
+   * <code>string seq = 10;</code>
+   * @return The seq.
+   */
+  @java.lang.Override
+  public java.lang.String getSeq() {
+    java.lang.Object ref = seq_;
+    if (ref instanceof java.lang.String) {
+      return (java.lang.String) ref;
+    } else {
+      com.google.protobuf.ByteString bs = 
+          (com.google.protobuf.ByteString) ref;
+      java.lang.String s = bs.toStringUtf8();
+      seq_ = s;
+      return s;
+    }
+  }
+  /**
+   * <code>string seq = 10;</code>
+   * @return The bytes for seq.
+   */
+  @java.lang.Override
+  public com.google.protobuf.ByteString
+      getSeqBytes() {
+    java.lang.Object ref = seq_;
+    if (ref instanceof java.lang.String) {
+      com.google.protobuf.ByteString b = 
+          com.google.protobuf.ByteString.copyFromUtf8(
+              (java.lang.String) ref);
+      seq_ = b;
+      return b;
+    } else {
+      return (com.google.protobuf.ByteString) ref;
+    }
+  }
+
   private byte memoizedIsInitialized = -1;
   @java.lang.Override
   public final boolean isInitialized() {
@@ -399,6 +444,9 @@ private static final long serialVersionUID = 0L;
     if (!getVideoUrlBytes().isEmpty()) {
       com.google.protobuf.GeneratedMessageV3.writeString(output, 9, videoUrl_);
     }
+    if (!getSeqBytes().isEmpty()) {
+      com.google.protobuf.GeneratedMessageV3.writeString(output, 10, seq_);
+    }
     unknownFields.writeTo(output);
   }
 
@@ -436,6 +484,9 @@ private static final long serialVersionUID = 0L;
     if (!getVideoUrlBytes().isEmpty()) {
       size += com.google.protobuf.GeneratedMessageV3.computeStringSize(9, videoUrl_);
     }
+    if (!getSeqBytes().isEmpty()) {
+      size += com.google.protobuf.GeneratedMessageV3.computeStringSize(10, seq_);
+    }
     size += unknownFields.getSerializedSize();
     memoizedSize = size;
     return size;
@@ -469,6 +520,8 @@ private static final long serialVersionUID = 0L;
         .equals(other.getImageUrl())) return false;
     if (!getVideoUrl()
         .equals(other.getVideoUrl())) return false;
+    if (!getSeq()
+        .equals(other.getSeq())) return false;
     if (!unknownFields.equals(other.unknownFields)) return false;
     return true;
   }
@@ -500,6 +553,8 @@ private static final long serialVersionUID = 0L;
     hash = (53 * hash) + getImageUrl().hashCode();
     hash = (37 * hash) + VIDEOURL_FIELD_NUMBER;
     hash = (53 * hash) + getVideoUrl().hashCode();
+    hash = (37 * hash) + SEQ_FIELD_NUMBER;
+    hash = (53 * hash) + getSeq().hashCode();
     hash = (29 * hash) + unknownFields.hashCode();
     memoizedHashCode = hash;
     return hash;
@@ -657,6 +712,8 @@ private static final long serialVersionUID = 0L;
 
       videoUrl_ = "";
 
+      seq_ = "";
+
       return this;
     }
 
@@ -695,6 +752,7 @@ private static final long serialVersionUID = 0L;
       result.audioUrl_ = audioUrl_;
       result.imageUrl_ = imageUrl_;
       result.videoUrl_ = videoUrl_;
+      result.seq_ = seq_;
       onBuilt();
       return result;
     }
@@ -769,6 +827,10 @@ private static final long serialVersionUID = 0L;
       }
       if (!other.getVideoUrl().isEmpty()) {
         videoUrl_ = other.videoUrl_;
+        onChanged();
+      }
+      if (!other.getSeq().isEmpty()) {
+        seq_ = other.seq_;
         onChanged();
       }
       this.mergeUnknownFields(other.unknownFields);
@@ -1335,6 +1397,82 @@ private static final long serialVersionUID = 0L;
   checkByteStringIsUtf8(value);
       
       videoUrl_ = value;
+      onChanged();
+      return this;
+    }
+
+    private java.lang.Object seq_ = "";
+    /**
+     * <code>string seq = 10;</code>
+     * @return The seq.
+     */
+    public java.lang.String getSeq() {
+      java.lang.Object ref = seq_;
+      if (!(ref instanceof java.lang.String)) {
+        com.google.protobuf.ByteString bs =
+            (com.google.protobuf.ByteString) ref;
+        java.lang.String s = bs.toStringUtf8();
+        seq_ = s;
+        return s;
+      } else {
+        return (java.lang.String) ref;
+      }
+    }
+    /**
+     * <code>string seq = 10;</code>
+     * @return The bytes for seq.
+     */
+    public com.google.protobuf.ByteString
+        getSeqBytes() {
+      java.lang.Object ref = seq_;
+      if (ref instanceof String) {
+        com.google.protobuf.ByteString b = 
+            com.google.protobuf.ByteString.copyFromUtf8(
+                (java.lang.String) ref);
+        seq_ = b;
+        return b;
+      } else {
+        return (com.google.protobuf.ByteString) ref;
+      }
+    }
+    /**
+     * <code>string seq = 10;</code>
+     * @param value The seq to set.
+     * @return This builder for chaining.
+     */
+    public Builder setSeq(
+        java.lang.String value) {
+      if (value == null) {
+    throw new NullPointerException();
+  }
+  
+      seq_ = value;
+      onChanged();
+      return this;
+    }
+    /**
+     * <code>string seq = 10;</code>
+     * @return This builder for chaining.
+     */
+    public Builder clearSeq() {
+      
+      seq_ = getDefaultInstance().getSeq();
+      onChanged();
+      return this;
+    }
+    /**
+     * <code>string seq = 10;</code>
+     * @param value The bytes for seq to set.
+     * @return This builder for chaining.
+     */
+    public Builder setSeqBytes(
+        com.google.protobuf.ByteString value) {
+      if (value == null) {
+    throw new NullPointerException();
+  }
+  checkByteStringIsUtf8(value);
+      
+      seq_ = value;
       onChanged();
       return this;
     }

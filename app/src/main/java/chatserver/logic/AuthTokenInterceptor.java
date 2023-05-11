@@ -32,7 +32,13 @@ public class AuthTokenInterceptor implements ServerInterceptor {
             return serverCallHandler.startCall(serverCall, metadata);
         }
         final String authToken = metadata.get(Key.of("auth_token", Metadata.ASCII_STRING_MARSHALLER));
-        final User user = validate(authToken);
+        User user = null;
+        try {
+            user = validate(authToken);
+        } catch (Exception e) {
+            logger.warning(e.getMessage());
+            // e.printStackTrace();
+        }
 
         if (user == null) {
             logger.warning("validation failed when access " + methodName);

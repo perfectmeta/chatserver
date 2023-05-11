@@ -2,6 +2,7 @@ package chatserver.dao;
 
 import jakarta.persistence.*;
 
+@SuppressWarnings("unused")
 @Entity
 @Table(indexes = {
         @Index(name = "phone", columnList = "phone", unique = true),

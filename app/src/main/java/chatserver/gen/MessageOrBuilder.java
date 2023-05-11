@@ -92,4 +92,16 @@ public interface MessageOrBuilder extends
    */
   com.google.protobuf.ByteString
       getVideoUrlBytes();
+
+  /**
+   * <code>string seq = 10;</code>
+   * @return The seq.
+   */
+  java.lang.String getSeq();
+  /**
+   * <code>string seq = 10;</code>
+   * @return The bytes for seq.
+   */
+  com.google.protobuf.ByteString
+      getSeqBytes();
 }

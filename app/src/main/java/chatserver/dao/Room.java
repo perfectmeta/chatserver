@@ -1,18 +1,20 @@
 package chatserver.dao;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 
+@SuppressWarnings("unused")
 @Entity
+@Table(indexes = {
+        @Index(name = "byUserId", columnList = "userId"),
+        @Index(name = "byAIType", columnList = "aiType"),
+        @Index(name = "byAIUserId", columnList = "aiUserId")
+})
 public class Room {
 
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long roomId;
-
 
     private String roomName;
 
@@ -22,10 +24,9 @@ public class Room {
 
     private long aiType;
 
-    private int aiUserId;
+    private long aiUserId;
 
     private String aiShowName;
-
 
     private long createdTime;
 
@@ -85,11 +86,11 @@ public class Room {
         this.aiType = aiType;
     }
 
-    public int getAiUserId() {
+    public long getAiUserId() {
         return aiUserId;
     }
 
-    public void setAiUserId(int aiUserId) {
+    public void setAiUserId(long aiUserId) {
         this.aiUserId = aiUserId;
     }
 

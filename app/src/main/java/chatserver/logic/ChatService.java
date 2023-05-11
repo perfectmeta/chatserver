@@ -5,29 +5,34 @@ import io.grpc.stub.StreamObserver;
 import org.lognet.springboot.grpc.GRpcService;
 import org.springframework.beans.factory.annotation.Autowired;
 
+@SuppressWarnings("unused")
 @GRpcService
 public class ChatService extends ChatServiceGrpc.ChatServiceImplBase {
 
-    @Autowired
-    private GetRoomList getRoomList;
+    private final GetRoomList getRoomList;
+
+    private final GetNewMessageStream getNewMessageStream;
+
+    private final EnterRoom enterRoom;
+
+    private final SpeechRecognize speechRecognize;
+
+    private final TextToSound textToSound;
+
+    private final Chat chat;
+
+    private final Signup signup;
 
     @Autowired
-    private GetNewMessageStream getNewMessageStream;
-
-    @Autowired
-    private EnterRoom enterRoom;
-
-    @Autowired
-    private SpeechRecognize speechRecognize;
-
-    @Autowired
-    private TextToSound textToSound;
-
-    @Autowired
-    private Chat chat;
-
-    @Autowired
-    private Signup signup;
+    public ChatService(GetRoomList getRoomList, GetNewMessageStream getNewMessageStream, EnterRoom enterRoom, SpeechRecognize speechRecognize, TextToSound textToSound, Chat chat, Signup signup) {
+        this.getRoomList = getRoomList;
+        this.getNewMessageStream = getNewMessageStream;
+        this.enterRoom = enterRoom;
+        this.speechRecognize = speechRecognize;
+        this.textToSound = textToSound;
+        this.chat = chat;
+        this.signup = signup;
+    }
 
     @Override
     public void signup(RegisterInfo request, StreamObserver<RegisterFeedback> responseObserver) {

@@ -95,9 +95,6 @@ class ServerAppTest {
     void chat() {
         ChatRequest msg = ChatRequest.newBuilder().setRoomId(1).setText("are you ok?").build();
         Iterator<ChatResponseStream> chat = blockingStub.chat(msg);
-        chat.forEachRemaining(textAudioStream -> {
-            System.out.print(textAudioStream.getText() + " - ");
-        });
+        chat.forEachRemaining(textAudioStream -> System.out.print(textAudioStream.getText() + " - "));
     }
-
 }

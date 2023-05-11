@@ -169,6 +169,7 @@ private static final long serialVersionUID = 0L;
    * <pre>
    * 返回一个带messageId的消息，替代原来的临时message，这个对应关系客户端自己来维护
    * message 至少有3个状态，正在asr生成，正在发送，服务器确认
+   * 本协议里两个Message结构会包含seq字段，供客户端用以确定对应发送的时哪条
    * </pre>
    *
    * <code>.Message requestMessage = 1;</code>
@@ -182,6 +183,7 @@ private static final long serialVersionUID = 0L;
    * <pre>
    * 返回一个带messageId的消息，替代原来的临时message，这个对应关系客户端自己来维护
    * message 至少有3个状态，正在asr生成，正在发送，服务器确认
+   * 本协议里两个Message结构会包含seq字段，供客户端用以确定对应发送的时哪条
    * </pre>
    *
    * <code>.Message requestMessage = 1;</code>
@@ -198,6 +200,7 @@ private static final long serialVersionUID = 0L;
    * <pre>
    * 返回一个带messageId的消息，替代原来的临时message，这个对应关系客户端自己来维护
    * message 至少有3个状态，正在asr生成，正在发送，服务器确认
+   * 本协议里两个Message结构会包含seq字段，供客户端用以确定对应发送的时哪条
    * </pre>
    *
    * <code>.Message requestMessage = 1;</code>
@@ -745,6 +748,7 @@ private static final long serialVersionUID = 0L;
      * <pre>
      * 返回一个带messageId的消息，替代原来的临时message，这个对应关系客户端自己来维护
      * message 至少有3个状态，正在asr生成，正在发送，服务器确认
+     * 本协议里两个Message结构会包含seq字段，供客户端用以确定对应发送的时哪条
      * </pre>
      *
      * <code>.Message requestMessage = 1;</code>
@@ -758,6 +762,7 @@ private static final long serialVersionUID = 0L;
      * <pre>
      * 返回一个带messageId的消息，替代原来的临时message，这个对应关系客户端自己来维护
      * message 至少有3个状态，正在asr生成，正在发送，服务器确认
+     * 本协议里两个Message结构会包含seq字段，供客户端用以确定对应发送的时哪条
      * </pre>
      *
      * <code>.Message requestMessage = 1;</code>
@@ -781,6 +786,7 @@ private static final long serialVersionUID = 0L;
      * <pre>
      * 返回一个带messageId的消息，替代原来的临时message，这个对应关系客户端自己来维护
      * message 至少有3个状态，正在asr生成，正在发送，服务器确认
+     * 本协议里两个Message结构会包含seq字段，供客户端用以确定对应发送的时哪条
      * </pre>
      *
      * <code>.Message requestMessage = 1;</code>
@@ -802,6 +808,7 @@ private static final long serialVersionUID = 0L;
      * <pre>
      * 返回一个带messageId的消息，替代原来的临时message，这个对应关系客户端自己来维护
      * message 至少有3个状态，正在asr生成，正在发送，服务器确认
+     * 本协议里两个Message结构会包含seq字段，供客户端用以确定对应发送的时哪条
      * </pre>
      *
      * <code>.Message requestMessage = 1;</code>
@@ -821,6 +828,7 @@ private static final long serialVersionUID = 0L;
      * <pre>
      * 返回一个带messageId的消息，替代原来的临时message，这个对应关系客户端自己来维护
      * message 至少有3个状态，正在asr生成，正在发送，服务器确认
+     * 本协议里两个Message结构会包含seq字段，供客户端用以确定对应发送的时哪条
      * </pre>
      *
      * <code>.Message requestMessage = 1;</code>
@@ -848,6 +856,7 @@ private static final long serialVersionUID = 0L;
      * <pre>
      * 返回一个带messageId的消息，替代原来的临时message，这个对应关系客户端自己来维护
      * message 至少有3个状态，正在asr生成，正在发送，服务器确认
+     * 本协议里两个Message结构会包含seq字段，供客户端用以确定对应发送的时哪条
      * </pre>
      *
      * <code>.Message requestMessage = 1;</code>
@@ -872,6 +881,7 @@ private static final long serialVersionUID = 0L;
      * <pre>
      * 返回一个带messageId的消息，替代原来的临时message，这个对应关系客户端自己来维护
      * message 至少有3个状态，正在asr生成，正在发送，服务器确认
+     * 本协议里两个Message结构会包含seq字段，供客户端用以确定对应发送的时哪条
      * </pre>
      *
      * <code>.Message requestMessage = 1;</code>
@@ -883,6 +893,7 @@ private static final long serialVersionUID = 0L;
      * <pre>
      * 返回一个带messageId的消息，替代原来的临时message，这个对应关系客户端自己来维护
      * message 至少有3个状态，正在asr生成，正在发送，服务器确认
+     * 本协议里两个Message结构会包含seq字段，供客户端用以确定对应发送的时哪条
      * </pre>
      *
      * <code>.Message requestMessage = 1;</code>
@@ -902,6 +913,7 @@ private static final long serialVersionUID = 0L;
      * <pre>
      * 返回一个带messageId的消息，替代原来的临时message，这个对应关系客户端自己来维护
      * message 至少有3个状态，正在asr生成，正在发送，服务器确认
+     * 本协议里两个Message结构会包含seq字段，供客户端用以确定对应发送的时哪条
      * </pre>
      *
      * <code>.Message requestMessage = 1;</code>

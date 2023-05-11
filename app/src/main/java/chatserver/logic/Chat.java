@@ -21,11 +21,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import chatserver.security.KeyManager;
 import retrofit2.Retrofit;
+import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory;
+import retrofit2.converter.jackson.JacksonConverterFactory;
 
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.net.InetSocketAddress;
-import java.net.Proxy;
 import java.nio.ByteBuffer;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -39,33 +39,20 @@ import java.util.logging.Logger;
 public class Chat {
     private static final Logger logger = Logger.getLogger(Chat.class.getName());
 
+    private final RoomService roomService;
+
     @Autowired
-    private RoomService roomService;
+    public Chat(RoomService roomService) {
+        this.roomService = roomService;
+    }
 
     public void run(ChatRequest request, StreamObserver<ChatResponseStream> responseObserver) {
-        Proxy proxy = new Proxy(Proxy.Type.SOCKS, new InetSocketAddress("localhost", 1080));
-        OkHttpClient client =
-                OpenAiService.defaultClient(KeyManager.OPENAI_KEY, Duration.of(5, ChronoUnit.SECONDS))
-                        .newBuilder()
-                        .proxy(proxy)
-                        .build();
-        ObjectMapper mapper = OpenAiService.defaultObjectMapper();
-        Retrofit retrofit = OpenAiService.defaultRetrofit(client, mapper);
-        OpenAiApi api = retrofit.create(OpenAiApi.class);
-        OpenAiService service = new OpenAiService(api);
+        // check room id first
 
+        OpenAiService service = makeOpenAiService();
         List<Message> messageHistory = roomService.getMessageHistory(request.getRoomId());
 
-        Message newUserMsg = new Message();
-        newUserMsg.setRoomId(request.getRoomId());
-        newUserMsg.setAuthorUserType(Msg.UT_HUMAN);
-        newUserMsg.setAuthorUserId(AuthTokenInterceptor.USER.get().getUserId());
-        newUserMsg.setAuthorShowName(AuthTokenInterceptor.USER.get().getNickName());
-        newUserMsg.setCreatedTime(System.currentTimeMillis());
-        newUserMsg.setMsgType(MsgType.TEXT_VALUE);
-        newUserMsg.setText(request.getText());
-        newUserMsg = roomService.addMessage(newUserMsg);
-
+        var newUserMsg = roomService.addMessage(parseDbMessage(request));
         chatserver.gen.Message requestMessage = Msg.fromDb(newUserMsg);
 
         ChatResponseStream firstResponse = ChatResponseStream.newBuilder().setRequestMessage(requestMessage).build();
@@ -117,7 +104,9 @@ public class Chat {
                             content = "";
                         }
                         gptReturn.append(content);
-                        ChatResponseStream text = ChatResponseStream.newBuilder().setText(content).build();
+                        ChatResponseStream text = ChatResponseStream.newBuilder()
+                                .setText(content)
+                                .build();
                         responseObserver.onNext(text);
                     }
                 });
@@ -143,6 +132,37 @@ public class Chat {
         roomService.addMessage(gptMsg);
 
         // service.shutdownExecutor();
+    }
+
+    private Message parseDbMessage(ChatRequest request) {
+        Message newUserMsg = new Message();
+        newUserMsg.setRoomId(request.getRoomId());
+        newUserMsg.setAuthorUserType(Msg.UT_HUMAN);
+        newUserMsg.setAuthorUserId(AuthTokenInterceptor.USER.get().getUserId());
+        newUserMsg.setAuthorShowName(AuthTokenInterceptor.USER.get().getNickName());
+        newUserMsg.setCreatedTime(System.currentTimeMillis());
+        newUserMsg.setMsgType(MsgType.TEXT_VALUE);
+        newUserMsg.setText(request.getText());
+        return newUserMsg;
+    }
+
+    private OpenAiService makeOpenAiService() {
+        OkHttpClient client =
+                OpenAiService.defaultClient(KeyManager.OPENAI_KEY, Duration.of(5, ChronoUnit.SECONDS))
+                        .newBuilder()
+                        .build();
+        ObjectMapper mapper = OpenAiService.defaultObjectMapper();
+        Retrofit retrofit = // OpenAiService.defaultRetrofit(client, mapper);
+                new Retrofit.Builder()
+                        .baseUrl("http://111.207.225.93:4000/")
+                        .client(client)
+                        .addConverterFactory(JacksonConverterFactory.create(mapper))
+                        .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
+                        .build();
+
+        OpenAiApi api = retrofit.create(OpenAiApi.class);
+        OpenAiService service = new OpenAiService(api);
+        return service;
     }
 
     private String saveTTS(String allContent) {
