@@ -27,13 +27,14 @@ message ChatRequest {// 临时显示在聊天窗口里的message
   string audioUrl = 7;
   string imageUrl = 8;
   string videoUrl = 9;
-  string sequence = 10;
+  string seq = 10;
 }
 
 message ChatResponseStream {
   oneof response {
     // 返回一个带messageId的消息，替代原来的临时message，这个对应关系客户端自己来维护
     // message 至少有3个状态，正在asr生成，正在发送，服务器确认
+    // 本协议里两个Message结构会包含seq字段，供客户端用以确定对应发送的时哪条
     Message requestMessage = 1;
     string text = 2; // chatgpt生成
     bytes audio = 3; // tts生成
@@ -51,6 +52,7 @@ message Message {
   string audioUrl = 7;
   string imageUrl = 8;
   string videoUrl = 9;
+  string seq = 10;
 }
 
 message Author {
