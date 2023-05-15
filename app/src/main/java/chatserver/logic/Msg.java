@@ -25,6 +25,7 @@ public class Msg {
         b.setAudioUrl(Objects.isNull(dm.getAudioUrl()) ? "" : dm.getAudioUrl());
         b.setImageUrl(Objects.isNull(dm.getImageUrl()) ? "" : dm.getImageUrl());
         b.setVideoUrl(Objects.isNull(dm.getVideoUrl()) ? "" : dm.getVideoUrl());
+        b.setMessageId(dm.getMessageId());
 
         return b.build();
     }

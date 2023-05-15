@@ -3,22 +3,35 @@ package chatserver.logic;
 import chatserver.gen.AudioStream;
 import chatserver.gen.TextStream;
 import chatserver.third.asr.XFYasr;
+import chatserver.util.Digest;
+import com.google.common.base.Strings;
 import io.grpc.stub.StreamObserver;
 import org.springframework.stereotype.Component;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.PipedInputStream;
-import java.io.PipedOutputStream;
+import java.io.*;
 import java.nio.ByteBuffer;
 import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Path;
 
 @Component
 public class SpeechRecognize {
 
+    private final String resourcePath = !Strings.isNullOrEmpty(System.getenv("static_dir")) ?
+            System.getenv("static_dir") : "./static";
+
     private String saveAudioContent(byte[] content) {
-        // todo to save AudioContent
-        return "";
+        var fileName = "";
+        try {
+            fileName = content.length + "_" + Digest.calculateMD5(content) + ".pcm";
+            var file = Files.createFile(Path.of(resourcePath, fileName));
+            try (var fout = new FileOutputStream(file.toFile())) {
+                fout.write(content);
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return fileName;
     }
 
     public StreamObserver<AudioStream> run(StreamObserver<TextStream> responseObserver) {
@@ -60,7 +73,7 @@ public class SpeechRecognize {
             private void waitAllResponse() throws IOException {
                 if (finished) return;
                 var bytes = new byte[1024];
-                int len = 0;
+                int len;
                 while ((len = in.read(bytes)) != -1) {
                     var text = new String(bytes, 0, len, StandardCharsets.UTF_8);
                     responseObserver.onNext(TextStream.newBuilder().setText(text).build());

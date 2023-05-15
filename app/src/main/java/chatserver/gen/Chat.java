@@ -88,36 +88,36 @@ public final class Chat {
       "eam\022\"\n\016requestMessage\030\001 \001(\0132\010.MessageH\000\022" +
       "\016\n\004text\030\002 \001(\tH\000\022\017\n\005audio\030\003 \001(\014H\000\022#\n\017resp" +
       "onseMessage\030\004 \001(\0132\010.MessageH\000B\n\n\010respons" +
-      "e\"\263\001\n\007Message\022\016\n\006roomId\030\001 \001(\003\022\027\n\006author\030" +
+      "e\"\306\001\n\007Message\022\016\n\006roomId\030\001 \001(\003\022\027\n\006author\030" +
       "\003 \001(\0132\007.Author\022\023\n\013createdTime\030\004 \001(\003\022\031\n\007m" +
       "sgType\030\005 \001(\0162\010.MsgType\022\014\n\004text\030\006 \001(\t\022\020\n\010" +
       "audioUrl\030\007 \001(\t\022\020\n\010imageUrl\030\010 \001(\t\022\020\n\010vide" +
-      "oUrl\030\t \001(\t\022\013\n\003seq\030\n \001(\t\"4\n\006Author\022\014\n\004typ" +
-      "e\030\001 \001(\005\022\016\n\006userId\030\002 \001(\003\022\014\n\004name\030\003 \001(\t\"\233\001" +
-      "\n\010RoomInfo\022\016\n\006roomId\030\001 \001(\003\022\020\n\010roomName\030\002" +
-      " \001(\t\022\024\n\003you\030\003 \001(\0132\007.Author\022\023\n\002ai\030\004 \001(\0132\007" +
-      ".Author\022\023\n\013createdTime\030\005 \001(\003\022\026\n\016firstMes" +
-      "sageId\030\006 \001(\003\022\025\n\rlastMessageId\030\007 \001(\003\"\027\n\005H" +
-      "ello\022\016\n\006whoami\030\001 \001(\t\"9\n\020EnterRoomRequest" +
-      "\022\016\n\006roomId\030\001 \001(\003\022\025\n\rlastMessageId\030\002 \001(\003\"" +
-      ">\n\014RegisterInfo\022\r\n\005email\030\001 \001(\t\022\020\n\010nickna" +
-      "me\030\002 \001(\t\022\r\n\005phone\030\003 \001(\t\"\353\001\n\020RegisterFeed" +
-      "back\022\022\n\nstatusCode\030\001 \001(\005\022\017\n\007message\030\002 \001(" +
-      "\t\022\017\n\007user_id\030\003 \001(\005\"\240\001\n\nStatusCode\022\006\n\002OK\020" +
-      "\000\022\024\n\020NICKNAME_INVALID\020\001\022\025\n\021NICKNAME_CONF" +
-      "LICT\020\002\022\021\n\rPHONE_INVALID\020\003\022\022\n\016PHONE_CONFL" +
-      "ICT\020\004\022\021\n\rEMAIL_INVALID\020\005\022\022\n\016EMAIL_CONFLI" +
-      "CT\020\006\022\017\n\013OTHER_ERROR\020\007*S\n\007MsgType\022\023\n\017AUDI" +
-      "O_WITH_TEXT\020\000\022\023\n\017TEXT_WITH_AUDIO\020\001\022\010\n\004TE" +
-      "XT\020\002\022\t\n\005IMAGE\020\003\022\t\n\005VIDEO\020\0042\223\002\n\013ChatServi" +
-      "ce\022*\n\006Signup\022\r.RegisterInfo\032\021.RegisterFe" +
-      "edback\022\"\n\013GetRoomList\022\006.Hello\032\t.RoomInfo" +
-      "0\001\022)\n\023GetNewMessageStream\022\006.Hello\032\010.Mess" +
-      "age0\001\022*\n\tEnterRoom\022\021.EnterRoomRequest\032\010." +
-      "Message0\001\0220\n\017SpeechRecognize\022\014.AudioStre" +
-      "am\032\013.TextStream(\0010\001\022+\n\004Chat\022\014.ChatReques" +
-      "t\032\023.ChatResponseStream0\001B\022\n\016chatserver.g" +
-      "enP\001b\006proto3"
+      "oUrl\030\t \001(\t\022\013\n\003seq\030\n \001(\t\022\021\n\tmessageId\030\013 \001" +
+      "(\003\"4\n\006Author\022\014\n\004type\030\001 \001(\005\022\016\n\006userId\030\002 \001" +
+      "(\003\022\014\n\004name\030\003 \001(\t\"\233\001\n\010RoomInfo\022\016\n\006roomId\030" +
+      "\001 \001(\003\022\020\n\010roomName\030\002 \001(\t\022\024\n\003you\030\003 \001(\0132\007.A" +
+      "uthor\022\023\n\002ai\030\004 \001(\0132\007.Author\022\023\n\013createdTim" +
+      "e\030\005 \001(\003\022\026\n\016firstMessageId\030\006 \001(\003\022\025\n\rlastM" +
+      "essageId\030\007 \001(\003\"\027\n\005Hello\022\016\n\006whoami\030\001 \001(\t\"" +
+      "9\n\020EnterRoomRequest\022\016\n\006roomId\030\001 \001(\003\022\025\n\rl" +
+      "astMessageId\030\002 \001(\003\">\n\014RegisterInfo\022\r\n\005em" +
+      "ail\030\001 \001(\t\022\020\n\010nickname\030\002 \001(\t\022\r\n\005phone\030\003 \001" +
+      "(\t\"\353\001\n\020RegisterFeedback\022\022\n\nstatusCode\030\001 " +
+      "\001(\005\022\017\n\007message\030\002 \001(\t\022\017\n\007user_id\030\003 \001(\005\"\240\001" +
+      "\n\nStatusCode\022\006\n\002OK\020\000\022\024\n\020NICKNAME_INVALID" +
+      "\020\001\022\025\n\021NICKNAME_CONFLICT\020\002\022\021\n\rPHONE_INVAL" +
+      "ID\020\003\022\022\n\016PHONE_CONFLICT\020\004\022\021\n\rEMAIL_INVALI" +
+      "D\020\005\022\022\n\016EMAIL_CONFLICT\020\006\022\017\n\013OTHER_ERROR\020\007" +
+      "*S\n\007MsgType\022\023\n\017AUDIO_WITH_TEXT\020\000\022\023\n\017TEXT" +
+      "_WITH_AUDIO\020\001\022\010\n\004TEXT\020\002\022\t\n\005IMAGE\020\003\022\t\n\005VI" +
+      "DEO\020\0042\223\002\n\013ChatService\022*\n\006Signup\022\r.Regist" +
+      "erInfo\032\021.RegisterFeedback\022\"\n\013GetRoomList" +
+      "\022\006.Hello\032\t.RoomInfo0\001\022)\n\023GetNewMessageSt" +
+      "ream\022\006.Hello\032\010.Message0\001\022*\n\tEnterRoom\022\021." +
+      "EnterRoomRequest\032\010.Message0\001\0220\n\017SpeechRe" +
+      "cognize\022\014.AudioStream\032\013.TextStream(\0010\001\022+" +
+      "\n\004Chat\022\014.ChatRequest\032\023.ChatResponseStrea" +
+      "m0\001B\022\n\016chatserver.genP\001b\006proto3"
     };
     descriptor = com.google.protobuf.Descriptors.FileDescriptor
       .internalBuildGeneratedFileFrom(descriptorData,
@@ -152,7 +152,7 @@ public final class Chat {
     internal_static_Message_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_Message_descriptor,
-        new java.lang.String[] { "RoomId", "Author", "CreatedTime", "MsgType", "Text", "AudioUrl", "ImageUrl", "VideoUrl", "Seq", });
+        new java.lang.String[] { "RoomId", "Author", "CreatedTime", "MsgType", "Text", "AudioUrl", "ImageUrl", "VideoUrl", "Seq", "MessageId", });
     internal_static_Author_descriptor =
       getDescriptor().getMessageTypes().get(5);
     internal_static_Author_fieldAccessorTable = new

@@ -53,6 +53,7 @@ message Message {
   string imageUrl = 8;
   string videoUrl = 9;
   string seq = 10;
+  int64 messageId = 11;
 }
 
 message Author {

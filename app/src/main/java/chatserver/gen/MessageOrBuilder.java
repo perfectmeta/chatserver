@@ -104,4 +104,10 @@ public interface MessageOrBuilder extends
    */
   com.google.protobuf.ByteString
       getSeqBytes();
+
+  /**
+   * <code>int64 messageId = 11;</code>
+   * @return The messageId.
+   */
+  long getMessageId();
 }

@@ -7,6 +7,16 @@ import java.util.Formatter;
 
 public class Digest {
 
+    public static String calculateMD5(byte[] content) {
+        try {
+            MessageDigest md = MessageDigest.getInstance("MD5");
+            md.update(content);
+            return toHexString(md.digest());
+        } catch (NoSuchAlgorithmException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
     public static String calculateMD5(ByteBuffer byteBuffer) {
         try {
             MessageDigest md = MessageDigest.getInstance("MD5");

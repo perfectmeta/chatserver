@@ -144,12 +144,24 @@ public class LoginTest {
         ChatRequest request = ChatRequest.newBuilder()
                 .setRoomId(1)
                 .setText("Hey, How are you?")
+                .setSeq("aabb")
                 .setMsgType(MsgType.TEXT)
                 .build();
         CountDownLatch latch = new CountDownLatch(1);
         stub.chat(request, new StreamObserver<>() {
             @Override
             public void onNext(ChatResponseStream value) {
+                if (value.hasRequestMessage()) {
+                    logger.info("Request not null");
+                    logger.info(value.getRequestMessage().getSeq());
+                    return;
+                }
+                if (value.hasResponseMessage()) {
+                    logger.info("Response not null");
+                    logger.info(value.getResponseMessage().getText());
+                    logger.info(value.getResponseMessage().getAudioUrl());
+                    return;
+                }
                 logger.info("OnNext: " + value.getText());
             }
 

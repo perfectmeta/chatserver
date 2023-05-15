@@ -41,6 +41,8 @@ public class Chat {
     private static final Logger logger = Logger.getLogger(Chat.class.getName());
 
     private final RoomService roomService;
+    private final String resourcePath = !Strings.isNullOrEmpty(System.getenv("static_dir")) ?
+            System.getenv("static_dir") : ".";
 
     @Autowired
     public Chat(RoomService roomService) {
@@ -61,9 +63,15 @@ public class Chat {
         List<Message> messageHistory = roomService.getMessageHistory(request.getRoomId());
 
         var newUserMsg = roomService.addMessage(parseDbMessage(request));
-        chatserver.gen.Message requestMessage = Msg.fromDb(newUserMsg);
+        //chatserver.gen.Message requestMessage = Msg.fromDb(newUserMsg);
 
-        ChatResponseStream firstResponse = ChatResponseStream.newBuilder().setRequestMessage(requestMessage).build();
+        var messageSeq = request.getSeq();
+        chatserver.gen.Message.Builder rr = chatserver.gen.Message.newBuilder()
+                .setMessageId(newUserMsg.getMessageId())
+                .setSeq(messageSeq);
+        ChatResponseStream firstResponse = ChatResponseStream.newBuilder()
+                .setRequestMessage(rr)
+                .build();
         responseObserver.onNext(firstResponse);
 
         final List<ChatMessage> messages = new ArrayList<>();
@@ -101,6 +109,7 @@ public class Chat {
 
         service.streamChatCompletion(chatCompletionRequest)
                 .doOnError(throwable -> {
+                    throwable.printStackTrace();
                     responseObserver.onError(throwable);
                     hasError[0] = true;
                 })
@@ -121,15 +130,13 @@ public class Chat {
 
         String allContent = gptReturn.toString();
         String url = "";
-        if (Strings.isNullOrEmpty(allContent)) {
+        if (!Strings.isNullOrEmpty(allContent)) {
             url = saveTTS(allContent);
         }
 
-        if (!hasError[0]) {
+        if (hasError[0]) {
             logger.warning("chat gpt returned error");
         }
-        responseObserver.onCompleted();
-
         Message gptMsg = new Message();
         gptMsg.setRoomId(request.getRoomId());
         gptMsg.setAuthorUserType(Msg.UT_AI_TEACHER);
@@ -138,7 +145,17 @@ public class Chat {
         gptMsg.setMsgType(MsgType.TEXT_VALUE);
         gptMsg.setText(gptReturn.toString());
         gptMsg.setAudioUrl(url);
-        roomService.addMessage(gptMsg);
+        gptMsg = roomService.addMessage(gptMsg);
+
+        var responseMessage = chatserver.gen.Message.newBuilder()
+                .setMessageId(gptMsg.getMessageId())
+                .setText(allContent)
+                .setAudioUrl(url)
+                .setSeq(messageSeq);
+
+        var lastResponse = ChatResponseStream.newBuilder().setResponseMessage(responseMessage).build();
+        responseObserver.onNext(lastResponse);
+        responseObserver.onCompleted();
 
         // service.shutdownExecutor();
     }
@@ -161,8 +178,7 @@ public class Chat {
                         .newBuilder()
                         .build();
         ObjectMapper mapper = OpenAiService.defaultObjectMapper();
-        Retrofit retrofit = // OpenAiService.defaultRetrofit(client, mapper);
-                new Retrofit.Builder()
+        Retrofit retrofit = new Retrofit.Builder()
                         .baseUrl("http://111.207.225.93:4000/")
                         .client(client)
                         .addConverterFactory(JacksonConverterFactory.create(mapper))
@@ -170,15 +186,14 @@ public class Chat {
                         .build();
 
         OpenAiApi api = retrofit.create(OpenAiApi.class);
-        OpenAiService service = new OpenAiService(api);
-        return service;
+        return new OpenAiService(api);
     }
 
     private String saveTTS(String allContent) {
         ByteBuffer tempFile = ByteBuffer.allocate(1024*1024);
         try(var inputStream = XFYtts.makeSession(allContent)) {
             byte[] buffer = new byte[1024];
-            int len = 0;
+            int len;
             while ((len=inputStream.read(buffer)) != -1) {
                 tempFile.put(buffer, 0, len);
             }
@@ -186,9 +201,9 @@ public class Chat {
             var size = tempFile.remaining();
             var content = tempFile.array();
             var fileName = size+ "_" + Digest.calculateMD5(tempFile) + ".pcm";
-            var file = Files.createFile(Path.of(fileName));
+            var file = Files.createFile(Path.of(resourcePath, fileName));
             try (var fout = new FileOutputStream(file.toFile())) {
-                fout.write(content);
+                fout.write(content, 0, size);
             }
             return fileName;
         } catch (IOException e) {

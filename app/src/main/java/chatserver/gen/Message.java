@@ -117,6 +117,11 @@ private static final long serialVersionUID = 0L;
             seq_ = s;
             break;
           }
+          case 88: {
+
+            messageId_ = input.readInt64();
+            break;
+          }
           default: {
             if (!parseUnknownField(
                 input, unknownFields, extensionRegistry, tag)) {
@@ -406,6 +411,17 @@ private static final long serialVersionUID = 0L;
     }
   }
 
+  public static final int MESSAGEID_FIELD_NUMBER = 11;
+  private long messageId_;
+  /**
+   * <code>int64 messageId = 11;</code>
+   * @return The messageId.
+   */
+  @java.lang.Override
+  public long getMessageId() {
+    return messageId_;
+  }
+
   private byte memoizedIsInitialized = -1;
   @java.lang.Override
   public final boolean isInitialized() {
@@ -447,6 +463,9 @@ private static final long serialVersionUID = 0L;
     if (!getSeqBytes().isEmpty()) {
       com.google.protobuf.GeneratedMessageV3.writeString(output, 10, seq_);
     }
+    if (messageId_ != 0L) {
+      output.writeInt64(11, messageId_);
+    }
     unknownFields.writeTo(output);
   }
 
@@ -487,6 +506,10 @@ private static final long serialVersionUID = 0L;
     if (!getSeqBytes().isEmpty()) {
       size += com.google.protobuf.GeneratedMessageV3.computeStringSize(10, seq_);
     }
+    if (messageId_ != 0L) {
+      size += com.google.protobuf.CodedOutputStream
+        .computeInt64Size(11, messageId_);
+    }
     size += unknownFields.getSerializedSize();
     memoizedSize = size;
     return size;
@@ -522,6 +545,8 @@ private static final long serialVersionUID = 0L;
         .equals(other.getVideoUrl())) return false;
     if (!getSeq()
         .equals(other.getSeq())) return false;
+    if (getMessageId()
+        != other.getMessageId()) return false;
     if (!unknownFields.equals(other.unknownFields)) return false;
     return true;
   }
@@ -555,6 +580,9 @@ private static final long serialVersionUID = 0L;
     hash = (53 * hash) + getVideoUrl().hashCode();
     hash = (37 * hash) + SEQ_FIELD_NUMBER;
     hash = (53 * hash) + getSeq().hashCode();
+    hash = (37 * hash) + MESSAGEID_FIELD_NUMBER;
+    hash = (53 * hash) + com.google.protobuf.Internal.hashLong(
+        getMessageId());
     hash = (29 * hash) + unknownFields.hashCode();
     memoizedHashCode = hash;
     return hash;
@@ -714,6 +742,8 @@ private static final long serialVersionUID = 0L;
 
       seq_ = "";
 
+      messageId_ = 0L;
+
       return this;
     }
 
@@ -753,6 +783,7 @@ private static final long serialVersionUID = 0L;
       result.imageUrl_ = imageUrl_;
       result.videoUrl_ = videoUrl_;
       result.seq_ = seq_;
+      result.messageId_ = messageId_;
       onBuilt();
       return result;
     }
@@ -832,6 +863,9 @@ private static final long serialVersionUID = 0L;
       if (!other.getSeq().isEmpty()) {
         seq_ = other.seq_;
         onChanged();
+      }
+      if (other.getMessageId() != 0L) {
+        setMessageId(other.getMessageId());
       }
       this.mergeUnknownFields(other.unknownFields);
       onChanged();
@@ -1473,6 +1507,37 @@ private static final long serialVersionUID = 0L;
   checkByteStringIsUtf8(value);
       
       seq_ = value;
+      onChanged();
+      return this;
+    }
+
+    private long messageId_ ;
+    /**
+     * <code>int64 messageId = 11;</code>
+     * @return The messageId.
+     */
+    @java.lang.Override
+    public long getMessageId() {
+      return messageId_;
+    }
+    /**
+     * <code>int64 messageId = 11;</code>
+     * @param value The messageId to set.
+     * @return This builder for chaining.
+     */
+    public Builder setMessageId(long value) {
+      
+      messageId_ = value;
+      onChanged();
+      return this;
+    }
+    /**
+     * <code>int64 messageId = 11;</code>
+     * @return This builder for chaining.
+     */
+    public Builder clearMessageId() {
+      
+      messageId_ = 0L;
       onChanged();
       return this;
     }
