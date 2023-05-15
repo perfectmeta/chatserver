@@ -2,6 +2,7 @@ package chatserver.logic;
 
 import chatserver.gen.*;
 import chatserver.service.UserService;
+import com.google.protobuf.ByteString;
 import io.grpc.Grpc;
 import io.grpc.InsecureChannelCredentials;
 import io.grpc.Metadata;
@@ -11,6 +12,11 @@ import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.nio.ByteBuffer;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.CountDownLatch;
@@ -28,8 +34,8 @@ public class LoginTest {
     private static final Logger logger = Logger.getLogger(LoginTest.class.getName());
     @BeforeAll
     void init() {
-        var channel = Grpc.newChannelBuilder("ai.taohuayuaner.com:8080", InsecureChannelCredentials.create()).build();
-        //var channel = Grpc.newChannelBuilder("localhost:6565", InsecureChannelCredentials.create()).build();
+        //var channel = Grpc.newChannelBuilder("ai.taohuayuaner.com:8080", InsecureChannelCredentials.create()).build();
+        var channel = Grpc.newChannelBuilder("localhost:6565", InsecureChannelCredentials.create()).build();
         stub = ChatServiceGrpc.newStub(channel);
         Metadata metadata = new Metadata();
         metadata.put(Metadata.Key.of("auth_token", Metadata.ASCII_STRING_MARSHALLER), "1");
@@ -179,5 +185,49 @@ public class LoginTest {
             }
         });
         latch.await();
+    }
+
+    @Test
+    public void asrTest() throws IOException, InterruptedException {
+        var audioPath = Paths.get("src/test/resources/iat_pcm_16k.pcm").toAbsolutePath();
+        logger.info(audioPath.toString());
+        ByteBuffer bytes;
+        CountDownLatch latch;
+        StreamObserver<AudioStream> audioInput;
+        try (FileInputStream fis = new FileInputStream(audioPath.toFile())) {
+            bytes = ByteBuffer.allocate(1024);
+            latch = new CountDownLatch(1);
+            audioInput = stub.speechRecognize(new StreamObserver<>() {
+                @Override
+                public void onNext(TextStream value) {
+                    logger.info("Get Response Client " + value.getText());
+                    bytes.put(value.getText().getBytes(StandardCharsets.UTF_8));
+                }
+
+                @Override
+                public void onError(Throwable t) {
+                    latch.countDown();
+                }
+
+                @Override
+                public void onCompleted() {
+                    logger.warning("Complete");
+                    latch.countDown();
+                }
+            });
+
+            byte[] buffer = new byte[1280];
+            int len;
+            while ((len = fis.read(buffer)) != -1) {
+                var as = AudioStream.newBuilder().setAudio(ByteString.copyFrom(buffer, 0, len));
+                audioInput.onNext(as.build());
+            }
+        }
+        audioInput.onCompleted();
+
+        latch.await();
+        bytes.flip();
+        var content = new String(bytes.array(), 0, bytes.remaining(), StandardCharsets.UTF_8);
+        Assertions.assertEquals("语音听写可以将语音转为文字。", content);
     }
 }

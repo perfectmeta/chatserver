@@ -11,6 +11,7 @@ import chatserver.security.KeyManager;
 import java.io.*;
 import java.net.URI;
 import java.nio.charset.StandardCharsets;
+import java.util.Arrays;
 import java.util.Base64;
 import java.util.logging.Logger;
 
@@ -28,6 +29,7 @@ public class XFYASRSession extends org.java_websocket.client.WebSocketClient imp
     private final InputStream audioInputStream;
     private final OutputStream textOutputStream;
     private final InputStream resultStream;
+    @SuppressWarnings("unused")
     private SessionStatus status;
 
     public XFYASRSession(URI serverUri, InputStream audioStream) {
@@ -55,19 +57,19 @@ public class XFYASRSession extends org.java_websocket.client.WebSocketClient imp
                 int size;
                 boolean first = true;
                 while ((size = audioInputStream.read(audioBuffer)) != -1) {
-                    var content_ = new byte[AUDIO_BUFFER_SIZE];
-                    System.arraycopy(audioBuffer, 0, content_, 0, size);
+                    var content_ = Arrays.copyOf(audioBuffer, size);
                     var requestContent = makeRequest(content_, first);
-                    logger.info("content: " + requestContent);
                     first = false;
                     send(requestContent);
-                    Thread.sleep(40);
+                    Thread.sleep(40);   //fixme 后面想个办法给去掉这个限制
                 }
                 var lastRequest = makeEndRequest();
-                logger.info("content: " + lastRequest);
+                logger.info("content last: " + lastRequest);
                 send(lastRequest);
                 status = SessionStatus.WAITING_FOR_REMOTE;
             } catch (IOException | InterruptedException e) {
+                logger.warning(e.getMessage());
+                e.printStackTrace();
                 throw new RuntimeException(e);
             }
         });
@@ -75,7 +77,6 @@ public class XFYASRSession extends org.java_websocket.client.WebSocketClient imp
 
     @Override
     public void onMessage(String message) {
-        logger.info("message " + message);
         var om = new ObjectMapper();
         try {
             var obj = om.readValue(message, Response.class);
@@ -103,10 +104,19 @@ public class XFYASRSession extends org.java_websocket.client.WebSocketClient imp
     @Override
     public void onClose(int code, String reason, boolean remote) {
         status = SessionStatus.FINISHED;
+
+        try {
+            textOutputStream.flush();
+            textOutputStream.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     @Override
     public void onError(Exception ex) {
+        logger.warning("OnError:" + ex.getMessage());
+        ex.printStackTrace();
         close();
         status = SessionStatus.FINISHED;
     }
