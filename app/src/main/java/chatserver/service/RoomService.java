@@ -1,9 +1,6 @@
 package chatserver.service;
 
-import chatserver.dao.Message;
-import chatserver.dao.MessageRepository;
-import chatserver.dao.Room;
-import chatserver.dao.RoomRepository;
+import chatserver.dao.*;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -15,6 +12,9 @@ public class RoomService {
 
     @Autowired
     private RoomRepository rooms;
+
+    @Autowired
+    private AICharacterRepository aiCharacter;
 
     @Autowired
     private MessageRepository messages;
@@ -50,5 +50,7 @@ public class RoomService {
         return messages.findFirst100ByRoomIdOrderByMessageIdDesc(roomId);
     }
 
-
+    public AICharacter getAICharacterInRoom(long roomId) {
+        return aiCharacter.findAICharacterByRoom_RoomId(roomId);
+    }
 }

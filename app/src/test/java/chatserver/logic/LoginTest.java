@@ -149,7 +149,7 @@ public class LoginTest {
     void sendMessageTest() throws InterruptedException {
         ChatRequest request = ChatRequest.newBuilder()
                 .setRoomId(1)
-                .setText("Hey, How are you?")
+                .setText("Hey, 请告诉我你的名字好吗?")
                 .setSeq("aabb")
                 .setMsgType(MsgType.TEXT)
                 .build();

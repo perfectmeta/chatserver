@@ -10,6 +10,7 @@ option java_package = "chatserver.gen";
 message AudioStream {
   int64 roomId = 1;  // 传一下roomId吧，可能生成audioUrl会用到。
   bytes audio = 4; // 麦克风收录产生
+  string audioFormat = 5; // 音频传输格式, 支持列表见ReadMe
 }
 
 message TextStream {

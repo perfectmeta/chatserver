@@ -11,7 +11,6 @@ import chatserver.security.KeyManager;
 import java.io.*;
 import java.net.URI;
 import java.nio.charset.StandardCharsets;
-import java.util.Arrays;
 import java.util.Base64;
 import java.util.logging.Logger;
 
@@ -52,22 +51,20 @@ public class XFYASRSession extends org.java_websocket.client.WebSocketClient imp
         status = SessionStatus.RUNNING;
         logger.info("onOpen: " + handshakeData.getHttpStatus());
         Thread.startVirtualThread(()->{
-            byte[] audioBuffer = new byte[AUDIO_BUFFER_SIZE];
             try {
-                int size;
                 boolean first = true;
-                while ((size = audioInputStream.read(audioBuffer)) != -1) {
-                    var content_ = Arrays.copyOf(audioBuffer, size);
-                    var requestContent = makeRequest(content_, first);
+                byte[] buffer;
+                while ((buffer = audioInputStream.readNBytes(AUDIO_BUFFER_SIZE*10)).length > 0) {
+                    var requestContent = makeRequest(buffer, first);
                     first = false;
                     send(requestContent);
-                    Thread.sleep(40);   //fixme 后面想个办法给去掉这个限制
+                    // Thread.sleep(40);   //fixme 后面想个办法给去掉这个限制
                 }
                 var lastRequest = makeEndRequest();
                 logger.info("content last: " + lastRequest);
                 send(lastRequest);
                 status = SessionStatus.WAITING_FOR_REMOTE;
-            } catch (IOException | InterruptedException e) {
+            } catch (IOException e) { // | InterruptedException e) {
                 logger.warning(e.getMessage());
                 e.printStackTrace();
                 throw new RuntimeException(e);
@@ -80,6 +77,7 @@ public class XFYASRSession extends org.java_websocket.client.WebSocketClient imp
         var om = new ObjectMapper();
         try {
             var obj = om.readValue(message, Response.class);
+            logger.info("asr res:" + message);
             textOutputStream.write(getFragmentText(obj.data().result()).getBytes(StandardCharsets.UTF_8));
             if (obj.data().status() == 2  || obj.data().result().ls()) {
                 textOutputStream.flush();

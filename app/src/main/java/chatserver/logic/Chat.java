@@ -1,5 +1,6 @@
 package chatserver.logic;
 
+import chatserver.dao.AICharacter;
 import chatserver.dao.Message;
 import chatserver.dao.User;
 import chatserver.gen.ChatRequest;
@@ -8,33 +9,26 @@ import chatserver.gen.MsgType;
 import chatserver.service.RoomService;
 import chatserver.third.tts.XFYtts;
 import chatserver.util.Digest;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.base.Strings;
-import com.theokanning.openai.OpenAiApi;
 import com.theokanning.openai.completion.chat.ChatCompletionChoice;
 import com.theokanning.openai.completion.chat.ChatCompletionRequest;
 import com.theokanning.openai.completion.chat.ChatMessage;
 import com.theokanning.openai.completion.chat.ChatMessageRole;
 import com.theokanning.openai.service.OpenAiService;
 import io.grpc.stub.StreamObserver;
-import okhttp3.OkHttpClient;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-import chatserver.security.KeyManager;
-import retrofit2.Retrofit;
-import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory;
-import retrofit2.converter.jackson.JacksonConverterFactory;
 
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.time.Duration;
-import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Logger;
+
+import static chatserver.third.openai.OpenAi.makeOpenAiService;
 
 @Component
 public class Chat {
@@ -58,7 +52,9 @@ public class Chat {
             responseObserver.onCompleted();
             return;
         }
-
+        AICharacter aiCharacter = roomService.getAICharacterInRoom(room.getRoomId());
+        logger.info("AI Prompt" + aiCharacter.getPrompt());
+        var prompt = aiCharacter.getPrompt();
         OpenAiService service = makeOpenAiService();
         List<Message> messageHistory = roomService.getMessageHistory(request.getRoomId());
 
@@ -75,7 +71,7 @@ public class Chat {
         responseObserver.onNext(firstResponse);
 
         final List<ChatMessage> messages = new ArrayList<>();
-        final ChatMessage systemMessage = new ChatMessage(ChatMessageRole.SYSTEM.value(), KeyManager.TEACHER_PROMPT);
+        final ChatMessage systemMessage = new ChatMessage(ChatMessageRole.SYSTEM.value(), prompt);
         messages.add(systemMessage);
 
         for (Message msg : messageHistory) {
@@ -172,25 +168,10 @@ public class Chat {
         return newUserMsg;
     }
 
-    private OpenAiService makeOpenAiService() {
-        OkHttpClient client =
-                OpenAiService.defaultClient(KeyManager.OPENAI_KEY, Duration.of(5, ChronoUnit.SECONDS))
-                        .newBuilder()
-                        .build();
-        ObjectMapper mapper = OpenAiService.defaultObjectMapper();
-        Retrofit retrofit = new Retrofit.Builder()
-                        .baseUrl("http://111.207.225.93:4000/")
-                        .client(client)
-                        .addConverterFactory(JacksonConverterFactory.create(mapper))
-                        .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
-                        .build();
-
-        OpenAiApi api = retrofit.create(OpenAiApi.class);
-        return new OpenAiService(api);
-    }
 
     private String saveTTS(String allContent) {
         ByteBuffer tempFile = ByteBuffer.allocate(1024*1024);
+        String fileName;
         try(var inputStream = XFYtts.makeSession(allContent)) {
             byte[] buffer = new byte[1024];
             int len;
@@ -200,14 +181,20 @@ public class Chat {
             tempFile.flip();
             var size = tempFile.remaining();
             var content = tempFile.array();
-            var fileName = size+ "_" + Digest.calculateMD5(tempFile) + ".pcm";
-            var file = Files.createFile(Path.of(resourcePath, fileName));
+            fileName = size+ "_" + Digest.calculateMD5(tempFile) + ".pcm";
+            Path file;
+            try {
+                //这一步可能文件已经存在了，就不需要再写入文件，直接返回文件名即可
+                file = Files.createFile(Path.of(resourcePath, fileName));
+            } catch (IOException e) {
+                return fileName;
+            }
             try (var fout = new FileOutputStream(file.toFile())) {
                 fout.write(content, 0, size);
             }
-            return fileName;
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
+        return fileName;
     }
 }
