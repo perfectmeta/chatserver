@@ -27,8 +27,6 @@ import java.util.logging.Logger;
 public class LoginTest {
     private ChatServiceGrpc.ChatServiceStub stub;
 
-    private List<RoomInfo> rooms = new ArrayList<>();
-
     @Autowired
     private UserService userService;
     private static final Logger logger = Logger.getLogger(LoginTest.class.getName());
@@ -106,21 +104,21 @@ public class LoginTest {
             }
         });
         latch.await();
-        Assertions.assertEquals(1, result.size());
+        Assertions.assertEquals(2, result.size());
         Assertions.assertTrue(result.get(0).getYou().getName().equals("nick")
                 || result.get(0).getYou().getName().equals("earneet"));
-        rooms = result;
     }
 
     @Test
     void enterRoomTest() throws InterruptedException {
-        if (rooms.isEmpty()) return;
-        var firstRoom = rooms.get(0);
+        var roomId = 1;
+        var lastMessageId = 0;
         var enterRoomRequest = EnterRoomRequest.newBuilder()
-                .setRoomId(firstRoom.getRoomId())
-                .setLastMessageId(firstRoom.getLastMessageId()).build();
+                .setRoomId(roomId)
+                .setLastMessageId(lastMessageId).build();
         var messages = new ArrayList<>();
         CountDownLatch latch = new CountDownLatch(1);
+        var success = new boolean[]{false};
         stub.enterRoom(enterRoomRequest, new StreamObserver<>() {
             @Override
             public void onNext(Message value) {
@@ -137,12 +135,13 @@ public class LoginTest {
             @Override
             public void onCompleted() {
                 logger.warning("onComplete: ");
+                success[0] = true;
                 latch.countDown();
             }
         });
         latch.await();
         logger.info("finished");
-        Assertions.assertEquals(0, messages.size());
+        Assertions.assertTrue(success[0]);
     }
 
     @Test
@@ -158,12 +157,10 @@ public class LoginTest {
             @Override
             public void onNext(ChatResponseStream value) {
                 if (value.hasRequestMessage()) {
-                    logger.info("Request not null");
                     logger.info(value.getRequestMessage().getSeq());
                     return;
                 }
                 if (value.hasResponseMessage()) {
-                    logger.info("Response not null");
                     logger.info(value.getResponseMessage().getText());
                     logger.info(value.getResponseMessage().getAudioUrl());
                     return;

@@ -64,7 +64,7 @@ public class GetRoomList {
         newRoom.setCreatedTime(System.currentTimeMillis());
         newRoom.setFirstMessageId(-1);
         newRoom.setLastMessageId(-1);
-        return roomService.addRoom(newRoom);
+        return roomService.upsertRoom(newRoom);
     }
 
     private static RoomInfo parseRoomInfo(Room room) {

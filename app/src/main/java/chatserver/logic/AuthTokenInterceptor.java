@@ -47,7 +47,6 @@ public class AuthTokenInterceptor implements ServerInterceptor {
         }
 
         Context context = Context.current().withValue(USER, user);
-
         return Contexts.interceptCall(context, serverCall, metadata, serverCallHandler);
     }
 

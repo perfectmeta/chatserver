@@ -13,7 +13,7 @@ public class AICharacter {
     private int aiType;
     private int gender;
     private String nature;
-    @Column(length = 1022)
+    @Column(length = 2046)
     private String prompt;
 
     public long getCharacterId() {
