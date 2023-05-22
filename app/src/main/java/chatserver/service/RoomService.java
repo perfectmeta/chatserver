@@ -12,12 +12,12 @@ public class RoomService {
 
     private final RoomRepository rooms;
 
-    private final BotClassRepository bots;
+    private final UserCategoryRepository bots;
 
     private final MessageRepository messages;
 
     @Autowired
-    public RoomService(RoomRepository rooms, BotClassRepository bots, MessageRepository messages) {
+    public RoomService(RoomRepository rooms, UserCategoryRepository bots, MessageRepository messages) {
         this.rooms = rooms;
         this.bots = bots;
         this.messages = messages;

@@ -5,16 +5,16 @@ import lombok.Data;
 
 @Data
 @Entity
-// @Table(name = "memory_node")
 public class Memory {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
-    private long id;
-    private long me;
-    private long you;
-    @Column(length = 2048)
-    private String memory;
+    private long memoryId;
 
-    private long first_encounter_time;
-    private long last_communication_time;
+    private long userId;
+    private long otherUserId;
+    private int memoType;  // 为将来扩展
+    @Column(length = 1022)
+    private String memo;
+
+    private long createdTime;
 }

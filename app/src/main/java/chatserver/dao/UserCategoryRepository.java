@@ -6,6 +6,6 @@ import org.springframework.stereotype.Repository;
 
 @SuppressWarnings("unused")
 @Repository
-public interface BotClassRepository extends JpaRepository<BotClass, Long> {
-    BotClass findBotClassByBotClassId(long botClassId);
+public interface UserCategoryRepository extends JpaRepository<UserCategory, Long> {
+    UserCategory findByUserCategoryId(long userCategoryId);
 }

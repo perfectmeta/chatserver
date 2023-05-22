@@ -120,10 +120,38 @@ message RoomId {
   int32 room_id = 1;
 }
 
-message Memory {
-  int32 valid = 1;
-  string memory = 2;
+message GetMemoryRequest {
+  int64 userId = 1;
+  int64 otherUserId = 2;
 }
+
+message Memory {
+  int64 memoryId = 1;
+  string memo = 2;
+  int64 createdTime = 3;
+}
+
+message DeleteMemoryRequest {
+  int64 userId = 1;
+  int64 otherUserId = 2;
+  int64 memoryId = 3;
+}
+
+message DeleteMemoryResponse {
+  int32 errorCode = 1;
+}
+
+
+message Contact {
+  int32 userType = 1; // 0: human , 1: bot
+  string nickName = 2;
+  string categoryName = 3;
+  int32 gender = 4; // 0: unknown, 1: male, 2: female
+  string tags = 5;
+  string description = 6;
+  string headIconUrl = 7;
+}
+
 
 //////////////////////////////////////
 
@@ -132,9 +160,13 @@ service ChatService {
   // 把token放到之后所有的请求的header里，例子见app/src/test/java/chatserver/ServerAppTest.java
   rpc Signup(RegisterInfo) returns (RegisterFeedback);
 
-  // 登录游戏后立马就发送Hello，取room list，new message stream，这两个可能就是在连接期间一直会发。
-  rpc GetRoomList(Hello) returns (stream RoomInfo);
+  // 取自己信息
+  rpc GetSelfInfo(Hello) returns (Contact);
+  // 登录游戏后立马就发送Hello，取room list，contact list, new message stream，这3个可能就是在连接期间一直会发。
+  rpc GetRoomStream(Hello) returns (stream RoomInfo);
+  rpc GetContactStream(Hello) returns (stream Contact);
   rpc GetNewMessageStream(Hello) returns (stream Message); //自己发和gpt回应的在Chat()里自己确认，不通过这个接口发回自己
+
 
   // 进入房间，发lastMessageId后，服务器同步给客户端这之后的消息
   rpc EnterRoom(EnterRoomRequest) returns (stream Message);
@@ -145,5 +177,9 @@ service ChatService {
   // 聊天，会接受chatgpt发回的文本流，这样响应性更好。当一句话或多句话结束时会服务器会给出语音。
   rpc Chat(ChatRequest) returns (stream ChatResponseStream);
 
-  rpc Memory(RoomId) returns (Memory);
+
+  // 取记忆，会complete
+  rpc GetMemory(GetMemoryRequest) returns (stream Memory);
+
+  rpc DeleteMemory(DeleteMemoryRequest) returns (DeleteMemoryResponse);
 }

@@ -7,8 +7,6 @@ import lombok.Data;
 @Entity
 @Table(indexes = {@Index(name = "byUserId", columnList = "userId"), @Index(name = "byAIType", columnList = "aiType"), @Index(name = "byAIUserId", columnList = "aiUserId")})
 public class Room {
-
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long roomId;

@@ -9,17 +9,15 @@ import lombok.Data;
         @Index(name = "phone", columnList = "phone", unique = true),
         @Index(name = "email", columnList = "email", unique = true)
 })
-public class User {
-
+public class User {  // user is human or bot
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long userId;
 
+    private int userCategory;
     private String phone;
-
     private String email;
-
-    private int userType; // 0: human, 1:robot
-
     private String nickName;
+
+    private String headIconUrl;
 }
