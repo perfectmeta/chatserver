@@ -12,14 +12,14 @@ public class RoomService {
 
     private final RoomRepository rooms;
 
-    private final AICharacterRepository aiCharacter;
+    private final BotClassRepository bots;
 
     private final MessageRepository messages;
 
     @Autowired
-    public RoomService(RoomRepository rooms, AICharacterRepository aiCharacter, MessageRepository messages) {
+    public RoomService(RoomRepository rooms, BotClassRepository bots, MessageRepository messages) {
         this.rooms = rooms;
-        this.aiCharacter = aiCharacter;
+        this.bots = bots;
         this.messages = messages;
     }
 
@@ -58,9 +58,5 @@ public class RoomService {
 
     public List<Message> getMessageHistory(long roomId) {
         return messages.findFirst100ByRoomIdOrderByMessageIdDesc(roomId);
-    }
-
-    public AICharacter getAICharacterInRoom(long roomId) {
-        return aiCharacter.findAICharacterByRoom_RoomId(roomId);
     }
 }

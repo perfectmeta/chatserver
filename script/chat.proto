@@ -116,6 +116,15 @@ message RegisterFeedback {
   int32 user_id = 3;
 }
 
+message RoomId {
+  int32 room_id = 1;
+}
+
+message Memory {
+  int32 valid = 1;
+  string memory = 2;
+}
+
 //////////////////////////////////////
 
 service ChatService {
@@ -135,4 +144,6 @@ service ChatService {
 
   // 聊天，会接受chatgpt发回的文本流，这样响应性更好。当一句话或多句话结束时会服务器会给出语音。
   rpc Chat(ChatRequest) returns (stream ChatResponseStream);
+
+  rpc Memory(RoomId) returns (Memory);
 }

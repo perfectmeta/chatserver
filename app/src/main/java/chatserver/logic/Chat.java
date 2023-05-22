@@ -1,11 +1,12 @@
 package chatserver.logic;
 
-import chatserver.dao.AICharacter;
+import chatserver.dao.BotClass;
 import chatserver.dao.Message;
 import chatserver.dao.User;
 import chatserver.gen.ChatRequest;
 import chatserver.gen.ChatResponseStream;
 import chatserver.gen.MsgType;
+import chatserver.service.BotClassService;
 import chatserver.service.RoomService;
 import chatserver.third.tts.XFYtts;
 import chatserver.util.Digest;
@@ -35,12 +36,15 @@ public class Chat {
     private static final Logger logger = Logger.getLogger(Chat.class.getName());
 
     private final RoomService roomService;
+    private final BotClassService botClassService;
     private final String resourcePath = !Strings.isNullOrEmpty(System.getenv("static_dir")) ?
             System.getenv("static_dir") : ".";
 
+
     @Autowired
-    public Chat(RoomService roomService) {
+    public Chat(RoomService roomService, BotClassService botClassService) {
         this.roomService = roomService;
+        this.botClassService = botClassService;
     }
 
     public void run(ChatRequest request, StreamObserver<ChatResponseStream> responseObserver) {
@@ -52,9 +56,9 @@ public class Chat {
             responseObserver.onCompleted();
             return;
         }
-        AICharacter aiCharacter = roomService.getAICharacterInRoom(room.getRoomId());
-        logger.info("AI Prompt" + aiCharacter.getPrompt());
-        var prompt = aiCharacter.getPrompt();
+        BotClass botClass = botClassService.findBotClassById(room.getAiUserId());
+        logger.info("AI Prompt" + botClass.getPrompt());
+        var prompt = botClass.getPrompt();
         OpenAiService service = makeOpenAiService();
         List<Message> messageHistory = roomService.getMessageHistory(request.getRoomId());
 
