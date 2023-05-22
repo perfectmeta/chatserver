@@ -52,7 +52,7 @@ public class Signup {
             return;
         }
         var feedbackback = RegisterFeedback.newBuilder().setStatusCode(RegisterFeedback.StatusCode.OK_VALUE)
-                        .setUserId(dbUser.getUserId().intValue()).build();
+                        .setUserId((int)dbUser.getUserId()).build();
         responseObserver.onNext(feedbackback);
         responseObserver.onCompleted();
     }
