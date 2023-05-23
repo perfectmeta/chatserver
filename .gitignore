@@ -8,3 +8,4 @@ build
 .idea/*
 /app/key.properties
 static
+/.jpb
