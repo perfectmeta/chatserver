@@ -1,14 +1,13 @@
 package chatserver.dao;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import lombok.Data;
 
 @Data
 @Entity
 public class UserCategory {
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long userCategoryId;
 
     private int userType; // 0: human , 1: bot

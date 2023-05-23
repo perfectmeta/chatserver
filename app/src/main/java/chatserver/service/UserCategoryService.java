@@ -1,25 +1,25 @@
 package chatserver.service;
 
-import chatserver.dao.BotClass;
+import chatserver.dao.UserCategory;
 import chatserver.dao.UserCategoryRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
 @Service
-public class BotClassService {
+public class UserCategoryService {
 
     private final UserCategoryRepository userCategory;
 
-    public BotClassService(UserCategoryRepository userCategory) {
+    public UserCategoryService(UserCategoryRepository userCategory) {
         this.userCategory = userCategory;
     }
 
-    public List<BotClass> getAllBotClasses() {
+    public List<UserCategory> getAllUserCategories() {
         return userCategory.findAll();
     }
 
-    public BotClass findBotClassById(long id) {
-        return userCategory.findBotClassByBotClassId(id);
+    public UserCategory findUserCategoryById(long id) {
+        return userCategory.findByUserCategoryId(id);
     }
 }

@@ -5,11 +5,11 @@ import io.grpc.stub.StreamObserver;
 import org.lognet.springboot.grpc.GRpcService;
 import org.springframework.beans.factory.annotation.Autowired;
 
-@SuppressWarnings("unused")
 @GRpcService
 public class ChatService extends ChatServiceGrpc.ChatServiceImplBase {
 
     private final GetRoomList getRoomList;
+    private final GetContactList getContactList;
 
     private final GetNewMessageStream getNewMessageStream;
 
@@ -17,19 +17,23 @@ public class ChatService extends ChatServiceGrpc.ChatServiceImplBase {
 
     private final SpeechRecognize speechRecognize;
 
-    private final TextToSound textToSound;
-
     private final Chat chat;
 
     private final Signup signup;
 
     @Autowired
-    public ChatService(GetRoomList getRoomList, GetNewMessageStream getNewMessageStream, EnterRoom enterRoom, SpeechRecognize speechRecognize, TextToSound textToSound, Chat chat, Signup signup) {
+    public ChatService(GetRoomList getRoomList,
+                       GetContactList getContactList,
+                       GetNewMessageStream getNewMessageStream,
+                       EnterRoom enterRoom,
+                       SpeechRecognize speechRecognize,
+                       Chat chat,
+                       Signup signup) {
         this.getRoomList = getRoomList;
+        this.getContactList = getContactList;
         this.getNewMessageStream = getNewMessageStream;
         this.enterRoom = enterRoom;
         this.speechRecognize = speechRecognize;
-        this.textToSound = textToSound;
         this.chat = chat;
         this.signup = signup;
     }
@@ -40,7 +44,7 @@ public class ChatService extends ChatServiceGrpc.ChatServiceImplBase {
     }
 
     @Override
-    public void getRoomList(Hello request, StreamObserver<RoomInfo> responseObserver) {
+    public void getRoomStream(Hello request, StreamObserver<RoomInfo> responseObserver) {
         getRoomList.run(request, responseObserver);
     }
 
@@ -62,5 +66,10 @@ public class ChatService extends ChatServiceGrpc.ChatServiceImplBase {
     @Override
     public void chat(ChatRequest request, StreamObserver<ChatResponseStream> responseObserver) {
         chat.run(request, responseObserver);
+    }
+
+    @Override
+    public void getContactStream(Hello request, StreamObserver<Contact> responseObserver) {
+        getContactList.run(request, responseObserver);
     }
 }

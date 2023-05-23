@@ -42,7 +42,7 @@ public class Signup {
 
         User user = new User();
         user.setEmail(email);
-        user.setUserType(0);
+        user.setUserCategory(0);
         user.setPhone(phone);
         user.setNickName(request.getNickname());
         User dbUser;

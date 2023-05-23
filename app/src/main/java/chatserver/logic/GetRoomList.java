@@ -1,12 +1,12 @@
 package chatserver.logic;
 
-import chatserver.dao.BotClass;
 import chatserver.dao.Room;
 import chatserver.dao.User;
+import chatserver.dao.UserCategory;
 import chatserver.gen.Author;
 import chatserver.gen.Hello;
 import chatserver.gen.RoomInfo;
-import chatserver.service.BotClassService;
+import chatserver.service.UserCategoryService;
 import chatserver.service.RoomService;
 import io.grpc.stub.StreamObserver;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,12 +19,12 @@ import java.util.List;
 public class GetRoomList {
 
     private final RoomService roomService;
-    private final BotClassService botClassService;
+    private final UserCategoryService userCategoryService;
 
     @Autowired
-    public GetRoomList(RoomService roomService, BotClassService botClassService) {
+    public GetRoomList(RoomService roomService, UserCategoryService userCategoryService) {
         this.roomService = roomService;
-        this.botClassService = botClassService;
+        this.userCategoryService = userCategoryService;
     }
 
     private boolean containRoom(long aiCharacter, Collection<Room> rooms) {
@@ -34,10 +34,10 @@ public class GetRoomList {
     public void run(Hello ignoredRequest, StreamObserver<RoomInfo> responseObserver) {
         User user = AuthTokenInterceptor.USER.get();
         List<Room> userRooms = roomService.findByUserId(user.getUserId());
-        List<BotClass> botClasses = botClassService.getAllBotClasses();
+        List<UserCategory> userCategories = userCategoryService.getAllUserCategories();
 
-        for (var character : botClasses) {
-            if (containRoom(character.getBotClassId(), userRooms)) {
+        for (var character : userCategories) {
+            if (containRoom(character.getUserCategoryId(), userRooms)) {
                 continue;
             }
             var room = makeRoom(character, user);
@@ -52,15 +52,15 @@ public class GetRoomList {
         responseObserver.onCompleted();
     }
 
-    private Room makeRoom(BotClass botClass, User user) {
+    private Room makeRoom(UserCategory userCategory, User user) {
         Room newRoom = new Room();
         newRoom.setRoomName("english classroom");
         newRoom.setUserType(Msg.UT_HUMAN);
         newRoom.setUserId(user.getUserId());
         newRoom.setUserShowName(user.getNickName());
         newRoom.setAiType(Msg.UT_AI_TEACHER);
-        newRoom.setAiUserId(botClass.getBotClassId());
-        newRoom.setAiShowName(botClass.getBotClassName());
+        newRoom.setAiUserId(userCategory.getUserCategoryId());
+        newRoom.setAiShowName(userCategory.getUserCategoryName());
         newRoom.setCreatedTime(System.currentTimeMillis());
         newRoom.setFirstMessageId(-1);
         newRoom.setLastMessageId(-1);

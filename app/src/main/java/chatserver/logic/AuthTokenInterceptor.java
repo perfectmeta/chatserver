@@ -2,6 +2,7 @@ package chatserver.logic;
 
 import chatserver.service.UserService;
 import chatserver.dao.User;
+import chatserver.userjob.UserBlackboard;
 import io.grpc.*;
 import io.grpc.Metadata.Key;
 import io.grpc.ServerCall.Listener;
@@ -18,6 +19,7 @@ public class AuthTokenInterceptor implements ServerInterceptor {
     private UserService users;  // 不够service层了，直接用repo
 
     public static final Context.Key<User> USER = Context.key("user");
+    public static final Context.Key<UserBlackboard> BLACKBOARD = Context.key("blackboard");
 
 
     @Override
@@ -46,8 +48,16 @@ public class AuthTokenInterceptor implements ServerInterceptor {
             return new ServerCall.Listener<>() {};
         }
 
-        Context context = Context.current().withValue(USER, user);
-        return Contexts.interceptCall(context, serverCall, metadata, serverCallHandler);
+        Context context = Context.current().withValue(USER, user).withValue(BLACKBOARD, new UserBlackboard());
+
+        ServerCall<ReqT, RespT> wrappedCall = new ForwardingServerCall.SimpleForwardingServerCall<ReqT, RespT>(serverCall) {
+            public void close(Status status, Metadata metadata) {
+                // todo: clean userjob
+                logger.warning("client close");
+            }
+        };
+
+        return Contexts.interceptCall(context, wrappedCall, metadata, serverCallHandler);
     }
 
     private User validate(String authToken) {

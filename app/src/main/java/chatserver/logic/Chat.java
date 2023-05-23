@@ -1,12 +1,12 @@
 package chatserver.logic;
 
-import chatserver.dao.BotClass;
 import chatserver.dao.Message;
 import chatserver.dao.User;
+import chatserver.dao.UserCategory;
 import chatserver.gen.ChatRequest;
 import chatserver.gen.ChatResponseStream;
 import chatserver.gen.MsgType;
-import chatserver.service.BotClassService;
+import chatserver.service.UserCategoryService;
 import chatserver.service.RoomService;
 import chatserver.third.tts.XFYtts;
 import chatserver.util.Digest;
@@ -36,15 +36,15 @@ public class Chat {
     private static final Logger logger = Logger.getLogger(Chat.class.getName());
 
     private final RoomService roomService;
-    private final BotClassService botClassService;
+    private final UserCategoryService userCategoryService;
     private final String resourcePath = !Strings.isNullOrEmpty(System.getenv("static_dir")) ?
             System.getenv("static_dir") : ".";
 
 
     @Autowired
-    public Chat(RoomService roomService, BotClassService botClassService) {
+    public Chat(RoomService roomService, UserCategoryService userCategoryService) {
         this.roomService = roomService;
-        this.botClassService = botClassService;
+        this.userCategoryService = userCategoryService;
     }
 
     public void run(ChatRequest request, StreamObserver<ChatResponseStream> responseObserver) {
@@ -56,7 +56,7 @@ public class Chat {
             responseObserver.onCompleted();
             return;
         }
-        BotClass botClass = botClassService.findBotClassById(room.getAiUserId());
+        UserCategory botClass = userCategoryService.findUserCategoryById(room.getAiUserId());
         logger.info("AI Prompt" + botClass.getPrompt());
         var prompt = botClass.getPrompt();
         OpenAiService service = makeOpenAiService();

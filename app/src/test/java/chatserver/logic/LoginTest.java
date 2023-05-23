@@ -80,10 +80,11 @@ public class LoginTest {
 
     @Test
     void getRoomListTest() throws InterruptedException {
+        // fixme 这个接口发生了改变，现在不会再complete了，所以测试需要修改
         Hello hello = Hello.newBuilder().build();
         List<RoomInfo> result = new ArrayList<>();
         CountDownLatch latch = new CountDownLatch(1);
-        stub.getRoomList(hello, new StreamObserver<>() {
+        stub.getRoomStream(hello, new StreamObserver<>() {
             @Override
             public void onNext(RoomInfo value) {
                 logger.info("Room info: " + value);
@@ -116,14 +117,12 @@ public class LoginTest {
         var enterRoomRequest = EnterRoomRequest.newBuilder()
                 .setRoomId(roomId)
                 .setLastMessageId(lastMessageId).build();
-        var messages = new ArrayList<>();
         CountDownLatch latch = new CountDownLatch(1);
         var success = new boolean[]{false};
         stub.enterRoom(enterRoomRequest, new StreamObserver<>() {
             @Override
             public void onNext(Message value) {
                 logger.info("new message received: " + value);
-                messages.add(value);
             }
 
             @Override
