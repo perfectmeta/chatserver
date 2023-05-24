@@ -10,7 +10,7 @@ public class UserBlackboard {
     private StreamObserver<RoomInfo> roomInfoStreamObserver;
     private StreamObserver<Message> messageStreamObserver;
 
-    public void registerStreamObserver(StreamObserver<Contact> streamObserver) {
+    public void registerContactStreamObserver(StreamObserver<Contact> streamObserver) {
         this.contactStreamObserver = streamObserver;
     }
 

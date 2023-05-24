@@ -1,6 +1,6 @@
 package chatserver.service;
 
-import chatserver.dao.UserCategory;
+import chatserver.entity.UserCategory;
 import chatserver.dao.UserCategoryRepository;
 import org.springframework.stereotype.Service;
 

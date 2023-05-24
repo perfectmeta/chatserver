@@ -1,8 +1,8 @@
 package chatserver.logic;
 
-import chatserver.dao.Message;
-import chatserver.dao.User;
-import chatserver.dao.UserCategory;
+import chatserver.entity.Message;
+import chatserver.entity.User;
+import chatserver.entity.UserCategory;
 import chatserver.gen.ChatRequest;
 import chatserver.gen.ChatResponseStream;
 import chatserver.gen.MsgType;
@@ -56,9 +56,9 @@ public class Chat {
             responseObserver.onCompleted();
             return;
         }
-        UserCategory botClass = userCategoryService.findUserCategoryById(room.getAiUserId());
-        logger.info("AI Prompt" + botClass.getPrompt());
-        var prompt = botClass.getPrompt();
+        UserCategory userCategory = userCategoryService.findUserCategoryById(room.getAiUserId());
+        logger.info("AI Prompt" + userCategory.getPrompt());
+        var prompt = userCategory.getPrompt();
         OpenAiService service = makeOpenAiService();
         List<Message> messageHistory = roomService.getMessageHistory(request.getRoomId());
 

@@ -1,6 +1,6 @@
 package chatserver.service;
 
-import chatserver.dao.User;
+import chatserver.entity.User;
 import chatserver.dao.UserRepository;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;

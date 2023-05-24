@@ -1,6 +1,6 @@
 package chatserver.logic;
 
-import chatserver.dao.User;
+import chatserver.entity.User;
 import chatserver.gen.Contact;
 import chatserver.gen.Hello;
 import chatserver.service.ContactService;
@@ -10,25 +10,29 @@ import org.springframework.stereotype.Component;
 import java.util.List;
 
 @Component
-public class GetContactList {
+public class GetContactStream {
 
     private final ContactService contactService;
 
-    public GetContactList(ContactService contactService) {
+    public GetContactStream(ContactService contactService) {
         this.contactService = contactService;
     }
 
     public void run(Hello request, StreamObserver<Contact> responseObserver) {
         User user = AuthTokenInterceptor.USER.get();
-        List<chatserver.dao.Contact> contacts = contactService.getAllContactsByUserId(user.getUserId());
+        List<chatserver.entity.Contact> contacts = contactService.getAllContactsByUserId(user.getUserId());
         for (var c : contacts) {
             responseObserver.onNext(makeContact(c));
         }
+
+        var userBlackboard = AuthTokenInterceptor.BLACKBOARD.get();
+        userBlackboard.registerContactStreamObserver(responseObserver);
     }
 
-    private static Contact makeContact(chatserver.dao.Contact contact) {
+    private static Contact makeContact(chatserver.entity.Contact contact) {
         var builder = Contact.newBuilder();
-        // builder.setCategoryName(contact.get);
+        builder.setCategoryName(contact.getContactUserId().getNickName());
+        builder.setNickName(contact.getContactUserId().getPhone());
         return builder.build();
     }
 }

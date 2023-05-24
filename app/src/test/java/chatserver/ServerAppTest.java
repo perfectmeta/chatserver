@@ -58,7 +58,7 @@ class ServerAppTest {
 
     @Test
     void listRoom() {
-        blockingStub.getRoomList(Hello.newBuilder().build()).forEachRemaining(
+        blockingStub.getRoomStream(Hello.newBuilder().build()).forEachRemaining(
                 roomInfo -> System.out.print("blocking list room ok: " + roomInfo.toString()));
     }
 
@@ -84,7 +84,7 @@ class ServerAppTest {
                 finishLatch.countDown();
             }
         };
-        asyncStub.getRoomList(Hello.newBuilder().build(), observer);
+        asyncStub.getRoomStream(Hello.newBuilder().build(), observer);
 
         if (!finishLatch.await(1, TimeUnit.SECONDS)) {
             System.out.println("exit! do not wait");

@@ -1,8 +1,8 @@
 package chatserver.logic;
 
-import chatserver.dao.Room;
-import chatserver.dao.User;
-import chatserver.dao.UserCategory;
+import chatserver.entity.Room;
+import chatserver.entity.User;
+import chatserver.entity.UserCategory;
 import chatserver.gen.Author;
 import chatserver.gen.Hello;
 import chatserver.gen.RoomInfo;
@@ -16,13 +16,13 @@ import java.util.Collection;
 import java.util.List;
 
 @Component
-public class GetRoomList {
+public class GetRoomStream {
 
     private final RoomService roomService;
     private final UserCategoryService userCategoryService;
 
     @Autowired
-    public GetRoomList(RoomService roomService, UserCategoryService userCategoryService) {
+    public GetRoomStream(RoomService roomService, UserCategoryService userCategoryService) {
         this.roomService = roomService;
         this.userCategoryService = userCategoryService;
     }
@@ -49,7 +49,9 @@ public class GetRoomList {
         for (Room room : userRooms) {
             responseObserver.onNext(parseRoomInfo(room));
         }
-        responseObserver.onCompleted();
+        var userBlackboard = AuthTokenInterceptor.BLACKBOARD.get();
+        userBlackboard.registerRoomInfoStreamObserver(responseObserver);
+        // responseObserver.onCompleted();
     }
 
     private Room makeRoom(UserCategory userCategory, User user) {

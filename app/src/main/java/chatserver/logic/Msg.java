@@ -12,7 +12,7 @@ public class Msg {
     public static final int UT_AI_FRIEND = 2;
 
 
-    public static Message fromDb(chatserver.dao.Message dm) {
+    public static Message fromDb(chatserver.entity.Message dm) {
         Message.Builder b = Message.newBuilder();
         b.setRoomId(dm.getRoomId());
         b.setAuthor(Author.newBuilder().setType(dm.getAuthorUserType())

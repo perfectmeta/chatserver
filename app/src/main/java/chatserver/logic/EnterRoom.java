@@ -1,7 +1,7 @@
 package chatserver.logic;
 
-import chatserver.dao.Room;
-import chatserver.dao.User;
+import chatserver.entity.Room;
+import chatserver.entity.User;
 import chatserver.gen.EnterRoomRequest;
 import chatserver.gen.Message;
 import chatserver.service.RoomService;
@@ -33,10 +33,10 @@ public class EnterRoom {
             return;
         }
 
-        List<chatserver.dao.Message> messageHistory =
+        List<chatserver.entity.Message> messageHistory =
                 roomService.getMessageHistorySince(request.getRoomId(), request.getLastMessageId());
 
-        for (chatserver.dao.Message message : messageHistory) {
+        for (chatserver.entity.Message message : messageHistory) {
             Message msg = Msg.fromDb(message);
             responseObserver.onNext(msg);
         }

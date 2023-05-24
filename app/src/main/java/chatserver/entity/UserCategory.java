@@ -1,4 +1,4 @@
-package chatserver.dao;
+package chatserver.entity;
 
 import jakarta.persistence.*;
 import lombok.Data;

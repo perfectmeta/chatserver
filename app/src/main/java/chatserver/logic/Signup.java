@@ -1,6 +1,6 @@
 package chatserver.logic;
 
-import chatserver.dao.User;
+import chatserver.entity.User;
 import chatserver.gen.RegisterFeedback;
 import chatserver.gen.RegisterInfo;
 import chatserver.service.UserService;

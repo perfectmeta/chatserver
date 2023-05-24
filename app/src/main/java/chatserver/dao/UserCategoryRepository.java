@@ -1,5 +1,6 @@
 package chatserver.dao;
 
+import chatserver.entity.UserCategory;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

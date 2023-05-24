@@ -1,6 +1,8 @@
 package chatserver.service;
 
 import chatserver.dao.*;
+import chatserver.entity.Message;
+import chatserver.entity.Room;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -54,6 +56,7 @@ public class RoomService {
 
     public Long getRoomMaxMessageId(long roomId) {
         return messages.findMaxMessageInRoomId(roomId);
+        //return messages.findTopByMessageId(roomId);
     }
 
     public List<Message> getMessageHistory(long roomId) {

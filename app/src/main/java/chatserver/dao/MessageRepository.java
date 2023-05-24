@@ -1,5 +1,6 @@
 package chatserver.dao;
 
+import chatserver.entity.Message;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.data.repository.query.Param;
@@ -17,4 +18,6 @@ public interface MessageRepository extends CrudRepository<Message, Long> {
 
     @Query("SELECT MAX(e.messageId) FROM Message e WHERE e.roomId = :roomId")
     Long findMaxMessageInRoomId(@Param("roomId") long roomId);
+
+    // Long findTopByMessageId(@Param("roomId") long roomId);
 }

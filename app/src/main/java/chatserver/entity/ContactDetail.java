@@ -1,10 +1,4 @@
-package chatserver.dao;
-
-import jakarta.persistence.Entity;
-import jakarta.persistence.SecondaryTable;
-import jakarta.persistence.SecondaryTables;
-import jakarta.persistence.Table;
-import lombok.Data;
+package chatserver.entity;
 
 //@Data
 //@Entity

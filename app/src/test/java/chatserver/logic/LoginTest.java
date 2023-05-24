@@ -144,6 +144,12 @@ public class LoginTest {
     }
 
     @Test
+    void sendMessageTwice() throws Exception {
+        sendMessageTest();
+        sendMessageTest();
+    }
+
+    @Test
     void sendMessageTest() throws InterruptedException {
         ChatRequest request = ChatRequest.newBuilder()
                 .setRoomId(1)
@@ -225,5 +231,30 @@ public class LoginTest {
         bytes.flip();
         var content = new String(bytes.array(), 0, bytes.remaining(), StandardCharsets.UTF_8);
         Assertions.assertEquals("语音听写可以将语音转为文字。", content);
+    }
+
+    @Test
+    public void getContactStreamTest() throws Exception {
+        CountDownLatch latch = new CountDownLatch(1);
+        stub.getContactStream(Hello.newBuilder().build(), new StreamObserver<>() {
+            @Override
+            public void onNext(Contact value) {
+                logger.info("Get Contact Result " + value.toString());
+                latch.countDown();
+            }
+
+            @Override
+            public void onError(Throwable t) {
+                Assertions.fail("Error occurred");
+                logger.warning(t.getMessage());
+                t.printStackTrace();
+            }
+
+            @Override
+            public void onCompleted() {
+                Assertions.fail();
+            }
+        });
+        latch.await();
     }
 }

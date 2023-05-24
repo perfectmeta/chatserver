@@ -8,27 +8,25 @@ import org.springframework.beans.factory.annotation.Autowired;
 @GRpcService
 public class ChatService extends ChatServiceGrpc.ChatServiceImplBase {
 
-    private final GetRoomList getRoomList;
-    private final GetContactList getContactList;
-
-    private final GetNewMessageStream getNewMessageStream;
-
-    private final EnterRoom enterRoom;
-
-    private final SpeechRecognize speechRecognize;
-
-    private final Chat chat;
-
+    private final GetSelfInfo getSelfInfo;
     private final Signup signup;
+    private final GetRoomStream getRoomList;
+    private final GetContactStream getContactList;
+    private final GetNewMessageStream getNewMessageStream;
+    private final EnterRoom enterRoom;
+    private final SpeechRecognize speechRecognize;
+    private final Chat chat;
+    private final GetMemory getMemory;
 
     @Autowired
-    public ChatService(GetRoomList getRoomList,
-                       GetContactList getContactList,
+    public ChatService(GetSelfInfo getSelfInfo, GetRoomStream getRoomList,
+                       GetContactStream getContactList,
                        GetNewMessageStream getNewMessageStream,
                        EnterRoom enterRoom,
                        SpeechRecognize speechRecognize,
                        Chat chat,
-                       Signup signup) {
+                       Signup signup, GetMemory getMemory) {
+        this.getSelfInfo = getSelfInfo;
         this.getRoomList = getRoomList;
         this.getContactList = getContactList;
         this.getNewMessageStream = getNewMessageStream;
@@ -36,11 +34,17 @@ public class ChatService extends ChatServiceGrpc.ChatServiceImplBase {
         this.speechRecognize = speechRecognize;
         this.chat = chat;
         this.signup = signup;
+        this.getMemory = getMemory;
     }
 
     @Override
     public void signup(RegisterInfo request, StreamObserver<RegisterFeedback> responseObserver) {
         signup.run(request, responseObserver);
+    }
+
+    @Override
+    public void getSelfInfo(Hello request, StreamObserver<Contact> responseObserver) {
+        getSelfInfo.run(request, responseObserver);
     }
 
     @Override
@@ -71,5 +75,9 @@ public class ChatService extends ChatServiceGrpc.ChatServiceImplBase {
     @Override
     public void getContactStream(Hello request, StreamObserver<Contact> responseObserver) {
         getContactList.run(request, responseObserver);
+    }
+
+    public void getMemory(GetMemoryRequest request, StreamObserver<Memory> responseObserver) {
+        getMemory.run(request, responseObserver);
     }
 }

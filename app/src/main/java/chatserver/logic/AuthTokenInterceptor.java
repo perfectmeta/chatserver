@@ -1,7 +1,7 @@
 package chatserver.logic;
 
 import chatserver.service.UserService;
-import chatserver.dao.User;
+import chatserver.entity.User;
 import chatserver.userjob.UserBlackboard;
 import io.grpc.*;
 import io.grpc.Metadata.Key;
@@ -29,7 +29,7 @@ public class AuthTokenInterceptor implements ServerInterceptor {
 
         MethodDescriptor<ReqT, RespT> methodDescriptor = serverCall.getMethodDescriptor();
         var methodName = methodDescriptor.getFullMethodName();
-        if (ignoreValidate(methodName)) {
+        if (ignoreValidate(methodName) || USER.get() != null) {
             logger.info("request handler " + methodName + "ignore validation");
             return serverCallHandler.startCall(serverCall, metadata);
         }
@@ -47,8 +47,12 @@ public class AuthTokenInterceptor implements ServerInterceptor {
             serverCall.close(Status.PERMISSION_DENIED, new Metadata());
             return new ServerCall.Listener<>() {};
         }
+        logger.info("validation success when access " + methodName);
 
-        Context context = Context.current().withValue(USER, user).withValue(BLACKBOARD, new UserBlackboard());
+        Context context = Context.current().withValue(USER, user).withValue(BLACKBOARD, new UserBlackboard());;
+//        if (BLACKBOARD.get() == null) {
+//            context.withValue(BLACKBOARD, new UserBlackboard());
+//        }
 
         ServerCall<ReqT, RespT> wrappedCall = new ForwardingServerCall.SimpleForwardingServerCall<ReqT, RespT>(serverCall) {
             public void close(Status status, Metadata metadata) {

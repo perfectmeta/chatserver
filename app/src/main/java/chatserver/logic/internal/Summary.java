@@ -1,6 +1,6 @@
 package chatserver.logic.internal;
 
-import chatserver.dao.User;
+import chatserver.entity.User;
 import chatserver.logic.AuthTokenInterceptor;
 import com.theokanning.openai.service.OpenAiService;
 
