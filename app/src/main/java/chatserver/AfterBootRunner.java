@@ -35,12 +35,12 @@ public class AfterBootRunner implements ApplicationRunner {
     }
 
     private void checkAndRegisterUserCategory() {
-        var humanCategory = userCategoryService.findUserCategoryById(0);
+        var humanCategory = userCategoryService.findUserCategoryById(1);
         if (humanCategory != null) {
             return;
         }
         UserCategory uc = new UserCategory();
-        uc.setUserCategoryId(0);
+        uc.setUserCategoryId(1);
         uc.setUserCategoryName("");
         uc.setGender(0);
         uc.setTags("");
