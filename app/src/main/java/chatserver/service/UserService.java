@@ -3,17 +3,23 @@ package chatserver.service;
 import chatserver.entity.User;
 import chatserver.dao.UserRepository;
 import org.jetbrains.annotations.NotNull;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.cache.annotation.Caching;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
+
 @Service
 public class UserService {  // 不抽象成接口，直接用，因为这里不太可能会有扩展
 
-    @Autowired
-    private UserRepository users;
+    private final UserRepository users;
+
+    public UserService(UserRepository users) {
+        this.users = users;
+    }
 
     @Caching(evict = {
             @CacheEvict(value = "userByPhone", key = "#p0.phone"),
@@ -43,4 +49,13 @@ public class UserService {  // 不抽象成接口，直接用，因为这里不�
     public void deleteByUserId(long userId) { users.deleteById(userId);}
 
     public int deleteByPhone(String phone) { return users.deleteByPhone(phone);}
+
+    @Cacheable("allUsers")
+    public List<User> findAllBotUsers() {
+        return users.findAllByUserCategoryNotIn(List.of(0));
+    }
+
+    public List<User> addUsers(Collection<User> needRegisters) {
+        return users.saveAllAndFlush(needRegisters);
+    }
 }

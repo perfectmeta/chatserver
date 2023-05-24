@@ -9,17 +9,25 @@ import java.util.List;
 @Service
 public class UserCategoryService {
 
-    private final UserCategoryRepository userCategory;
+    private final UserCategoryRepository userCategoryRepository;
 
-    public UserCategoryService(UserCategoryRepository userCategory) {
-        this.userCategory = userCategory;
+    public UserCategoryService(UserCategoryRepository userCategoryRepository) {
+        this.userCategoryRepository = userCategoryRepository;
     }
 
-    public List<UserCategory> getAllUserCategories() {
-        return userCategory.findAll();
+    public List<UserCategory> findAllUserCategories() {
+        return userCategoryRepository.findAll();
+    }
+
+    public List<UserCategory> findAllBotUserCategories() {
+        return userCategoryRepository.findAllByUserTypeIsNot(0);
     }
 
     public UserCategory findUserCategoryById(long id) {
-        return userCategory.findByUserCategoryId(id);
+        return userCategoryRepository.findByUserCategoryId(id);
+    }
+
+    public void addUserCategory(UserCategory uc) {
+        userCategoryRepository.save(uc);
     }
 }

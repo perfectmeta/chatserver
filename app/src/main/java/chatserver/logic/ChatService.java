@@ -17,6 +17,8 @@ public class ChatService extends ChatServiceGrpc.ChatServiceImplBase {
     private final SpeechRecognize speechRecognize;
     private final Chat chat;
     private final GetMemory getMemory;
+    private final DeleteMemory deleteMemory;
+
 
     @Autowired
     public ChatService(GetSelfInfo getSelfInfo, GetRoomStream getRoomList,
@@ -25,7 +27,9 @@ public class ChatService extends ChatServiceGrpc.ChatServiceImplBase {
                        EnterRoom enterRoom,
                        SpeechRecognize speechRecognize,
                        Chat chat,
-                       Signup signup, GetMemory getMemory) {
+                       Signup signup,
+                       GetMemory getMemory,
+                       DeleteMemory deleteMemory) {
         this.getSelfInfo = getSelfInfo;
         this.getRoomList = getRoomList;
         this.getContactList = getContactList;
@@ -35,6 +39,7 @@ public class ChatService extends ChatServiceGrpc.ChatServiceImplBase {
         this.chat = chat;
         this.signup = signup;
         this.getMemory = getMemory;
+        this.deleteMemory = deleteMemory;
     }
 
     @Override
@@ -77,7 +82,13 @@ public class ChatService extends ChatServiceGrpc.ChatServiceImplBase {
         getContactList.run(request, responseObserver);
     }
 
+    @Override
     public void getMemory(GetMemoryRequest request, StreamObserver<Memory> responseObserver) {
         getMemory.run(request, responseObserver);
+    }
+
+    @Override
+    public void deleteMemory(DeleteMemoryRequest request, StreamObserver<DeleteMemoryResponse> responseStreamObserver) {
+        deleteMemory.run(request, responseStreamObserver);
     }
 }

@@ -3,16 +3,22 @@ package chatserver.logic;
 import chatserver.entity.User;
 import chatserver.gen.RegisterFeedback;
 import chatserver.gen.RegisterInfo;
+import chatserver.service.ContactService;
 import chatserver.service.UserService;
 import chatserver.util.Validator;
 import io.grpc.stub.StreamObserver;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 @Component
 public class Signup {
-    @Autowired
-    UserService userService;
+    final UserService userService;
+    final ContactService contactService;
+
+    public Signup(UserService userService,
+                  ContactService contactService) {
+        this.userService = userService;
+        this.contactService = contactService;
+    }
 
     public void run(RegisterInfo request, StreamObserver<RegisterFeedback> responseObserver) {
         var email = request.getEmail();
@@ -28,6 +34,7 @@ public class Signup {
             responseObserver.onCompleted();
             return;
         }
+
         if (userService.findByEmail(email) != null) {
             responseObserver.onNext(error(RegisterFeedback.StatusCode.EMAIL_CONFLICT_VALUE, "email registered"));
             responseObserver.onCompleted();
@@ -46,19 +53,23 @@ public class Signup {
         user.setPhone(phone);
         user.setNickName(request.getNickname());
         User dbUser;
-        if ((dbUser =userService.addUser(user)) == null) {
+        if ((dbUser=userService.addUser(user)) == null) {
             responseObserver.onNext(error(RegisterFeedback.StatusCode.OTHER_ERROR_VALUE, "DB error"));
             responseObserver.onCompleted();
             return;
         }
-        var feedbackback = RegisterFeedback.newBuilder().setStatusCode(RegisterFeedback.StatusCode.OK_VALUE)
+        makeAllBotAsContact(dbUser.getUserId());
+        var feedback = RegisterFeedback.newBuilder().setStatusCode(RegisterFeedback.StatusCode.OK_VALUE)
                         .setUserId((int)dbUser.getUserId()).build();
-        responseObserver.onNext(feedbackback);
+        responseObserver.onNext(feedback);
         responseObserver.onCompleted();
+    }
+
+    private void makeAllBotAsContact(long userId) {
+        contactService.makeContactForUser(userId);
     }
 
     private RegisterFeedback error(int code, String message) {
         return RegisterFeedback.newBuilder().setStatusCode(code).setMessage(message).build();
     }
-
 }

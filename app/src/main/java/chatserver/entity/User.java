@@ -18,6 +18,6 @@ public class User {  // user is human or bot
     private String phone;
     private String email;
     private String nickName;
-
+    private int gender;
     private String headIconUrl;
 }

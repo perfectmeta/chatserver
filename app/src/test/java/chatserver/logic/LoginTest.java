@@ -257,4 +257,31 @@ public class LoginTest {
         });
         latch.await();
     }
+
+    @Test
+    public void getMemoryTest() throws Exception {
+        var request = GetMemoryRequest.newBuilder().setUserId(1).setOtherUserId(2).build();
+        CountDownLatch latch = new CountDownLatch(1);
+        stub.getMemory(request, new StreamObserver<>() {
+            @Override
+            public void onNext(Memory value) {
+                logger.info(value.toString());
+            }
+
+            @Override
+            public void onError(Throwable t) {
+                t.printStackTrace();
+                logger.warning(t.getMessage());
+                Assertions.fail();
+            }
+
+            @Override
+            public void onCompleted() {
+                logger.info("onCompleted");
+                latch.countDown();
+            }
+        });
+        latch.await();
+        logger.info("test finished");
+    }
 }

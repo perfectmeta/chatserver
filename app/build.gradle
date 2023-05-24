@@ -8,7 +8,6 @@
 
 plugins {
     id 'application'
-//    id 'io.freefair.lombok' version '5.3.0'
     id 'org.springframework.boot' version '3.0.6'
     id 'io.spring.dependency-management' version '1.1.0'
     id "io.github.lognet.grpc-spring-boot" version '5.1.1'
@@ -67,9 +66,8 @@ application {
     mainClass = 'chatserver.ServerApp'
 }
 
-tasks.withType(JavaCompile).forEach {
-    it.options.compilerArgs += ["--enable-preview", "-parameters"]
-    //这个lombok版本不支持,下个版本再开吧 "--add-exports", "jdk.compiler/com.sun.tools.javac.processing=ALL-UNNAMED"]
+tasks.withType(JavaCompile).configureEach {
+    options.compilerArgs += ["--enable-preview", "-parameters"]
 }
 
 run {
