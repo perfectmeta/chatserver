@@ -32,7 +32,7 @@ public class LoginTest {
     private static final Logger logger = Logger.getLogger(LoginTest.class.getName());
     @BeforeAll
     void init() {
-        //var channel = Grpc.newChannelBuilder("ai.taohuayuaner.com:8080", InsecureChannelCredentials.create()).build();
+        // var channel = Grpc.newChannelBuilder("ai.taohuayuaner.com:9080", InsecureChannelCredentials.create()).build();
         var channel = Grpc.newChannelBuilder("localhost:6565", InsecureChannelCredentials.create()).build();
         stub = ChatServiceGrpc.newStub(channel);
         Metadata metadata = new Metadata();

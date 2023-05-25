@@ -1,7 +1,9 @@
 package chatserver.service;
 
+import chatserver.dao.UserRepository;
 import chatserver.entity.UserCategory;
 import chatserver.dao.UserCategoryRepository;
+import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -10,9 +12,11 @@ import java.util.List;
 public class UserCategoryService {
 
     private final UserCategoryRepository userCategoryRepository;
+    private final UserRepository userRepository;
 
-    public UserCategoryService(UserCategoryRepository userCategoryRepository) {
+    public UserCategoryService(UserCategoryRepository userCategoryRepository, UserRepository userRepository) {
         this.userCategoryRepository = userCategoryRepository;
+        this.userRepository = userRepository;
     }
 
     public List<UserCategory> findAllUserCategories() {
@@ -25,6 +29,15 @@ public class UserCategoryService {
 
     public UserCategory findUserCategoryById(long id) {
         return userCategoryRepository.findByUserCategoryId(id);
+    }
+
+    @Transactional
+    public UserCategory findUserCategoryByUserId(long userId) {
+        var userEnt = userRepository.findByUserId(userId);
+        if (userEnt == null) {
+            return null;
+        }
+        return userCategoryRepository.findByUserCategoryId(userEnt.getUserCategory());
     }
 
     public void addUserCategory(UserCategory uc) {

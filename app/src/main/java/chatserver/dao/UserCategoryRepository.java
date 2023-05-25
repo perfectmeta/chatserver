@@ -7,7 +7,6 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 
 
-@SuppressWarnings("unused")
 @Repository
 public interface UserCategoryRepository extends JpaRepository<UserCategory, Long> {
     UserCategory findByUserCategoryId(long userCategoryId);

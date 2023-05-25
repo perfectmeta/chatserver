@@ -35,6 +35,10 @@ public class ContactService {
         return memoryRepository.findAllByUserIdAndOtherUserId(userId, otherId);
     }
 
+    public Memory getNewestMemory(long userId, long otherId) {
+        return memoryRepository.findTopByUserIdAndOtherUserIdOrderByCreatedTimeDesc(userId, otherId);
+    }
+
     @Transactional
     public int deleteMemoryByUserIdAndOtherUserIdAndMemoryId(long userId, long otherId, long memoryId) {
         return memoryRepository.deleteByUserIdAndOtherUserIdAndMemoryId(userId, otherId, memoryId);

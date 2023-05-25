@@ -1,11 +1,13 @@
 package chatserver.logic;
 
+import chatserver.entity.Memory;
 import chatserver.entity.Message;
 import chatserver.entity.User;
 import chatserver.entity.UserCategory;
 import chatserver.gen.ChatRequest;
 import chatserver.gen.ChatResponseStream;
 import chatserver.gen.MsgType;
+import chatserver.service.ContactService;
 import chatserver.service.UserCategoryService;
 import chatserver.service.RoomService;
 import chatserver.third.tts.XFYtts;
@@ -37,14 +39,17 @@ public class Chat {
 
     private final RoomService roomService;
     private final UserCategoryService userCategoryService;
+
+    private final ContactService contactService;
     private final String resourcePath = !Strings.isNullOrEmpty(System.getenv("static_dir")) ?
             System.getenv("static_dir") : ".";
 
 
     @Autowired
-    public Chat(RoomService roomService, UserCategoryService userCategoryService) {
+    public Chat(RoomService roomService, UserCategoryService userCategoryService, ContactService contactService) {
         this.roomService = roomService;
         this.userCategoryService = userCategoryService;
+        this.contactService = contactService;
     }
 
     public void run(ChatRequest request, StreamObserver<ChatResponseStream> responseObserver) {
@@ -56,14 +61,13 @@ public class Chat {
             responseObserver.onCompleted();
             return;
         }
-        UserCategory userCategory = userCategoryService.findUserCategoryById(room.getAiUserId());
+        UserCategory userCategory = userCategoryService.findUserCategoryByUserId(room.getAiUserId());
         logger.info("AI Prompt" + userCategory.getPrompt());
-        var prompt = userCategory.getPrompt();
+        var prompt = userCategory.getPrompt() + "\n 下面，将开始对话:";
         OpenAiService service = makeOpenAiService();
         List<Message> messageHistory = roomService.getMessageHistory(request.getRoomId());
 
         var newUserMsg = roomService.addMessage(parseDbMessage(request));
-        //chatserver.gen.Message requestMessage = Msg.fromDb(newUserMsg);
 
         var messageSeq = request.getSeq();
         chatserver.gen.Message.Builder rr = chatserver.gen.Message.newBuilder()
@@ -74,9 +78,16 @@ public class Chat {
                 .build();
         responseObserver.onNext(firstResponse);
 
+        Memory memory = contactService.getNewestMemory(user.getUserId(), room.getAiUserId());
+        if (memory != null) {
+            String memoryPrompt = "以下是你和将要和你对话的用户的一些对话摘要:" + memory.getMemo();
+            prompt = memoryPrompt + prompt;
+        }
+
         final List<ChatMessage> messages = new ArrayList<>();
         final ChatMessage systemMessage = new ChatMessage(ChatMessageRole.SYSTEM.value(), prompt);
         messages.add(systemMessage);
+
 
         for (Message msg : messageHistory) {
             String role = ChatMessageRole.USER.value();

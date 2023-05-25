@@ -34,7 +34,7 @@ public class GetRoomStream {
     public void run(Hello ignoredRequest, StreamObserver<RoomInfo> responseObserver) {
         User user = AuthTokenInterceptor.USER.get();
         List<Room> userRooms = roomService.findByUserId(user.getUserId());
-        List<UserCategory> userCategories = userCategoryService.findAllUserCategories();
+        List<UserCategory> userCategories = userCategoryService.findAllBotUserCategories();
 
         for (var character : userCategories) {
             if (containRoom(character.getUserCategoryId(), userRooms)) {
