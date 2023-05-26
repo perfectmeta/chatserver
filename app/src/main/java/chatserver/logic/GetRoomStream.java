@@ -72,7 +72,7 @@ public class GetRoomStream {
     private static RoomInfo parseRoomInfo(Room room) {
         RoomInfo.Builder b = RoomInfo.newBuilder();
         b.setRoomId(room.getRoomId());
-        b.setRoomName(room.getRoomName());
+        b.setRoomName(room.getRoomName() == null ? "" : room.getAiShowName());
         b.setYou(Author.newBuilder().setType(0).setUserId(room.getUserId()).setName(room.getUserShowName()).build());
         b.setAi(Author.newBuilder().setType(1).setUserId(room.getAiUserId()).setName(room.getAiShowName()).build());
         b.setCreatedTime(room.getCreatedTime());
