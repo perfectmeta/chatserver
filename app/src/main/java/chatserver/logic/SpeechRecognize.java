@@ -4,16 +4,19 @@ import chatserver.gen.AudioStream;
 import chatserver.gen.TextStream;
 import chatserver.third.asr.XFYasr;
 import chatserver.util.Digest;
+import chatserver.util.StopSignal;
 import com.google.common.base.Strings;
 import io.grpc.stub.StreamObserver;
 import org.springframework.stereotype.Component;
 
-import java.io.*;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.PipedInputStream;
+import java.io.PipedOutputStream;
 import java.nio.ByteBuffer;
-import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.util.concurrent.LinkedBlockingQueue;
+import java.util.concurrent.BlockingQueue;
 import java.util.logging.Logger;
 
 @Component
@@ -38,32 +41,35 @@ public class SpeechRecognize {
 
     public StreamObserver<AudioStream> run(StreamObserver<TextStream> responseObserver) {
         PipedOutputStream out;
-        InputStream in;
+        BlockingQueue<Object> blockingQueue;
         try {
             var inputStream = new PipedInputStream();
             out = new PipedOutputStream(inputStream);
-            in = XFYasr.makeSession(inputStream);
+            blockingQueue = XFYasr.makeSession(inputStream);
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
 
-        Thread.startVirtualThread(()->{
+        Thread.startVirtualThread(() -> {
             try {
-                var bytes = new byte[1024];
-                int len;
-                while ((len = in.read(bytes)) != -1) {
-                    var text = new String(bytes, 0, len, StandardCharsets.UTF_8);
-                    logger.info("Get ASR Res " + text);
-                    responseObserver.onNext(TextStream.newBuilder().setText(text).build());
+                while (true) {
+                    var o = blockingQueue.take();
+                    if (o instanceof StopSignal) {
+                        break;
+                    }
+                    TextStream textStream = (TextStream) o;
+                    logger.info("Get ASR Res " + textStream);
+                    responseObserver.onNext(textStream);
                 }
                 responseObserver.onCompleted();
                 logger.info("Sent response: finished");
-            } catch (IOException e) {
+            }
+            catch (InterruptedException e) {
                 throw new RuntimeException(e);
             }
         });
         return new StreamObserver<>() {
-            private final ByteBuffer audioContent = ByteBuffer.allocate(1024*1024);
+            private final ByteBuffer audioContent = ByteBuffer.allocate(1024 * 1024);
 
             @Override
             public void onNext(AudioStream value) {
@@ -100,7 +106,7 @@ public class SpeechRecognize {
                 } catch (IOException e) {
                     throw new RuntimeException(e);
                 }
-                logger.info("Recieved audio data finished" );
+                logger.info("Recieved audio data finished");
             }
         };
     }

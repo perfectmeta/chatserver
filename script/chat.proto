@@ -17,6 +17,7 @@ message TextStream {
   oneof response{
     string text = 1; // asr生成
     string audioUrl = 2;  // 当audio stream结束被存下来的时候发
+    int32 delete = 4; // asr生成, 删除前面多少个字符
   }
 }
 

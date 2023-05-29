@@ -1,17 +1,19 @@
 package chatserver.third.asr;
 
+import chatserver.security.KeyManager;
 import chatserver.third.asr.entity.stream.req.Request;
 import chatserver.third.asr.entity.stream.res.Response;
-import chatserver.third.asr.entity.stream.res.Result;
+import chatserver.util.StopSignal;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.java_websocket.handshake.ServerHandshake;
-import chatserver.security.KeyManager;
 
-import java.io.*;
+import java.io.IOException;
+import java.io.InputStream;
 import java.net.URI;
-import java.nio.charset.StandardCharsets;
 import java.util.Base64;
+import java.util.concurrent.BlockingQueue;
+import java.util.concurrent.LinkedBlockingQueue;
 import java.util.logging.Logger;
 
 public class XFYASRSession extends org.java_websocket.client.WebSocketClient implements ASRSession {
@@ -26,35 +28,32 @@ public class XFYASRSession extends org.java_websocket.client.WebSocketClient imp
     }
 
     private final InputStream audioInputStream;
-    private final OutputStream textOutputStream;
-    private final InputStream resultStream;
+    private final BlockingQueue<Object> blockingQueue;
+    private final Decoder decoder;
+
     @SuppressWarnings("unused")
     private SessionStatus status;
 
     public XFYASRSession(URI serverUri, InputStream audioStream) {
         super(serverUri);
         this.audioInputStream = audioStream;
-        resultStream  = new PipedInputStream();
-        try {
-            textOutputStream = new PipedOutputStream((PipedInputStream) resultStream);
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
+        blockingQueue = new LinkedBlockingQueue<>();
+        decoder = new Decoder(blockingQueue);
     }
 
-    public InputStream getInputStream() {
-        return resultStream;
+    public BlockingQueue<Object> getInputStream() {
+        return blockingQueue;
     }
 
     @Override
     public void onOpen(ServerHandshake handshakeData) {
         status = SessionStatus.RUNNING;
         logger.info("onOpen: " + handshakeData.getHttpStatus());
-        Thread.startVirtualThread(()->{
+        Thread.startVirtualThread(() -> {
             try {
                 boolean first = true;
                 byte[] buffer;
-                while ((buffer = audioInputStream.readNBytes(AUDIO_BUFFER_SIZE*10)).length > 0) {
+                while ((buffer = audioInputStream.readNBytes(AUDIO_BUFFER_SIZE * 10)).length > 0) {
                     var requestContent = makeRequest(buffer, first);
                     first = false;
                     send(requestContent);
@@ -78,37 +77,20 @@ public class XFYASRSession extends org.java_websocket.client.WebSocketClient imp
         try {
             var obj = om.readValue(message, Response.class);
             logger.info("asr res:" + message);
-            textOutputStream.write(getFragmentText(obj.data().result()).getBytes(StandardCharsets.UTF_8));
-            if (obj.data().status() == 2  || obj.data().result().ls()) {
-                textOutputStream.flush();
-                textOutputStream.close();
+            decoder.decode(obj.data().result());
+            if (obj.data().status() == 2 || obj.data().result().ls()) {
+                blockingQueue.add(new StopSignal());
             }
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
     }
 
-    private String getFragmentText(Result result) {
-        StringBuilder sb = new StringBuilder();
-        for (var ws : result.ws()) {
-            for (var cw : ws.cw()) {
-                sb.append(cw.w());
-            }
-        }
-
-        return sb.toString();
-    }
-
     @Override
     public void onClose(int code, String reason, boolean remote) {
         status = SessionStatus.FINISHED;
 
-        try {
-            textOutputStream.flush();
-            textOutputStream.close();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        blockingQueue.add(new StopSignal());
     }
 
     @Override
@@ -120,9 +102,15 @@ public class XFYASRSession extends org.java_websocket.client.WebSocketClient imp
     }
 
     private String makeRequest(byte[] content, boolean isFirstFrame) {
-        var builder = makeRequestBuilder();
-        builder.data.status = isFirstFrame ? 0 : 1;
-        builder.data.audio = Base64.getEncoder().encodeToString(content);
+        Request.Builder builder;
+        if (isFirstFrame) {
+            builder = makeRequestBuilder();
+            builder.getData().status = 0;
+        } else {
+            builder = makeRequestDataBuilder();
+            builder.getData().status = 1;
+        }
+        builder.getData().audio = Base64.getEncoder().encodeToString(content);
         var om = new ObjectMapper();
         try {
             return om.writeValueAsString(builder.build());
@@ -133,8 +121,8 @@ public class XFYASRSession extends org.java_websocket.client.WebSocketClient imp
 
     private String makeEndRequest() {
         var builder = makeRequestBuilder();
-        builder.data.status = 2;
-        builder.data.audio = "";
+        builder.getData().status = 2;
+        builder.getData().audio = "";
         var om = new ObjectMapper();
         try {
             return om.writeValueAsString(builder.build());
@@ -145,20 +133,29 @@ public class XFYASRSession extends org.java_websocket.client.WebSocketClient imp
 
     private Request.Builder makeRequestBuilder() {
         Request.Builder builder = new Request.Builder();
-        builder.common.app_id = KeyManager.XFY_APPID;
-        builder.business.language = "zh_cn";
-        builder.business.domain = "iat";
-        builder.business.accent = "mandarin";
-        builder.business.pd = "game";
-        builder.business.ptt = 1;
-        builder.business.rlang = "zh-cn";
-        builder.business.vinfo = 0;
-        builder.business.nunum = 1;
-        builder.business.speex_size = 0;
-        builder.business.nbest = 1;     //暂时先用一个候选句子
-        builder.business.wbest = 1;     //暂时先用一个候选词
-        builder.data.format = "audio/L16;rate=16000";
-        builder.data.encoding = "raw";
+        builder.getCommon().app_id = KeyManager.XFY_APPID;
+        builder.getBusiness().language = "zh_cn";
+        builder.getBusiness().domain = "iat";
+        builder.getBusiness().accent = "mandarin";
+        builder.getBusiness().pd = "game";
+        builder.getBusiness().ptt = 1;
+        builder.getBusiness().rlang = "zh-cn";
+        builder.getBusiness().vinfo = 0;
+        builder.getBusiness().nunum = 1;
+        builder.getBusiness().speex_size = 0;
+        builder.getBusiness().nbest = 1;     //暂时先用一个候选句子
+        builder.getBusiness().wbest = 1;     //暂时先用一个候选词
+        builder.getBusiness().dwa = "wpgs";
+        builder.getData().format = "audio/L16;rate=16000";
+        builder.getData().encoding = "raw";
+
+        return builder;
+    }
+
+    private Request.Builder makeRequestDataBuilder() {
+        Request.Builder builder = new Request.Builder();
+        builder.getData().format = "audio/L16;rate=16000";
+        builder.getData().encoding = "raw";
 
         return builder;
     }

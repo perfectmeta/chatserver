@@ -7,6 +7,7 @@ import com.iflytek.cloud.speech.SpeechUtility;
 
 import java.io.InputStream;
 import java.net.URI;
+import java.util.concurrent.BlockingQueue;
 import java.util.logging.Logger;
 
 public class XFYasr {
@@ -17,7 +18,7 @@ public class XFYasr {
         SpeechUtility.createUtility(SpeechConstant.APPID + "=" + KeyManager.XFY_APPID + " ");
     }
 
-    public static InputStream makeSession(InputStream audioStream) {
+    public static BlockingQueue<Object> makeSession(InputStream audioStream) {
         String url;
         try {
             url = AuthURLEncoder.encodeXFYAuthorUrl(asrHost, KeyManager.XFY_API_KEY, KeyManager.XFY_API_SECRET, "GET");
