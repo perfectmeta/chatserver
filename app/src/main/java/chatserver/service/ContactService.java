@@ -45,7 +45,7 @@ public class ContactService {
     }
 
     public void makeContactForUser(long userId) {
-        List<User> botUsers = userRepository.findAllByUserCategoryNotIn(List.of(0));
+        List<User> botUsers = userRepository.findAllByUserCategoryNotIn(List.of(1));
         List<Contact> contacts = new ArrayList<>();
         for (User user : botUsers) {
             Contact contact = new Contact();
