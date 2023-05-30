@@ -49,7 +49,7 @@ public class Signup {
 
         User user = new User();
         user.setEmail(email);
-        user.setUserCategory(0);
+        user.setUserCategory(1);    // 人类类别为1
         user.setPhone(phone);
         user.setNickName(request.getNickname());
         User dbUser;
