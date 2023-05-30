@@ -14,4 +14,14 @@ public class RandomGenerator {
         }
         return sb.toString();
     }
+
+    public static String randomEmailAddress() {
+        StringBuilder sb = new StringBuilder();
+        Random random = new Random();
+        for (int i = 0; i < 7; i++) {
+            sb.append((char)(random.nextInt(26) + (int)'a')) ;
+        }
+        sb.append("@pwrd.com");
+        return sb.toString();
+    }
 }

@@ -155,6 +155,21 @@ message Contact {
   string headIconUrl = 7;
 }
 
+message CreateMineNPCsRequest {
+  int64 category = 1;
+}
+
+message CreateMineNPCsResponse {
+  int64 userId = 1;
+}
+
+message EstablishContactWithRequest {
+  int64 userId = 1;
+}
+
+message EstablishContactWithResponse {
+  int64 contactId = 1;
+}
 
 //////////////////////////////////////
 
@@ -185,4 +200,8 @@ service ChatService {
   rpc GetMemory(GetMemoryRequest) returns (stream Memory);
 
   rpc DeleteMemory(DeleteMemoryRequest) returns (DeleteMemoryResponse);
+
+  // 创建独属联系人用户
+  rpc CreateMineNPCs(CreateMineNPCsRequest) returns(CreateMineNPCsResponse);
+  rpc EstablishContactWith(EstablishContactWithRequest) returns(EstablishContactWithResponse);
 }

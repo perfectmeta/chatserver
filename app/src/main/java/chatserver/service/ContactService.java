@@ -31,6 +31,14 @@ public class ContactService {
         return contactRepository.findAllByUserId(userId);
     }
 
+    public List<Contact> getContacts(long userId, long targetId) {
+        var user = new User();
+        user.setUserId(userId);
+        var target = new User();
+        target.setUserId(targetId);
+        return contactRepository.findAllByUserIdAndContactUserId(user, target);
+    }
+
     public List<Memory> getAllMemory(long userId, long otherId) {
         return memoryRepository.findAllByUserIdAndOtherUserId(userId, otherId);
     }
@@ -58,5 +66,16 @@ public class ContactService {
             contacts.add(contact);
         }
         contactRepository.saveAll(contacts);
+    }
+
+    public Contact addContact(long userId, long targetUserId) {
+        User user = new User();
+        user.setUserId(userId);
+        User target = new User();
+        user.setUserId(targetUserId);
+        Contact contact = new Contact();
+        contact.setUserId(user);
+        contact.setContactUserId(target);
+        return contactRepository.save(contact);
     }
 }
