@@ -78,4 +78,16 @@ public class ContactService {
         contact.setContactUserId(target);
         return contactRepository.save(contact);
     }
+
+    @SuppressWarnings("unused")
+    public void deleteContact(User user, User target) {
+        Contact contact = new Contact();
+        contact.setUserId(user);
+        contact.setContactUserId(target);
+        deleteContact(contact);
+    }
+
+    public void deleteContact(Contact contact) {
+        contactRepository.delete(contact);
+    }
 }

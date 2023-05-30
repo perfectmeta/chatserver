@@ -171,6 +171,14 @@ message EstablishContactWithResponse {
   int64 contactId = 1;
 }
 
+message DeleteContactRequest {
+  int64 userId = 1;
+}
+
+message DeleteContactResponse {
+  int64 errCode = 1;
+}
+
 //////////////////////////////////////
 
 service ChatService {
@@ -204,4 +212,5 @@ service ChatService {
   // 创建独属联系人用户
   rpc CreateMineNPCs(CreateMineNPCsRequest) returns(CreateMineNPCsResponse);
   rpc EstablishContactWith(EstablishContactWithRequest) returns(EstablishContactWithResponse);
+  rpc DeleteContact(DeleteContactRequest) returns(DeleteContactResponse);
 }

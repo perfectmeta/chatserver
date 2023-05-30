@@ -21,6 +21,7 @@ public class ChatService extends ChatServiceGrpc.ChatServiceImplBase {
 
     private final CreateMineNPCs createMineNPCs;
     private final EstablishContactWith establishContactWith;
+    private final DeleteContact deleteContact;
 
 
     @Autowired
@@ -34,7 +35,8 @@ public class ChatService extends ChatServiceGrpc.ChatServiceImplBase {
                        GetMemory getMemory,
                        DeleteMemory deleteMemory,
                        CreateMineNPCs createMineNPCs,
-                       EstablishContactWith establishContactWith) {
+                       EstablishContactWith establishContactWith,
+                       DeleteContact deleteContact) {
         this.getSelfInfo = getSelfInfo;
         this.getRoomList = getRoomList;
         this.getContactList = getContactList;
@@ -47,6 +49,7 @@ public class ChatService extends ChatServiceGrpc.ChatServiceImplBase {
         this.deleteMemory = deleteMemory;
         this.createMineNPCs = createMineNPCs;
         this.establishContactWith = establishContactWith;
+        this.deleteContact = deleteContact;
     }
 
     @Override
@@ -108,5 +111,10 @@ public class ChatService extends ChatServiceGrpc.ChatServiceImplBase {
     public void establishContactWith(EstablishContactWithRequest request,
                                      StreamObserver<EstablishContactWithResponse> responseObs) {
         establishContactWith.run(request, responseObs);
+    }
+
+    @Override
+    public void deleteContact(DeleteContactRequest request, StreamObserver<DeleteContactResponse> response) {
+        deleteContact.run(request, response);
     }
 }
