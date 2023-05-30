@@ -3,6 +3,7 @@ package chatserver.logic;
 import chatserver.entity.User;
 import chatserver.gen.RegisterFeedback;
 import chatserver.gen.RegisterInfo;
+import chatserver.logic.internal.SignupBot;
 import chatserver.service.ContactService;
 import chatserver.service.UserService;
 import chatserver.util.Validator;
@@ -13,11 +14,14 @@ import org.springframework.stereotype.Component;
 public class Signup {
     final UserService userService;
     final ContactService contactService;
+    final SignupBot signupBotServer;
 
     public Signup(UserService userService,
-                  ContactService contactService) {
+                  ContactService contactService,
+                  SignupBot signupBotServer) {
         this.userService = userService;
         this.contactService = contactService;
+        this.signupBotServer = signupBotServer;
     }
 
     public void run(RegisterInfo request, StreamObserver<RegisterFeedback> responseObserver) {
@@ -63,6 +67,8 @@ public class Signup {
                         .setUserId((int)dbUser.getUserId()).build();
         responseObserver.onNext(feedback);
         responseObserver.onCompleted();
+
+        // todo 再考虑一下要不要在新用户注册时就对应给它创建新的独有AI角色。
     }
 
     private void makeAllBotAsContact(long userId) {

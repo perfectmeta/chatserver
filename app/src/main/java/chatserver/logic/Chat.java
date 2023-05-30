@@ -44,6 +44,9 @@ public class Chat {
     private final String resourcePath = !Strings.isNullOrEmpty(System.getenv("static_dir")) ?
             System.getenv("static_dir") : ".";
 
+    private final static String SYSTEM_PROMPT_PREFIX = "{\"role\".\"system\",\"content\".";
+    private final static String ASSISTANT_PROMPT_PREFIX = "{\"role\".\"assistant\",\"content\".";
+    private final static String USER_PROMPT_PREFIX = "{\"role\".\"user\",\"content\".";
 
     @Autowired
     public Chat(RoomService roomService, UserCategoryService userCategoryService, ContactService contactService) {
@@ -58,11 +61,11 @@ public class Chat {
         var room = roomService.findRoomById(request.getRoomId());
         if (room == null || room.getUserId() != user.getUserId()) {
             logger.warning("invalid room id: " + request.getRoomId());
-            responseObserver.onCompleted();
+            responseObserver.onError(new IllegalStateException("Invalid room id: " + request.getRoomId()));
+            // responseObserver.onCompleted();
             return;
         }
         UserCategory userCategory = userCategoryService.findUserCategoryByUserId(room.getAiUserId());
-        logger.info("AI Prompt" + userCategory.getPrompt());
         var prompt = userCategory.getPrompt() + "\n 下面，将开始对话:";
         OpenAiService service = makeOpenAiService();
         List<Message> messageHistory = roomService.getMessageHistory(request.getRoomId());
@@ -78,17 +81,14 @@ public class Chat {
                 .build();
         responseObserver.onNext(firstResponse);
 
+        final List<ChatMessage> messages = new ArrayList<>();
         Memory memory = contactService.getNewestMemory(user.getUserId(), room.getAiUserId());
         if (memory != null) {
             String memoryPrompt = "以下是你和将要和你对话的用户的一些对话摘要:" + memory.getMemo();
-            prompt = memoryPrompt + prompt;
+            messages.add(new ChatMessage(ChatMessageRole.SYSTEM.value(), memoryPrompt));
         }
-
-        final List<ChatMessage> messages = new ArrayList<>();
-        final ChatMessage systemMessage = new ChatMessage(ChatMessageRole.SYSTEM.value(), prompt);
-        messages.add(systemMessage);
-
-
+        preparePromptMessage(messages, prompt);
+        // debugPrintPrompt(messages);
         for (Message msg : messageHistory) {
             String role = ChatMessageRole.USER.value();
             if (msg.getAuthorUserType() != Msg.UT_HUMAN) {
@@ -171,6 +171,45 @@ public class Chat {
         // service.shutdownExecutor();
     }
 
+
+    private void preparePromptMessage(List<ChatMessage> messages, String prompt) {
+        if (!prompt.contains("}")) {
+            logger.warning("Not contain } content is " + prompt);
+            final ChatMessage systemMessage = new ChatMessage(ChatMessageRole.SYSTEM.value(), prompt);
+            messages.add(systemMessage);
+            return;
+        }
+
+        var prompts = prompt.split("}");
+        for (String p : prompts) {
+            p = p.replaceAll("\n","");
+            if (p.startsWith(SYSTEM_PROMPT_PREFIX)) {
+                var content = extractContent(SYSTEM_PROMPT_PREFIX, p);
+                messages.add(new ChatMessage(ChatMessageRole.SYSTEM.value(), content));
+            } else if (p.startsWith(ASSISTANT_PROMPT_PREFIX)) {
+                var content = extractContent(ASSISTANT_PROMPT_PREFIX, p);
+                messages.add(new ChatMessage(ChatMessageRole.ASSISTANT.value(), content));
+            } else if (p.startsWith(USER_PROMPT_PREFIX)) {
+                var content = extractContent(USER_PROMPT_PREFIX, p);
+                messages.add(new ChatMessage(ChatMessageRole.USER.value(), content));
+            } else {
+                logger.warning("Not in, statement {%s}".formatted(p));
+            }
+        }
+    }
+
+    private static String extractContent(String prefix, String message) {
+        var content = message.substring(prefix.length());
+        assert content.startsWith("\"") && content.endsWith("\"");
+        content = content.substring(1, content.length()-1);
+        return content;
+    }
+
+    @SuppressWarnings("unused")
+    private static void debugPrintPrompt(List<ChatMessage> messages) {
+        logger.info("Total prompt items is {%d}".formatted(messages.size()));
+        messages.forEach(m-> logger.info("["+ m.getRole() +"]:" + m.getContent()));
+    }
     private Message parseDbMessage(ChatRequest request) {
         Message newUserMsg = new Message();
         newUserMsg.setRoomId(request.getRoomId());

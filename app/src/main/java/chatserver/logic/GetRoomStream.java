@@ -56,7 +56,7 @@ public class GetRoomStream {
 
     private Room makeRoom(UserCategory userCategory, User user) {
         Room newRoom = new Room();
-        newRoom.setRoomName("english classroom");
+        newRoom.setRoomName(userCategory.getUserCategoryName() + "'s room");
         newRoom.setUserType(Msg.UT_HUMAN);
         newRoom.setUserId(user.getUserId());
         newRoom.setUserShowName(user.getNickName());

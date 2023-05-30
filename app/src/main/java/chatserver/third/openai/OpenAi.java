@@ -16,11 +16,7 @@ public class OpenAi {
 
     public static OpenAiService makeOpenAiService() {
         //Proxy proxy = new Proxy(Proxy.Type.SOCKS, new InetSocketAddress("localhost", 1080));
-        OkHttpClient client =
-                OpenAiService.defaultClient(KeyManager.OPENAI_KEY, Duration.of(5, ChronoUnit.SECONDS))
-                        .newBuilder()
-                        //.proxy(proxy)
-                        .build();
+        OkHttpClient client = makeHttpClient();
         ObjectMapper mapper = OpenAiService.defaultObjectMapper();
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl("http://111.207.225.93:4000/")
@@ -32,5 +28,13 @@ public class OpenAi {
 
         OpenAiApi api = retrofit.create(OpenAiApi.class);
         return new OpenAiService(api);
+    }
+
+    private static OkHttpClient makeHttpClient() {
+        var client = OpenAiService.defaultClient(KeyManager.OPENAI_KEY, Duration.of(5, ChronoUnit.SECONDS))
+                .newBuilder()
+                .build();
+        // todo, set a socket factory to make socket option tcp_no_delay enabled
+        return client;
     }
 }

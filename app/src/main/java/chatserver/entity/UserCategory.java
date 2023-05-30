@@ -16,6 +16,6 @@ public class UserCategory {
     private String tags;
     private String description;
 
-    @Column(length = 2046)
+    @Column(length = 4094)
     private String prompt;
 }

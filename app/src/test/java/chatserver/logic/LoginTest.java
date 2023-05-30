@@ -32,8 +32,8 @@ public class LoginTest {
     private static final Logger logger = Logger.getLogger(LoginTest.class.getName());
     @BeforeAll
     void init() {
-        var channel = Grpc.newChannelBuilder("ai.taohuayuaner.com:9080", InsecureChannelCredentials.create()).build();
-        //var channel = Grpc.newChannelBuilder("localhost:6565", InsecureChannelCredentials.create()).build();
+        //var channel = Grpc.newChannelBuilder("ai.taohuayuaner.com:9080", InsecureChannelCredentials.create()).build();
+        var channel = Grpc.newChannelBuilder("localhost:6565", InsecureChannelCredentials.create()).build();
         stub = ChatServiceGrpc.newStub(channel);
         Metadata metadata = new Metadata();
         metadata.put(Metadata.Key.of("auth_token", Metadata.ASCII_STRING_MARSHALLER), "1");
@@ -152,8 +152,8 @@ public class LoginTest {
     @Test
     void sendMessageTest() throws InterruptedException {
         ChatRequest request = ChatRequest.newBuilder()
-                .setRoomId(1)
-                .setText("Hey, 请告诉我你的名字好吗?")
+                .setRoomId(3)
+                .setText("Hey, 你是AI吗?你有名字吗?")
                 .setSeq("aabb")
                 .setMsgType(MsgType.TEXT)
                 .build();
