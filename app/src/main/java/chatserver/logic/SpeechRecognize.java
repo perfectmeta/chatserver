@@ -6,6 +6,7 @@ import chatserver.third.asr.XFYasr;
 import chatserver.util.Digest;
 import chatserver.util.StopSignal;
 import com.google.common.base.Strings;
+import com.google.protobuf.Descriptors;
 import io.grpc.stub.StreamObserver;
 import org.springframework.stereotype.Component;
 
@@ -14,6 +15,7 @@ import java.io.IOException;
 import java.io.PipedInputStream;
 import java.io.PipedOutputStream;
 import java.nio.ByteBuffer;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.concurrent.BlockingQueue;
@@ -55,10 +57,11 @@ public class SpeechRecognize {
                 while (true) {
                     var o = blockingQueue.take();
                     if (o instanceof StopSignal) {
+                        logger.warning("StopSignal received");
                         break;
                     }
                     TextStream textStream = (TextStream) o;
-                    logger.info("Get ASR Res " + textStream);
+                    logger.info("Get ASR Res " + textStream.getText());
                     responseObserver.onNext(textStream);
                 }
                 responseObserver.onCompleted();

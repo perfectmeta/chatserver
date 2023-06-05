@@ -1,7 +1,6 @@
 package chatserver.logic;
 
 import chatserver.gen.*;
-import chatserver.service.UserService;
 import com.google.protobuf.ByteString;
 import io.grpc.Grpc;
 import io.grpc.InsecureChannelCredentials;
@@ -9,8 +8,6 @@ import io.grpc.Metadata;
 import io.grpc.stub.MetadataUtils;
 import io.grpc.stub.StreamObserver;
 import org.junit.jupiter.api.*;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
 
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -22,18 +19,15 @@ import java.util.List;
 import java.util.concurrent.CountDownLatch;
 import java.util.logging.Logger;
 
-@SpringBootTest
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
-public class LoginTest {
+public class RemoteTest {
     private ChatServiceGrpc.ChatServiceStub stub;
 
-    @Autowired
-    private UserService userService;
     private static final Logger logger = Logger.getLogger(LoginTest.class.getName());
     @BeforeAll
     void init() {
-        var channel = Grpc.newChannelBuilder("ai.taohuayuaner.com:9080", InsecureChannelCredentials.create()).build();
-        //var channel = Grpc.newChannelBuilder("localhost:6565", InsecureChannelCredentials.create()).build();
+        // var channel = Grpc.newChannelBuilder("ai.taohuayuaner.com:9080", InsecureChannelCredentials.create()).build();
+        var channel = Grpc.newChannelBuilder("localhost:9080", InsecureChannelCredentials.create()).build();
         stub = ChatServiceGrpc.newStub(channel);
         Metadata metadata = new Metadata();
         metadata.put(Metadata.Key.of("auth_token", Metadata.ASCII_STRING_MARSHALLER), "1");
@@ -209,6 +203,8 @@ public class LoginTest {
 
                 @Override
                 public void onError(Throwable t) {
+                    logger.warning("Error" + t.getMessage());
+                    t.printStackTrace();
                     latch.countDown();
                 }
 
@@ -285,4 +281,5 @@ public class LoginTest {
         latch.await();
         logger.info("test finished");
     }
+
 }
