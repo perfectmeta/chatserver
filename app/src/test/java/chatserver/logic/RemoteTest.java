@@ -30,22 +30,17 @@ public class RemoteTest {
         var channel = Grpc.newChannelBuilder("localhost:9080", InsecureChannelCredentials.create()).build();
         stub = ChatServiceGrpc.newStub(channel);
         Metadata metadata = new Metadata();
-        metadata.put(Metadata.Key.of("auth_token", Metadata.ASCII_STRING_MARSHALLER), "1");
+        metadata.put(Metadata.Key.of("auth_token", Metadata.ASCII_STRING_MARSHALLER), "12");
         stub = stub.withInterceptors(MetadataUtils.newAttachHeadersInterceptor(metadata));
     }
 
     @AfterAll
     void destroy() {
         logger.info("Spring destroyed");
-        //SpringApplication.exit(context);
     }
 
     @Test
     void signupTest() throws InterruptedException {
-//        if (userService.findByPhone("+8618585858585")!=null) {
-//            userService.deleteByPhone("+8618585858585");
-//        }
-
         RegisterInfo ri = RegisterInfo.newBuilder().setEmail("earneet@gmail.com")
                 .setPhone("+8618585858585").setNickname("earneet").build();
         List<RegisterFeedback> results = new ArrayList<>();

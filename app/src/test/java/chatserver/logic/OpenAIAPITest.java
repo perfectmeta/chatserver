@@ -14,8 +14,6 @@ import java.net.Proxy;
 import java.time.temporal.ChronoUnit;
 import org.junit.jupiter.api.Test;
 import retrofit2.Retrofit;
-import retrofit2.converter.jackson.JacksonConverterFactory;
-import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory;
 
 import java.time.Duration;
 import java.util.List;
