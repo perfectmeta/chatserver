@@ -7,6 +7,7 @@ import org.jetbrains.annotations.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -17,12 +18,15 @@ public class RoomService {
     private final UserCategoryRepository bots;
 
     private final MessageRepository messages;
+    private final RoomRepository roomRepository;
 
     @Autowired
-    public RoomService(RoomRepository rooms, UserCategoryRepository bots, MessageRepository messages) {
+    public RoomService(RoomRepository rooms, UserCategoryRepository bots, MessageRepository messages,
+                       RoomRepository roomRepository) {
         this.rooms = rooms;
         this.bots = bots;
         this.messages = messages;
+        this.roomRepository = roomRepository;
     }
 
 
@@ -61,5 +65,20 @@ public class RoomService {
 
     public List<Message> getMessageHistory(long roomId) {
         return messages.findFirst100ByRoomIdOrderByMessageIdDesc(roomId);
+    }
+
+    public void getAllRoomsByUserId(long userId) {
+    }
+
+    public List<Message> getNewestMessageEachRoom(long userId) {
+        var messageList = new ArrayList<Message>();
+        var rooms = roomRepository.findAllByUserId(userId);
+        for (var room : rooms) {
+            var roomMessages = messages.findFirst10ByRoomIdOrderByMessageIdDesc(room.getRoomId());
+            if (roomMessages != null) {
+                messageList.addAll(roomMessages);
+            }
+        }
+        return messageList;
     }
 }

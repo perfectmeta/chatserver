@@ -11,6 +11,7 @@ import java.util.List;
 @Repository
 public interface MessageRepository extends CrudRepository<Message, Long> {
     List<Message> findFirst100ByRoomIdOrderByMessageIdDesc(long roomId);
+    List<Message> findFirst10ByRoomIdOrderByMessageIdDesc(long roomId);
 
     List<Message> findFirst50ByRoomIdAndMessageIdLessThanOrderByMessageIdDesc(long roomId, long toMessageId);
 

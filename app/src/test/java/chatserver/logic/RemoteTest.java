@@ -30,7 +30,7 @@ public class RemoteTest {
         var channel = Grpc.newChannelBuilder("localhost:9080", InsecureChannelCredentials.create()).build();
         stub = ChatServiceGrpc.newStub(channel);
         Metadata metadata = new Metadata();
-        metadata.put(Metadata.Key.of("auth_token", Metadata.ASCII_STRING_MARSHALLER), "12");
+        metadata.put(Metadata.Key.of("auth_token", Metadata.ASCII_STRING_MARSHALLER), "3");
         stub = stub.withInterceptors(MetadataUtils.newAttachHeadersInterceptor(metadata));
     }
 
@@ -277,4 +277,25 @@ public class RemoteTest {
         logger.info("test finished");
     }
 
+    @Test
+    public void getNewMessageTest() throws Exception {
+        stub.getNewMessageStream(Hello.newBuilder().build(), new StreamObserver<>(){
+
+            @Override
+            public void onNext(Message value) {
+                logger.info(value.getText());
+            }
+
+            @Override
+            public void onError(Throwable t) {
+
+            }
+
+            @Override
+            public void onCompleted() {
+
+            }
+        });
+        Thread.sleep(10000);
+    }
 }

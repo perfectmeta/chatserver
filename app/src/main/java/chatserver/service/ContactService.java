@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class ContactService {
@@ -52,7 +53,8 @@ public class ContactService {
         return memoryRepository.deleteByUserIdAndOtherUserIdAndMemoryId(userId, otherId, memoryId);
     }
 
-    public void makeContactForUser(long userId) {
+    @SuppressWarnings("UnusedReturnValue")
+    public List<Long> makeContactForUser(long userId) {
         List<User> botUsers = userRepository.findAllByUserCategoryNotIn(List.of(1));
         List<Contact> contacts = new ArrayList<>();
         for (User user : botUsers) {
@@ -66,6 +68,7 @@ public class ContactService {
             contacts.add(contact);
         }
         contactRepository.saveAll(contacts);
+        return contacts.stream().map(x->x.getContactUserId().getUserId()).collect(Collectors.toList());
     }
 
     public Contact addContact(long userId, long targetUserId) {

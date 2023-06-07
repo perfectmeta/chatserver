@@ -151,7 +151,7 @@ public class Chat {
         Message gptMsg = new Message();
         gptMsg.setRoomId(request.getRoomId());
         gptMsg.setAuthorUserType(Msg.UT_AI_TEACHER);
-        gptMsg.setAuthorShowName("teacher");
+        gptMsg.setAuthorShowName(userCategory.getUserCategoryName());
         gptMsg.setCreatedTime(System.currentTimeMillis());
         gptMsg.setMsgType(MsgType.TEXT_VALUE);
         gptMsg.setText(gptReturn.toString());
@@ -167,8 +167,6 @@ public class Chat {
         var lastResponse = ChatResponseStream.newBuilder().setResponseMessage(responseMessage).build();
         responseObserver.onNext(lastResponse);
         responseObserver.onCompleted();
-
-        // service.shutdownExecutor();
     }
 
     @Data
