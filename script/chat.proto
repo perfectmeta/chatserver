@@ -3,6 +3,9 @@ syntax = "proto3";
 option java_multiple_files = true;
 option java_package = "chatserver.gen";
 
+option csharp_namespace = "Chat.Gen";
+
+
 //////////////////////////////////////聊天模型
 // 现在id都用的int64，未来可能会改为string
 
@@ -195,6 +198,7 @@ service ChatService {
 
 
   // 进入房间，发lastMessageId后，服务器同步给客户端这之后的消息
+  // TODO: 好像不该有这个协议，本来就应该一登录就推送lastMessageId之后的消息
   rpc EnterRoom(EnterRoomRequest) returns (stream Message);
 
   // 流式语音识别，这个是不管接下来的chat的
