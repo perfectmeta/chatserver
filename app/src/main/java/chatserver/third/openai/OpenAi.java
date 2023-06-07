@@ -31,10 +31,9 @@ public class OpenAi {
     }
 
     private static OkHttpClient makeHttpClient() {
-        var client = OpenAiService.defaultClient(KeyManager.OPENAI_KEY, Duration.of(5, ChronoUnit.SECONDS))
+        // todo, set a socket factory to make socket option tcp_no_delay enabled
+        return OpenAiService.defaultClient(KeyManager.OPENAI_KEY, Duration.of(15, ChronoUnit.SECONDS))
                 .newBuilder()
                 .build();
-        // todo, set a socket factory to make socket option tcp_no_delay enabled
-        return client;
     }
 }

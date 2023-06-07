@@ -22,26 +22,39 @@ import java.util.logging.Logger;
 @Component
 public class SpeechRecognize {
     private final Logger logger = Logger.getLogger(SpeechRecognize.class.getName());
-    private final String resourcePath = !Strings.isNullOrEmpty(System.getenv("static_dir")) ?
+    private final static String resourcePath = !Strings.isNullOrEmpty(System.getenv("static_dir")) ?
             System.getenv("static_dir") : "./static";
 
-    private String saveAudioContent(byte[] content) {
-        var fileName = "";
-        try {
-            fileName = content.length + "_" + Digest.calculateMD5(content) + ".pcm";
-            var file = Files.createFile(Path.of(resourcePath, fileName));
-            try (var fout = new FileOutputStream(file.toFile())) {
-                fout.write(content);
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
+    static class AudioBuffer {
+        private final ByteBuffer bf;
+        public AudioBuffer() {
+            bf = ByteBuffer.allocate(102400);
         }
-        return fileName;
+
+        public void write(byte[] bytes) {
+            bf.put(bytes);
+        }
+
+        private String save() {
+            bf.flip();
+            var fileName = bf.remaining() + "_" + Digest.calculateMD5(bf.array()) + ".pcm";
+            try {
+                var file = Files.createFile(Path.of(resourcePath, fileName));
+                try (var fout = new FileOutputStream(file.toFile())) {
+                    fout.write(bf.array(), 0, bf.remaining());
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+                // throw new RuntimeException(e);
+            }
+            return fileName;
+        }
     }
 
     public StreamObserver<AudioStream> run(StreamObserver<TextStream> responseObserver) {
         PipedOutputStream out;
         BlockingQueue<Object> blockingQueue;
+        AudioBuffer audioBuffer = new AudioBuffer();
         try {
             var inputStream = new PipedInputStream();
             out = new PipedOutputStream(inputStream);
@@ -55,12 +68,15 @@ public class SpeechRecognize {
                 while (true) {
                     var o = blockingQueue.take();
                     if (o instanceof StopSignal) {
+                        logger.warning("StopSignal received");
                         break;
                     }
                     TextStream textStream = (TextStream) o;
-                    logger.info("Get ASR Res " + textStream);
+                    logger.info("Get ASR Res " + textStream.getText());
                     responseObserver.onNext(textStream);
                 }
+                var filePath = audioBuffer.save();
+                responseObserver.onNext(TextStream.newBuilder().setAudioUrl(filePath).build());
                 responseObserver.onCompleted();
                 logger.info("Sent response: finished");
             }
@@ -77,14 +93,13 @@ public class SpeechRecognize {
                 // logger.info("received audio data: " + audioData.length);
                 try {
                     out.write(audioData);
+                    audioBuffer.write(audioData);
                     audioContent.put(audioData);
                 } catch (IOException e) {
                     logger.warning("OnNext exception: " + e.getMessage());
                     e.printStackTrace();
                     throw new RuntimeException(e);
                 }
-                // audioContent.flip();
-                // saveAudioContent(audioContent.array());
             }
 
             @Override

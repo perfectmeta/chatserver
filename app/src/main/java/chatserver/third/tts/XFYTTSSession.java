@@ -118,7 +118,7 @@ public class XFYTTSSession extends org.java_websocket.client.WebSocketClient {
         request.business.volume = 50;
         request.business.pitch = 50;
         request.business.bgs = 0;
-        request.business.tte = "UTF-8";
+        request.business.tte = "UTF8";
         request.business.reg = "0";
         request.business.rdn = "0";
         request.data.text = Base64.getEncoder().encodeToString(content.getBytes(StandardCharsets.UTF_8));

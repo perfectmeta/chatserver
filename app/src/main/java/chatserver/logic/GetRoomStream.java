@@ -1,5 +1,6 @@
 package chatserver.logic;
 
+import chatserver.entity.Message;
 import chatserver.entity.Room;
 import chatserver.entity.User;
 import chatserver.entity.UserCategory;
@@ -14,9 +15,11 @@ import org.springframework.stereotype.Component;
 
 import java.util.Collection;
 import java.util.List;
+import java.util.logging.Logger;
 
 @Component
 public class GetRoomStream {
+    private static final Logger logger = Logger.getLogger(GetRoomStream.class.getName());
 
     private final RoomService roomService;
     private final UserCategoryService userCategoryService;
@@ -34,8 +37,17 @@ public class GetRoomStream {
     public void run(Hello ignoredRequest, StreamObserver<RoomInfo> responseObserver) {
         User user = AuthTokenInterceptor.USER.get();
         List<Room> userRooms = roomService.findByUserId(user.getUserId());
-        List<UserCategory> userCategories = userCategoryService.findAllBotUserCategories();
+        logger.info("User " + user.getUserId() + " Searched Rooms " + userRooms.size());
+        fillRooms(userRooms, user);
+        for (Room room : userRooms) {
+            responseObserver.onNext(parseRoomInfo(room));
+        }
+        var userBlackboard = AuthTokenInterceptor.BLACKBOARD.get();
+        userBlackboard.registerRoomInfoStreamObserver(responseObserver);
+    }
 
+    private void fillRooms(List<Room> userRooms, User user) {
+        List<UserCategory> userCategories = userCategoryService.findAllBotUserCategories();
         for (var character : userCategories) {
             if (containRoom(character.getUserCategoryId(), userRooms)) {
                 continue;
@@ -43,15 +55,9 @@ public class GetRoomStream {
             var room = makeRoom(character, user);
             if (room != null) {
                 userRooms.add(room);
+                fillFirstMessage(room.getRoomId(), character.getUserCategoryName(), user.getNickName());
             }
         }
-
-        for (Room room : userRooms) {
-            responseObserver.onNext(parseRoomInfo(room));
-        }
-        var userBlackboard = AuthTokenInterceptor.BLACKBOARD.get();
-        userBlackboard.registerRoomInfoStreamObserver(responseObserver);
-        // responseObserver.onCompleted();
     }
 
     private Room makeRoom(UserCategory userCategory, User user) {
@@ -67,6 +73,14 @@ public class GetRoomStream {
         newRoom.setFirstMessageId(-1);
         newRoom.setLastMessageId(-1);
         return roomService.upsertRoom(newRoom);
+    }
+
+    private void fillFirstMessage(long roomId, String userCategoryName, String nickName) {
+        Message message = new Message();
+        message.setRoomId(roomId);
+        message.setCreatedTime(System.currentTimeMillis());
+        message.setText("你好呀%s, 我是%s，很高兴认识你!".formatted(nickName, userCategoryName));
+        roomService.addMessage(message);
     }
 
     private static RoomInfo parseRoomInfo(Room room) {

@@ -79,6 +79,7 @@ public class XFYASRSession extends org.java_websocket.client.WebSocketClient imp
             logger.info("asr res:" + message);
             decoder.decode(obj.data().result());
             if (obj.data().status() == 2 || obj.data().result().ls()) {
+                logger.warning("onMessage");
                 blockingQueue.add(new StopSignal());
             }
         } catch (IOException e) {
@@ -89,7 +90,7 @@ public class XFYASRSession extends org.java_websocket.client.WebSocketClient imp
     @Override
     public void onClose(int code, String reason, boolean remote) {
         status = SessionStatus.FINISHED;
-
+        logger.warning("onClose");
         blockingQueue.add(new StopSignal());
     }
 

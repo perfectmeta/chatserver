@@ -55,9 +55,11 @@ public class AuthTokenInterceptor implements ServerInterceptor {
 //        }
 
         ServerCall<ReqT, RespT> wrappedCall = new ForwardingServerCall.SimpleForwardingServerCall<ReqT, RespT>(serverCall) {
+            @Override
             public void close(Status status, Metadata metadata) {
                 // todo: clean userjob
                 logger.warning("client close");
+                super.close(status, metadata);
             }
         };
 

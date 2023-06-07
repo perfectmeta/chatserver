@@ -11,4 +11,5 @@ public interface RoomRepository extends CrudRepository<Room, Long> {
 
     Room findByRoomId(long roomId);
     List<Room> findByUserId(long userId);
+    List<Room> findAllByUserId(long userId);
 }

@@ -12,6 +12,8 @@ import chatserver.service.UserCategoryService;
 import chatserver.service.RoomService;
 import chatserver.third.tts.XFYtts;
 import chatserver.util.Digest;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.base.Strings;
 import com.theokanning.openai.completion.chat.ChatCompletionChoice;
 import com.theokanning.openai.completion.chat.ChatCompletionRequest;
@@ -19,6 +21,7 @@ import com.theokanning.openai.completion.chat.ChatMessage;
 import com.theokanning.openai.completion.chat.ChatMessageRole;
 import com.theokanning.openai.service.OpenAiService;
 import io.grpc.stub.StreamObserver;
+import lombok.Data;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -44,10 +47,6 @@ public class Chat {
     private final String resourcePath = !Strings.isNullOrEmpty(System.getenv("static_dir")) ?
             System.getenv("static_dir") : ".";
 
-    private final static String SYSTEM_PROMPT_PREFIX = "{\"role\".\"system\",\"content\".";
-    private final static String ASSISTANT_PROMPT_PREFIX = "{\"role\".\"assistant\",\"content\".";
-    private final static String USER_PROMPT_PREFIX = "{\"role\".\"user\",\"content\".";
-
     @Autowired
     public Chat(RoomService roomService, UserCategoryService userCategoryService, ContactService contactService) {
         this.roomService = roomService;
@@ -65,8 +64,9 @@ public class Chat {
             // responseObserver.onCompleted();
             return;
         }
+        logger.info("AI UserId is " + room.getAiUserId());
         UserCategory userCategory = userCategoryService.findUserCategoryByUserId(room.getAiUserId());
-        var prompt = userCategory.getPrompt() + "\n 下面，将开始对话:";
+        var prompt = userCategory.getPrompt();
         OpenAiService service = makeOpenAiService();
         List<Message> messageHistory = roomService.getMessageHistory(request.getRoomId());
 
@@ -83,11 +83,11 @@ public class Chat {
 
         final List<ChatMessage> messages = new ArrayList<>();
         Memory memory = contactService.getNewestMemory(user.getUserId(), room.getAiUserId());
+        preparePromptMessage(messages, prompt);
         if (memory != null) {
             String memoryPrompt = "以下是你和将要和你对话的用户的一些对话摘要:" + memory.getMemo();
             messages.add(new ChatMessage(ChatMessageRole.SYSTEM.value(), memoryPrompt));
         }
-        preparePromptMessage(messages, prompt);
         // debugPrintPrompt(messages);
         for (Message msg : messageHistory) {
             String role = ChatMessageRole.USER.value();
@@ -151,7 +151,7 @@ public class Chat {
         Message gptMsg = new Message();
         gptMsg.setRoomId(request.getRoomId());
         gptMsg.setAuthorUserType(Msg.UT_AI_TEACHER);
-        gptMsg.setAuthorShowName("teacher");
+        gptMsg.setAuthorShowName(userCategory.getUserCategoryName());
         gptMsg.setCreatedTime(System.currentTimeMillis());
         gptMsg.setMsgType(MsgType.TEXT_VALUE);
         gptMsg.setText(gptReturn.toString());
@@ -167,42 +167,51 @@ public class Chat {
         var lastResponse = ChatResponseStream.newBuilder().setResponseMessage(responseMessage).build();
         responseObserver.onNext(lastResponse);
         responseObserver.onCompleted();
-
-        // service.shutdownExecutor();
     }
 
+    @Data
+    public static class PromptItem {
+        enum RoleType {
+            SYSTEM("system"),
+            ASSISTANT("assistant"),
+            USER("user");
 
-    private void preparePromptMessage(List<ChatMessage> messages, String prompt) {
-        if (!prompt.contains("}")) {
-            logger.warning("Not contain } content is " + prompt);
-            final ChatMessage systemMessage = new ChatMessage(ChatMessageRole.SYSTEM.value(), prompt);
-            messages.add(systemMessage);
-            return;
-        }
+            private final String strValue;
+            RoleType(String value) {
+                this.strValue = value;
+            }
 
-        var prompts = prompt.split("}");
-        for (String p : prompts) {
-            p = p.replaceAll("\n","");
-            if (p.startsWith(SYSTEM_PROMPT_PREFIX)) {
-                var content = extractContent(SYSTEM_PROMPT_PREFIX, p);
-                messages.add(new ChatMessage(ChatMessageRole.SYSTEM.value(), content));
-            } else if (p.startsWith(ASSISTANT_PROMPT_PREFIX)) {
-                var content = extractContent(ASSISTANT_PROMPT_PREFIX, p);
-                messages.add(new ChatMessage(ChatMessageRole.ASSISTANT.value(), content));
-            } else if (p.startsWith(USER_PROMPT_PREFIX)) {
-                var content = extractContent(USER_PROMPT_PREFIX, p);
-                messages.add(new ChatMessage(ChatMessageRole.USER.value(), content));
-            } else {
-                logger.warning("Not in, statement {%s}".formatted(p));
+            public String getStrValue() {
+                return strValue;
             }
         }
+        private String role;
+        private String content;
     }
 
-    private static String extractContent(String prefix, String message) {
-        var content = message.substring(prefix.length());
-        assert content.startsWith("\"") && content.endsWith("\"");
-        content = content.substring(1, content.length()-1);
-        return content;
+    private void preparePromptMessage(List<ChatMessage> messages, String prompt) {
+        var prompts = prompt.split("\n");
+        var mapper = new ObjectMapper();
+        for (var p : prompts) {
+            if (Strings.isNullOrEmpty(p)) {
+                continue;
+            }
+
+            try {
+                var pJson = mapper.readValue(p, PromptItem.class);
+                if (PromptItem.RoleType.SYSTEM.getStrValue().equals(pJson.role)) {
+                    messages.add(new ChatMessage(ChatMessageRole.SYSTEM.value(), pJson.content));
+                } else if (PromptItem.RoleType.ASSISTANT.getStrValue().equals(pJson.role)) {
+                    messages.add(new ChatMessage(ChatMessageRole.ASSISTANT.value(), pJson.content));
+                } else if (PromptItem.RoleType.USER.getStrValue().equals(pJson.role)) {
+                    messages.add(new ChatMessage(ChatMessageRole.USER.value(), pJson.content));
+                } else {
+                    throw new IllegalArgumentException("Unknown role %s ".formatted(pJson.role));
+                }
+            } catch (JsonProcessingException e) {
+                throw new RuntimeException(e);
+            }
+        }
     }
 
     @SuppressWarnings("unused")
@@ -221,7 +230,6 @@ public class Chat {
         newUserMsg.setText(request.getText());
         return newUserMsg;
     }
-
 
     private String saveTTS(String allContent) {
         ByteBuffer tempFile = ByteBuffer.allocate(1024*1024);
