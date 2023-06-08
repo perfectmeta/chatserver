@@ -17,3 +17,5 @@ plugins {
 rootProject.name = 'chatserver'
 include('app')
 include('toolkit')
+include('prompteditor')
+
