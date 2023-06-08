@@ -72,7 +72,7 @@ public class RoomService {
 
     public List<Message> getNewestMessageEachRoom(long userId) {
         var messageList = new ArrayList<Message>();
-        var rooms = roomRepository.findAllByUserId(userId);
+        var rooms = roomRepository.findByUserId(userId);
         for (var room : rooms) {
             var roomMessages = messages.findFirst10ByRoomIdOrderByMessageIdDesc(room.getRoomId());
             if (roomMessages != null) {

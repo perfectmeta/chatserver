@@ -5,28 +5,30 @@ import lombok.Data;
 
 @Data
 @Entity
-@Table(indexes = {@Index(name = "byUserId", columnList = "userId"), @Index(name = "byAIType", columnList = "aiType"), @Index(name = "byAIUserId", columnList = "aiUserId")})
+@Table(indexes = {
+        @Index(name = "byUserId", columnList = "userId"),
+        @Index(name = "byAIType", columnList = "aiType"),
+        @Index(name = "byAIUserId", columnList = "aiUserId")
+})
 public class Room {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long roomId;
-
     private String roomName;
 
-    private long userType;
+    @Convert(converter = EUserType.Converter.class)
+    private EUserType userType;
     private long userId;
     private String userShowName;
 
-    private long aiType;
-
+    @Convert(converter = EUserType.Converter.class)
+    private EUserType aiType;
     private long aiUserId;
-
     private String aiShowName;
 
     private long createdTime;
 
     private long firstMessageId;
-
     private long lastMessageId;
 
     // 不要这里去聚合了，用单独的MessageRepository，因为将来有page的需求

@@ -62,9 +62,14 @@ message Message {
 }
 
 message Author {
-  int32 type = 1; // 0: 真人，1：AI英语老师, 2：AI女友
+  int32 type = 1; // 0: 真人，1：bot， 之后改为UserType
   int64 userId = 2;
   string name = 3;
+}
+
+enum UserType {
+  HUMAN = 0;
+  BOT = 1;
 }
 
 enum MsgType {

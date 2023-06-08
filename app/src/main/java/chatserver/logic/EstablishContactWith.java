@@ -1,5 +1,6 @@
 package chatserver.logic;
 
+import chatserver.entity.Contact;
 import chatserver.entity.User;
 import chatserver.gen.EstablishContactWithRequest;
 import chatserver.gen.EstablishContactWithResponse;
@@ -20,16 +21,15 @@ public class EstablishContactWith {
     public void run(EstablishContactWithRequest request, StreamObserver<EstablishContactWithResponse> responseStream) {
         User user = AuthTokenInterceptor.USER.get();
         var targetUserId = request.getUserId();
-        var contacts = contactService.getContacts(user.getUserId(), targetUserId);
-        if (contacts != null && contacts.size() > 0) {
+        Contact contact = contactService.findBySubjectUserIdAndObjectUserId(user.getUserId(), targetUserId);
+
+        if (contact != null ) {
             responseStream.onError(new IllegalStateException("Have contacts with the id " + targetUserId + " already"));
         }
-        var contact = contactService.addContact(user.getUserId(), targetUserId);
-        if (contact == null) {
-            responseStream.onError(new IllegalStateException("Permission error"));
-        }
+        contact = contactService.addContact(user.getUserId(), targetUserId);
+
         var response = EstablishContactWithResponse.newBuilder().
-                setContactId(Objects.requireNonNull(contact).getContactId())
+                setContactId(contact.getObjectUserId())
                 .build();
         responseStream.onNext(response);
         responseStream.onCompleted();

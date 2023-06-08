@@ -1,5 +1,6 @@
 package chatserver.logic.internal;
 
+import chatserver.entity.EUserType;
 import chatserver.entity.User;
 import chatserver.entity.UserCategory;
 import chatserver.service.UserCategoryService;
@@ -27,7 +28,8 @@ public class SignupBot {
             return null;
         }
         User user = new User();
-        user.setUserCategory(category);
+        user.setUserType(EUserType.BOT);
+        user.setBotId(userCategory.getUserCategoryName());
         user.setGender(userCategory.getGender());
         user.setNickName(userCategory.getUserCategoryName());
         user = userService.addUser(user);

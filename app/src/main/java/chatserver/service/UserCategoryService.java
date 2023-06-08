@@ -37,7 +37,8 @@ public class UserCategoryService {
         if (userEnt == null) {
             return null;
         }
-        return userCategoryRepository.findByUserCategoryId(userEnt.getUserCategory());
+        //TODO
+        return userCategoryRepository.findByUserCategoryId(2);
     }
 
     public void addUserCategory(UserCategory uc) {

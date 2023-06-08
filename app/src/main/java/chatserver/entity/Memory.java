@@ -9,6 +9,7 @@ public class Memory {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long memoryId;
+
     private long userId;
     private long otherUserId;
     private int memoType;  // 为将来扩展

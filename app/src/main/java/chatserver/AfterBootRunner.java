@@ -1,5 +1,6 @@
 package chatserver;
 
+import chatserver.entity.EUserType;
 import chatserver.entity.User;
 import chatserver.entity.UserCategory;
 import chatserver.service.UserCategoryService;
@@ -51,24 +52,25 @@ public class AfterBootRunner implements ApplicationRunner {
     }
 
     private void checkAndRegisterUser() {
-        var botCategories = userCategoryService.findAllBotUserCategories();
-        var botUsers = userService.findAllBotUsers();
-        var botUserCats = botUsers.stream().map(User::getUserCategory).collect(Collectors.toSet());
-        var needRegisters = new ArrayList<User>();
-        for (var cat : botCategories) {
-            if (botUserCats.contains((int)cat.getUserCategoryId())) {
-                continue;
-            }
-            User user = new User();
-            user.setUserCategory((int)cat.getUserCategoryId());
-            user.setPhone(RandomGenerator.randomPhoneNumber());
-            user.setEmail(cat.getUserCategoryName() + "_bot@pwrd.com");
-            user.setNickName(cat.getUserCategoryName());
-            user.setHeadIconUrl("/headicon/12354");
-            needRegisters.add(user);
-        }
-        if (needRegisters.size() > 0) {
-            userService.addUsers(needRegisters);
-        }
+//        var botCategories = userCategoryService.findAllBotUserCategories();
+//        var botUsers = userService.findAllBotUsers();
+//        var botUserCats = botUsers.stream().map(User::getUserCategory).collect(Collectors.toSet());
+//        var needRegisters = new ArrayList<User>();
+//        for (var cat : botCategories) {
+//            if (botUserCats.contains((int)cat.getUserCategoryId())) {
+//                continue;
+//            }
+//            User user = new User();
+//            user.setUserType(EUserType.BOT);
+//            user.setBotId(cat.getUserCategoryName());
+//            user.setPhone(RandomGenerator.randomPhoneNumber());
+//            user.setEmail(cat.getUserCategoryName() + "_bot@pwrd.com");
+//            user.setNickName(cat.getUserCategoryName());
+//            user.setHeadIconUrl("/headicon/12354");
+//            needRegisters.add(user);
+//        }
+//        if (needRegisters.size() > 0) {
+//            userService.addUsers(needRegisters);
+//        }
     }
 }

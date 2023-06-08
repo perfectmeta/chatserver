@@ -36,7 +36,7 @@ public class GetNewMessageStream {
                 .setText(message.getText() == null ? "" : message.getText())
                 .setCreatedTime(message.getCreatedTime())
                 .setImageUrl(message.getImageUrl() == null ? "" : message.getImageUrl())
-                .setMsgTypeValue(message.getMsgType())
+                .setMsgType(message.getMsgType().toProto())
                 .build();
             responseObserver.onNext(rpcMessage);
         }

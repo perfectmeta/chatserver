@@ -9,6 +9,7 @@ import java.util.List;
 
 @Repository
 public interface UserCategoryRepository extends JpaRepository<UserCategory, Long> {
+    
     UserCategory findByUserCategoryId(long userCategoryId);
 
     List<UserCategory> findAllByUserTypeIsNot(int userType);

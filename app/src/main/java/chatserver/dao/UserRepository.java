@@ -21,4 +21,5 @@ public interface UserRepository extends JpaRepository<User, Long> {
     int deleteByPhone(String phone);
 
     List<User> findAllByUserCategoryNotIn(List<Integer> userCategory);
+
 }

@@ -1,5 +1,6 @@
 package chatserver.logic;
 
+import chatserver.entity.EUserType;
 import chatserver.entity.User;
 import chatserver.gen.CreateMineNPCsRequest;
 import chatserver.gen.CreateMineNPCsResponse;
@@ -29,7 +30,8 @@ public class CreateMineNPCs {
         User newUser = new User();
         newUser.setPhone(RandomGenerator.randomPhoneNumber());
         newUser.setEmail(RandomGenerator.randomEmailAddress());
-        newUser.setUserCategory((int)category.getUserCategoryId());
+        newUser.setUserType(EUserType.BOT);
+        newUser.setBotId("aya");
         newUser.setGender(category.getGender());
         newUser.setNickName(category.getUserCategoryName());
         newUser = userService.addUser(newUser);

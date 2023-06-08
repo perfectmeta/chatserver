@@ -1,5 +1,6 @@
 package chatserver.logic;
 
+import chatserver.entity.EUserType;
 import chatserver.entity.User;
 import chatserver.gen.RegisterFeedback;
 import chatserver.gen.RegisterInfo;
@@ -53,7 +54,7 @@ public class Signup {
 
         User user = new User();
         user.setEmail(email);
-        user.setUserCategory(1);    // 人类类别为1
+        user.setUserType(EUserType.HUMAN);    // 人类类别为1
         user.setPhone(phone);
         user.setNickName(request.getNickname());
         User dbUser;

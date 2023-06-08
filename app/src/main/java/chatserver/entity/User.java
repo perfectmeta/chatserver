@@ -6,15 +6,18 @@ import lombok.Data;
 @Data
 @Entity
 @Table(indexes = {
-        @Index(name = "phone", columnList = "phone", unique = true),
-        @Index(name = "email", columnList = "email", unique = true)
+        @Index(name = "byPhone", columnList = "phone", unique = true),
+        @Index(name = "byEmail", columnList = "email", unique = true)
 })
-public class User {  // user is human or bot
+public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long userId;
 
-    private int userCategory;
+    @Convert(converter = EUserType.Converter.class)
+    private EUserType userType;
+    private String botId;
+
     private String phone;
     private String email;
     private String nickName;

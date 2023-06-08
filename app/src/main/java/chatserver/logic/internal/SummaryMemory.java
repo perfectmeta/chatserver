@@ -2,12 +2,10 @@ package chatserver.logic.internal;
 
 import com.google.common.base.Strings;
 import com.theokanning.openai.completion.CompletionRequest;
-import com.theokanning.openai.completion.chat.ChatCompletionRequest;
 import com.theokanning.openai.service.OpenAiService;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
-import java.util.concurrent.TimeUnit;
 import java.util.logging.Logger;
 
 import static chatserver.third.openai.OpenAi.makeOpenAiService;

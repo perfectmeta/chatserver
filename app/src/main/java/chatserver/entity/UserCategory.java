@@ -6,6 +6,7 @@ import lombok.Data;
 @Data
 @Entity
 public class UserCategory {
+    // TODO 删除
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long userCategoryId;

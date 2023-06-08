@@ -6,18 +6,16 @@ import lombok.Data;
 
 @Data
 @Entity
-@Table(name = "contact", indexes = {
-        @Index(name = "user_id_index", columnList = "user_id")
+@IdClass(ContactKey.class)
+@Table(indexes = {
+        @Index(name = "bySubjectUserId", columnList = "subjectUserId")
 })
 public class Contact {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long contactId;
-    @ManyToOne
-    @JoinColumn(name = "user_id")
-    private User userId;
-    @ManyToOne
-    @JoinColumn(name = "contact_user_id")
-    private User contactUserId;
+    private long subjectUserId;
+
+    @Id
+    private long objectUserId;
+
     private long createdTime;
 }

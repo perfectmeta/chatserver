@@ -1,15 +1,11 @@
 package chatserver.logic;
 
-import chatserver.entity.Memory;
-import chatserver.entity.Message;
-import chatserver.entity.User;
-import chatserver.entity.UserCategory;
+import chatserver.entity.*;
 import chatserver.gen.ChatRequest;
 import chatserver.gen.ChatResponseStream;
-import chatserver.gen.MsgType;
 import chatserver.service.ContactService;
-import chatserver.service.UserCategoryService;
 import chatserver.service.RoomService;
+import chatserver.service.UserCategoryService;
 import chatserver.third.tts.XFYtts;
 import chatserver.util.Digest;
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -91,7 +87,7 @@ public class Chat {
         // debugPrintPrompt(messages);
         for (Message msg : messageHistory) {
             String role = ChatMessageRole.USER.value();
-            if (msg.getAuthorUserType() != Msg.UT_HUMAN) {
+            if (msg.getAuthorUserType() != EUserType.HUMAN) {
                 role = ChatMessageRole.ASSISTANT.value();
             }
             var content = msg.getText();
@@ -150,10 +146,10 @@ public class Chat {
         }
         Message gptMsg = new Message();
         gptMsg.setRoomId(request.getRoomId());
-        gptMsg.setAuthorUserType(Msg.UT_AI_TEACHER);
+        gptMsg.setAuthorUserType(EUserType.BOT);
         gptMsg.setAuthorShowName(userCategory.getUserCategoryName());
         gptMsg.setCreatedTime(System.currentTimeMillis());
-        gptMsg.setMsgType(MsgType.TEXT_VALUE);
+        gptMsg.setMsgType(EMsgType.TEXT_WITH_AUDIO);
         gptMsg.setText(gptReturn.toString());
         gptMsg.setAudioUrl(url);
         gptMsg = roomService.addMessage(gptMsg);
@@ -177,6 +173,7 @@ public class Chat {
             USER("user");
 
             private final String strValue;
+
             RoleType(String value) {
                 this.strValue = value;
             }
@@ -185,6 +182,7 @@ public class Chat {
                 return strValue;
             }
         }
+
         private String role;
         private String content;
     }
@@ -217,33 +215,34 @@ public class Chat {
     @SuppressWarnings("unused")
     private static void debugPrintPrompt(List<ChatMessage> messages) {
         logger.info("Total prompt items is {%d}".formatted(messages.size()));
-        messages.forEach(m-> logger.info("["+ m.getRole() +"]:" + m.getContent()));
+        messages.forEach(m -> logger.info("[" + m.getRole() + "]:" + m.getContent()));
     }
+
     private Message parseDbMessage(ChatRequest request) {
         Message newUserMsg = new Message();
         newUserMsg.setRoomId(request.getRoomId());
-        newUserMsg.setAuthorUserType(Msg.UT_HUMAN);
+        newUserMsg.setAuthorUserType(EUserType.HUMAN);
         newUserMsg.setAuthorUserId(AuthTokenInterceptor.USER.get().getUserId());
         newUserMsg.setAuthorShowName(AuthTokenInterceptor.USER.get().getNickName());
         newUserMsg.setCreatedTime(System.currentTimeMillis());
-        newUserMsg.setMsgType(MsgType.TEXT_VALUE);
+        newUserMsg.setMsgType(EMsgType.TEXT);
         newUserMsg.setText(request.getText());
         return newUserMsg;
     }
 
     private String saveTTS(String allContent) {
-        ByteBuffer tempFile = ByteBuffer.allocate(1024*1024);
+        ByteBuffer tempFile = ByteBuffer.allocate(1024 * 1024);
         String fileName;
-        try(var inputStream = XFYtts.makeSession(allContent)) {
+        try (var inputStream = XFYtts.makeSession(allContent)) {
             byte[] buffer = new byte[1024];
             int len;
-            while ((len=inputStream.read(buffer)) != -1) {
+            while ((len = inputStream.read(buffer)) != -1) {
                 tempFile.put(buffer, 0, len);
             }
             tempFile.flip();
             var size = tempFile.remaining();
             var content = tempFile.array();
-            fileName = size+ "_" + Digest.calculateMD5(tempFile) + ".pcm";
+            fileName = size + "_" + Digest.calculateMD5(tempFile) + ".pcm";
             Path file;
             try {
                 //这一步可能文件已经存在了，就不需要再写入文件，直接返回文件名即可

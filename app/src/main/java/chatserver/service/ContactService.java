@@ -7,6 +7,7 @@ import chatserver.dao.ContactRepository;
 import chatserver.entity.Memory;
 import chatserver.entity.User;
 import jakarta.transaction.Transactional;
+import org.jetbrains.annotations.NotNull;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -28,17 +29,23 @@ public class ContactService {
         this.userRepository = userRepository;
     }
 
-    public List<Contact> getAllContactsByUserId(long userId) {
-        return contactRepository.findAllByUserId(userId);
+    public List<Contact> findBySubjectUserId(long userId) {
+        return contactRepository.findBySubjectUserId(userId);
     }
 
-    public List<Contact> getContacts(long userId, long targetId) {
-        var user = new User();
-        user.setUserId(userId);
-        var target = new User();
-        target.setUserId(targetId);
-        return contactRepository.findAllByUserIdAndContactUserId(user, target);
+    public Contact findBySubjectUserIdAndObjectUserId(long subjectUserId, long objectUserId) {
+        return contactRepository.findBySubjectUserIdAndObjectUserId(subjectUserId, objectUserId);
     }
+
+
+    public @NotNull Contact addContact(long subjectUserId, long objectUserId) {
+        Contact contact = new Contact();
+        contact.setSubjectUserId(subjectUserId);
+        contact.setObjectUserId(objectUserId);
+        contact.setCreatedTime(System.currentTimeMillis());
+        return contactRepository.save(contact);
+    }
+
 
     public List<Memory> getAllMemory(long userId, long otherId) {
         return memoryRepository.findAllByUserIdAndOtherUserId(userId, otherId);
@@ -53,42 +60,11 @@ public class ContactService {
         return memoryRepository.deleteByUserIdAndOtherUserIdAndMemoryId(userId, otherId, memoryId);
     }
 
-    @SuppressWarnings("UnusedReturnValue")
-    public List<Long> makeContactForUser(long userId) {
-        List<User> botUsers = userRepository.findAllByUserCategoryNotIn(List.of(1));
-        List<Contact> contacts = new ArrayList<>();
-        for (User user : botUsers) {
-            Contact contact = new Contact();
-            User u = new User();
-            u.setUserId(userId);
-            User o = new User();
-            o.setUserId(user.getUserId());
-            contact.setUserId(u);
-            contact.setContactUserId(o);
-            contacts.add(contact);
-        }
-        contactRepository.saveAll(contacts);
-        return contacts.stream().map(x->x.getContactUserId().getUserId()).collect(Collectors.toList());
+    public void makeContactForUser(long userId) {
+        addContact(userId, 1L); // FIXME 假设1是bot，第一个加入
     }
 
-    public Contact addContact(long userId, long targetUserId) {
-        User user = new User();
-        user.setUserId(userId);
-        User target = new User();
-        user.setUserId(targetUserId);
-        Contact contact = new Contact();
-        contact.setUserId(user);
-        contact.setContactUserId(target);
-        return contactRepository.save(contact);
-    }
 
-    @SuppressWarnings("unused")
-    public void deleteContact(User user, User target) {
-        Contact contact = new Contact();
-        contact.setUserId(user);
-        contact.setContactUserId(target);
-        deleteContact(contact);
-    }
 
     public void deleteContact(Contact contact) {
         contactRepository.delete(contact);

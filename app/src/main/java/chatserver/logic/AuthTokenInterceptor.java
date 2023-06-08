@@ -15,11 +15,15 @@ import java.util.logging.Logger;
 public class AuthTokenInterceptor implements ServerInterceptor {
     private static final Logger logger = Logger.getLogger(AuthTokenInterceptor.class.getName());
 
-    @Autowired
-    private UserService users;  // 不够service层了，直接用repo
+    private final UserService users;
 
     public static final Context.Key<User> USER = Context.key("user");
     public static final Context.Key<UserBlackboard> BLACKBOARD = Context.key("blackboard");
+
+    @Autowired
+    public AuthTokenInterceptor(UserService users) {
+        this.users = users;
+    }
 
 
     @Override

@@ -6,6 +6,7 @@ import chatserver.gen.EnterRoomRequest;
 import chatserver.gen.Message;
 import chatserver.service.RoomService;
 import io.grpc.stub.StreamObserver;
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 

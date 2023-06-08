@@ -1,9 +1,6 @@
 package chatserver.logic;
 
-import chatserver.entity.Message;
-import chatserver.entity.Room;
-import chatserver.entity.User;
-import chatserver.entity.UserCategory;
+import chatserver.entity.*;
 import chatserver.gen.Author;
 import chatserver.gen.Hello;
 import chatserver.gen.RoomInfo;
@@ -63,10 +60,10 @@ public class GetRoomStream {
     private Room makeRoom(UserCategory userCategory, User user) {
         Room newRoom = new Room();
         newRoom.setRoomName(userCategory.getUserCategoryName() + "'s room");
-        newRoom.setUserType(Msg.UT_HUMAN);
+        newRoom.setUserType(EUserType.HUMAN);
         newRoom.setUserId(user.getUserId());
         newRoom.setUserShowName(user.getNickName());
-        newRoom.setAiType(Msg.UT_AI_TEACHER);
+        newRoom.setAiType(EUserType.BOT);
         newRoom.setAiUserId(userCategory.getUserCategoryId());
         newRoom.setAiShowName(userCategory.getUserCategoryName());
         newRoom.setCreatedTime(System.currentTimeMillis());
