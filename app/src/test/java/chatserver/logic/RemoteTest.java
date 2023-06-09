@@ -30,7 +30,7 @@ public class RemoteTest {
         var channel = Grpc.newChannelBuilder("localhost:9080", InsecureChannelCredentials.create()).build();
         stub = ChatServiceGrpc.newStub(channel);
         Metadata metadata = new Metadata();
-        metadata.put(Metadata.Key.of("auth_token", Metadata.ASCII_STRING_MARSHALLER), "3");
+        metadata.put(Metadata.Key.of("auth_token", Metadata.ASCII_STRING_MARSHALLER), "1");
         stub = stub.withInterceptors(MetadataUtils.newAttachHeadersInterceptor(metadata));
     }
 
@@ -70,7 +70,6 @@ public class RemoteTest {
 
     @Test
     void getRoomListTest() throws InterruptedException {
-        // fixme 这个接口发生了改变，现在不会再complete了，所以测试需要修改
         Hello hello = Hello.newBuilder().build();
         List<RoomInfo> result = new ArrayList<>();
         CountDownLatch latch = new CountDownLatch(1);

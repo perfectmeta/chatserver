@@ -8,7 +8,9 @@ import org.springframework.cache.annotation.Cacheable;
 import org.springframework.cache.annotation.Caching;
 import org.springframework.stereotype.Service;
 
+import java.util.Arrays;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 
 @Service
@@ -51,7 +53,7 @@ public class UserService {  // 不抽象成接口，直接用，因为这里不�
 
     @Cacheable("allUsers")
     public List<User> findAllBotUsers() {
-        return users.findAllByUserCategoryNotIn(List.of(0));
+        return Collections.singletonList(users.findByUserId(2));
     }
 
     public List<User> addUsers(Collection<User> needRegisters) {

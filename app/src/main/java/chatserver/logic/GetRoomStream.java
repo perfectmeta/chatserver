@@ -76,6 +76,9 @@ public class GetRoomStream {
         Message message = new Message();
         message.setRoomId(roomId);
         message.setCreatedTime(System.currentTimeMillis());
+        message.setMsgType(EMsgType.TEXT);
+        message.setAuthorShowName(nickName);
+        message.setAuthorUserType(EUserType.BOT);
         message.setText("你好呀%s, 我是%s，很高兴认识你!".formatted(nickName, userCategoryName));
         roomService.addMessage(message);
     }

@@ -8,9 +8,11 @@
 <h1>请仔细斟酌后再修改</h1>
 <!--<p th:text="${prompt}"></p>-->
 <form action="/modify" method="post">
-    <textarea name="message" rows="60" cols="200">
-        [[${prompt}]]
-    </textarea>
+    <label>
+<textarea name="message" rows="60" cols="200">
+    [[${prompt}]]
+</textarea>
+    </label>
     <button type="submit">Submit</button>
 </form>
 </body>

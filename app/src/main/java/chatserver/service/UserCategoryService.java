@@ -3,7 +3,6 @@ package chatserver.service;
 import chatserver.dao.UserRepository;
 import chatserver.entity.UserCategory;
 import chatserver.dao.UserCategoryRepository;
-import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -31,7 +30,7 @@ public class UserCategoryService {
         return userCategoryRepository.findByUserCategoryId(id);
     }
 
-    @Transactional
+    // @Transactional
     public UserCategory findUserCategoryByUserId(long userId) {
         var userEnt = userRepository.findByUserId(userId);
         if (userEnt == null) {

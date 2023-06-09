@@ -1,29 +1,19 @@
 package chatserver;
 
-import chatserver.entity.EUserType;
-import chatserver.entity.User;
-import chatserver.entity.UserCategory;
-import chatserver.service.UserCategoryService;
 import chatserver.service.UserService;
-import chatserver.util.RandomGenerator;
 import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;
 import org.springframework.stereotype.Component;
 
-import java.util.ArrayList;
 import java.util.logging.Logger;
-import java.util.stream.Collectors;
 
 @Component
 public class AfterBootRunner implements ApplicationRunner {
 
     private static final Logger logger = Logger.getLogger(AfterBootRunner.class.getName());
-    private final UserCategoryService userCategoryService;
     private final UserService userService;
 
-    public AfterBootRunner(UserCategoryService userCategoryService,
-                           UserService userService) {
-        this.userCategoryService = userCategoryService;
+    public AfterBootRunner(UserService userService) {
         this.userService = userService;
     }
 
@@ -36,41 +26,12 @@ public class AfterBootRunner implements ApplicationRunner {
     }
 
     private void checkAndRegisterUserCategory() {
-        var humanCategory = userCategoryService.findUserCategoryById(1);
-        if (humanCategory != null) {
-            return;
-        }
-        UserCategory uc = new UserCategory();
-        uc.setUserCategoryId(1);
-        uc.setUserCategoryName("");
-        uc.setGender(0);
-        uc.setTags("");
-        uc.setUserType(0);
-        uc.setPrompt("");
-        uc.setDescription("人类条目");
-        userCategoryService.addUserCategory(uc);
     }
 
     private void checkAndRegisterUser() {
-//        var botCategories = userCategoryService.findAllBotUserCategories();
-//        var botUsers = userService.findAllBotUsers();
-//        var botUserCats = botUsers.stream().map(User::getUserCategory).collect(Collectors.toSet());
-//        var needRegisters = new ArrayList<User>();
-//        for (var cat : botCategories) {
-//            if (botUserCats.contains((int)cat.getUserCategoryId())) {
-//                continue;
-//            }
-//            User user = new User();
-//            user.setUserType(EUserType.BOT);
-//            user.setBotId(cat.getUserCategoryName());
-//            user.setPhone(RandomGenerator.randomPhoneNumber());
-//            user.setEmail(cat.getUserCategoryName() + "_bot@pwrd.com");
-//            user.setNickName(cat.getUserCategoryName());
-//            user.setHeadIconUrl("/headicon/12354");
-//            needRegisters.add(user);
-//        }
-//        if (needRegisters.size() > 0) {
-//            userService.addUsers(needRegisters);
-//        }
+    }
+
+    private void loadConfigDir() {
+
     }
 }

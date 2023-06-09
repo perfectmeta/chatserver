@@ -26,11 +26,107 @@ import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
+import java.util.concurrent.LinkedBlockingDeque;
+import java.util.function.BiConsumer;
 import java.util.logging.Logger;
 
 import static chatserver.third.openai.OpenAi.makeOpenAiService;
+
+class VoiceTransfer {
+    private static final Logger logger = Logger.getLogger(VoiceTransfer.class.getName());
+    enum Status {
+        READY,
+        START,
+        FINISHED
+    }
+    private static final String[] _spliters = {",", "。", ".", "，", "?", "？", "!", "！"};
+    private static final Set<String> spliters = new HashSet<>(Arrays.asList(_spliters));
+    private final BiConsumer<byte[], Boolean> callBack;
+    private final Queue<String> queue;
+    private final ByteBuffer byteBuffer;
+    private StringBuilder tempFragment;
+    private Status status;
+
+    public VoiceTransfer(BiConsumer<byte[], Boolean> callBack) {
+        this.callBack = callBack;
+        this.queue = new LinkedBlockingDeque<>();
+        this.status = Status.READY;
+        this.tempFragment = new StringBuilder();
+        this.byteBuffer = ByteBuffer.allocate(1024*1024);
+    }
+
+    public void update(String newMessage) {
+        int offset = 0;
+        for (int i = 0; i < newMessage.length(); i++) {
+            if (spliters.contains(newMessage.substring(i, i+1))) {
+                tempFragment.append(newMessage, offset, i+1);
+                offset = i+1;
+                var fragment = tempFragment.toString();
+                if (!Strings.isNullOrEmpty(fragment)) {
+                    addTask(fragment);
+                    logger.info("Add Task: " + fragment);
+                }
+                tempFragment = new StringBuilder();
+            }
+        }
+
+        tempFragment.append(newMessage, offset, newMessage.length());
+
+        if (status == Status.READY) {
+            status = Status.START;
+            Thread.startVirtualThread(() -> {
+                while (status != Status.FINISHED || !queue.isEmpty()) {
+                    var content = queue.poll();
+                    if (Strings.isNullOrEmpty(content)) {
+                        continue;
+                    }
+                    try (var audioStream = XFYtts.makeSession(content)) {
+                        byte[] audio = audioStream.readAllBytes();
+                        byteBuffer.put(audio);
+                        boolean finished = status == Status.FINISHED && queue.isEmpty();
+                        callBack.accept(audio, finished);
+                        if (finished) {
+                            break;
+                        }
+                    } catch (IOException e) {
+                        throw new RuntimeException(e);
+                    }
+                }
+                byteBuffer.flip();
+                logger.info("saving TTS");
+                saveTTS(byteBuffer.array(), 0, byteBuffer.limit());
+            });
+        }
+    }
+
+    private void addTask(String content) {
+        queue.add(content);
+    }
+
+    public void finish() {
+        this.status = Status.FINISHED;
+    }
+
+    private String saveTTS(byte[] allContent, int offset, int length) {
+        var fileName = length + "_" + Digest.calculateMD5(allContent, offset, length) + ".mp3";
+        Path file;
+        try {
+            //这一步可能文件已经存在了，就不需要再写入文件，直接返回文件名即可
+            file = Files.createFile(Path.of(Chat.resourcePath, fileName));
+            logger.info("Save mp3 file " + file);
+        } catch (IOException e) {
+            logger.warning("conflict file " + fileName);
+            return fileName;
+        }
+        try (var fout = new FileOutputStream(file.toFile())) {
+            fout.write(allContent, offset, length);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return fileName;
+    }
+}
 
 @Component
 public class Chat {
@@ -40,7 +136,7 @@ public class Chat {
     private final UserCategoryService userCategoryService;
 
     private final ContactService contactService;
-    private final String resourcePath = !Strings.isNullOrEmpty(System.getenv("static_dir")) ?
+    static final String resourcePath = !Strings.isNullOrEmpty(System.getenv("static_dir")) ?
             System.getenv("static_dir") : ".";
 
     @Autowired
@@ -69,6 +165,21 @@ public class Chat {
         var newUserMsg = roomService.addMessage(parseDbMessage(request));
 
         var messageSeq = request.getSeq();
+
+        VoiceTransfer voiceTransfer = new VoiceTransfer((data, finished)->{
+            chatserver.gen.Message.Builder r = chatserver.gen.Message.newBuilder()
+                    .setSeq(messageSeq);
+            ChatResponseStream firstResponse = ChatResponseStream.newBuilder()
+                    .setRequestMessage(r)
+                    .build();
+            responseObserver.onNext(firstResponse);
+            if (finished) {
+                responseObserver.onCompleted();
+            }
+
+            // todo update url to database
+        });
+
         chatserver.gen.Message.Builder rr = chatserver.gen.Message.newBuilder()
                 .setMessageId(newUserMsg.getMessageId())
                 .setSeq(messageSeq);
@@ -131,15 +242,12 @@ public class Chat {
                         ChatResponseStream text = ChatResponseStream.newBuilder()
                                 .setText(content)
                                 .build();
+                        voiceTransfer.update(content);
                         responseObserver.onNext(text);
                     }
                 });
 
         String allContent = gptReturn.toString();
-        String url = "";
-        if (!Strings.isNullOrEmpty(allContent)) {
-            url = saveTTS(allContent);
-        }
 
         if (hasError[0]) {
             logger.warning("chat gpt returned error");
@@ -151,18 +259,17 @@ public class Chat {
         gptMsg.setCreatedTime(System.currentTimeMillis());
         gptMsg.setMsgType(EMsgType.TEXT_WITH_AUDIO);
         gptMsg.setText(gptReturn.toString());
-        gptMsg.setAudioUrl(url);
         gptMsg = roomService.addMessage(gptMsg);
 
         var responseMessage = chatserver.gen.Message.newBuilder()
                 .setMessageId(gptMsg.getMessageId())
                 .setText(allContent)
-                .setAudioUrl(url)
                 .setSeq(messageSeq);
 
         var lastResponse = ChatResponseStream.newBuilder().setResponseMessage(responseMessage).build();
         responseObserver.onNext(lastResponse);
-        responseObserver.onCompleted();
+        voiceTransfer.finish();
+        // responseObserver.onCompleted();
     }
 
     @Data
@@ -230,32 +337,4 @@ public class Chat {
         return newUserMsg;
     }
 
-    private String saveTTS(String allContent) {
-        ByteBuffer tempFile = ByteBuffer.allocate(1024 * 1024);
-        String fileName;
-        try (var inputStream = XFYtts.makeSession(allContent)) {
-            byte[] buffer = new byte[1024];
-            int len;
-            while ((len = inputStream.read(buffer)) != -1) {
-                tempFile.put(buffer, 0, len);
-            }
-            tempFile.flip();
-            var size = tempFile.remaining();
-            var content = tempFile.array();
-            fileName = size + "_" + Digest.calculateMD5(tempFile) + ".pcm";
-            Path file;
-            try {
-                //这一步可能文件已经存在了，就不需要再写入文件，直接返回文件名即可
-                file = Files.createFile(Path.of(resourcePath, fileName));
-            } catch (IOException e) {
-                return fileName;
-            }
-            try (var fout = new FileOutputStream(file.toFile())) {
-                fout.write(content, 0, size);
-            }
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
-        return fileName;
-    }
 }
