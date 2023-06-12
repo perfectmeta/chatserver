@@ -15,16 +15,13 @@ public class RoomService {
 
     private final RoomRepository rooms;
 
-    private final UserCategoryRepository bots;
-
     private final MessageRepository messages;
     private final RoomRepository roomRepository;
 
     @Autowired
-    public RoomService(RoomRepository rooms, UserCategoryRepository bots, MessageRepository messages,
+    public RoomService(RoomRepository rooms, MessageRepository messages,
                        RoomRepository roomRepository) {
         this.rooms = rooms;
-        this.bots = bots;
         this.messages = messages;
         this.roomRepository = roomRepository;
     }
@@ -54,6 +51,10 @@ public class RoomService {
         return newMsg; // 返回newMsg，里面有messageId
     }
 
+    public void updateMessage(@NotNull Message message) {
+        messages.save(message);
+    }
+
     public List<Message> getMessageHistorySince(long roomId, long fromMessageId) {
         return messages.findByRoomIdAndMessageIdGreaterThanOrderByMessageIdAsc(roomId, fromMessageId);
     }
@@ -65,9 +66,6 @@ public class RoomService {
 
     public List<Message> getMessageHistory(long roomId) {
         return messages.findFirst100ByRoomIdOrderByMessageIdDesc(roomId);
-    }
-
-    public void getAllRoomsByUserId(long userId) {
     }
 
     public List<Message> getNewestMessageEachRoom(long userId) {

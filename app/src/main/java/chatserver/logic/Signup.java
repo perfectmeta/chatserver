@@ -7,8 +7,8 @@ import chatserver.gen.RegisterInfo;
 import chatserver.logic.internal.SignupBot;
 import chatserver.service.ContactService;
 import chatserver.service.UserService;
-import chatserver.util.Validator;
 import io.grpc.stub.StreamObserver;
+import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Component;
 
 @Component
@@ -25,29 +25,18 @@ public class Signup {
         this.signupBotServer = signupBotServer;
     }
 
+    @Transactional
     public void run(RegisterInfo request, StreamObserver<RegisterFeedback> responseObserver) {
         var email = request.getEmail();
         var phone = request.getPhone();
-        if (!Validator.checkEmailAddressRule(email)) {
-            responseObserver.onNext(error(RegisterFeedback.StatusCode.EMAIL_INVALID_VALUE, "Invalid email address"));
-            responseObserver.onCompleted();
-            return;
-        }
+        var nickName = request.getNickname();
 
-        if (!Validator.checkPhoneNumberRule(phone)) {
-            responseObserver.onNext(error(RegisterFeedback.StatusCode.PHONE_INVALID_VALUE, "Invalid phone number"));
-            responseObserver.onCompleted();
-            return;
-        }
 
-        if (userService.findByEmail(email) != null) {
-            responseObserver.onNext(error(RegisterFeedback.StatusCode.EMAIL_CONFLICT_VALUE, "email registered"));
-            responseObserver.onCompleted();
-            return;
-        }
-
-        if (userService.findByPhone(phone) != null) {
-            responseObserver.onNext(error(RegisterFeedback.StatusCode.EMAIL_CONFLICT_VALUE, "phone registered"));
+        User dbUser = userService.findByNickName(nickName);
+        if (dbUser != null) {
+            var feedback = RegisterFeedback.newBuilder().setStatusCode(RegisterFeedback.StatusCode.OK_VALUE)
+                    .setUserId((int)dbUser.getUserId()).build();
+            responseObserver.onNext(feedback);
             responseObserver.onCompleted();
             return;
         }
@@ -57,26 +46,24 @@ public class Signup {
         user.setUserType(EUserType.HUMAN);    // 人类类别为1
         user.setPhone(phone);
         user.setNickName(request.getNickname());
-        User dbUser;
         if ((dbUser=userService.addUser(user)) == null) {
-            responseObserver.onNext(error(RegisterFeedback.StatusCode.OTHER_ERROR_VALUE, "DB error"));
+            var res = RegisterFeedback.newBuilder()
+                    .setStatusCode(RegisterFeedback.StatusCode.OTHER_ERROR_VALUE)
+                    .setMessage("DB error").build();
+            responseObserver.onNext(res);
             responseObserver.onCompleted();
             return;
         }
-        makeAllBotAsContact(dbUser.getUserId());
         var feedback = RegisterFeedback.newBuilder().setStatusCode(RegisterFeedback.StatusCode.OK_VALUE)
                         .setUserId((int)dbUser.getUserId()).build();
         responseObserver.onNext(feedback);
         responseObserver.onCompleted();
-
-        // todo 再考虑一下要不要在新用户注册时就对应给它创建新的独有AI角色。
+        signupBotAndMakeContact(dbUser.getUserId());
     }
 
-    private void makeAllBotAsContact(long userId) {
-        contactService.makeContactForUser(userId);
-    }
-
-    private RegisterFeedback error(int code, String message) {
-        return RegisterFeedback.newBuilder().setStatusCode(code).setMessage(message).build();
+    private void signupBotAndMakeContact(long userId) {
+        User botUser = signupBotServer.signupFor(2);
+        contactService.addContact(botUser.getUserId(), userId);
+        contactService.addContact(userId, botUser.getUserId());
     }
 }

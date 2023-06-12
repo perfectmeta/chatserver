@@ -28,7 +28,7 @@ public class SpeechRecognize {
     static class AudioBuffer {
         private final ByteBuffer bf;
         public AudioBuffer() {
-            bf = ByteBuffer.allocate(102400);
+            bf = ByteBuffer.allocate(1024*1024*8);
         }
 
         public void write(byte[] bytes) {

@@ -30,11 +30,12 @@ public class ContactService {
     }
 
     public @NotNull Contact addContact(long subjectUserId, long objectUserId) {
-        Contact contact = new Contact();
-        contact.setSubjectUserId(subjectUserId);
-        contact.setObjectUserId(objectUserId);
-        contact.setCreatedTime(System.currentTimeMillis());
-        return contactRepository.save(contact);
+        Contact subjectContact = new Contact();
+        subjectContact.setSubjectUserId(subjectUserId);
+        subjectContact.setObjectUserId(objectUserId);
+        subjectContact.setCreatedTime(System.currentTimeMillis());
+        subjectContact = contactRepository.save(subjectContact);
+        return subjectContact;
     }
 
     public List<Memory> getAllMemory(long userId, long otherId) {
@@ -48,10 +49,6 @@ public class ContactService {
     @Transactional
     public int deleteMemoryByUserIdAndOtherUserIdAndMemoryId(long userId, long otherId, long memoryId) {
         return memoryRepository.deleteByUserIdAndOtherUserIdAndMemoryId(userId, otherId, memoryId);
-    }
-
-    public void makeContactForUser(long userId) {
-        addContact(userId, 1L); // FIXME 假设1是bot，第一个加入
     }
 
     public void deleteContact(Contact contact) {

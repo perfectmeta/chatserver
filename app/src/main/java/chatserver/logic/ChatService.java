@@ -19,11 +19,6 @@ public class ChatService extends ChatServiceGrpc.ChatServiceImplBase {
     private final GetMemory getMemory;
     private final DeleteMemory deleteMemory;
 
-    private final CreateMineNPCs createMineNPCs;
-    private final EstablishContactWith establishContactWith;
-    private final DeleteContact deleteContact;
-
-
     @Autowired
     public ChatService(GetSelfInfo getSelfInfo, GetRoomStream getRoomList,
                        GetContactStream getContactList,
@@ -33,10 +28,7 @@ public class ChatService extends ChatServiceGrpc.ChatServiceImplBase {
                        Chat chat,
                        Signup signup,
                        GetMemory getMemory,
-                       DeleteMemory deleteMemory,
-                       CreateMineNPCs createMineNPCs,
-                       EstablishContactWith establishContactWith,
-                       DeleteContact deleteContact) {
+                       DeleteMemory deleteMemory) {
         this.getSelfInfo = getSelfInfo;
         this.getRoomList = getRoomList;
         this.getContactList = getContactList;
@@ -47,9 +39,6 @@ public class ChatService extends ChatServiceGrpc.ChatServiceImplBase {
         this.signup = signup;
         this.getMemory = getMemory;
         this.deleteMemory = deleteMemory;
-        this.createMineNPCs = createMineNPCs;
-        this.establishContactWith = establishContactWith;
-        this.deleteContact = deleteContact;
     }
 
     @Override
@@ -100,21 +89,5 @@ public class ChatService extends ChatServiceGrpc.ChatServiceImplBase {
     @Override
     public void deleteMemory(DeleteMemoryRequest request, StreamObserver<DeleteMemoryResponse> responseStreamObserver) {
         deleteMemory.run(request, responseStreamObserver);
-    }
-
-    @Override
-    public void createMineNPCs(CreateMineNPCsRequest request, StreamObserver<CreateMineNPCsResponse> responseObs) {
-        createMineNPCs.run(request, responseObs);
-    }
-
-    @Override
-    public void establishContactWith(EstablishContactWithRequest request,
-                                     StreamObserver<EstablishContactWithResponse> responseObs) {
-        establishContactWith.run(request, responseObs);
-    }
-
-    @Override
-    public void deleteContact(DeleteContactRequest request, StreamObserver<DeleteContactResponse> response) {
-        deleteContact.run(request, response);
     }
 }

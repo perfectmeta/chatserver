@@ -11,6 +11,7 @@ import chatserver.util.Digest;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.base.Strings;
+import com.google.protobuf.ByteString;
 import com.theokanning.openai.completion.chat.ChatCompletionChoice;
 import com.theokanning.openai.completion.chat.ChatCompletionRequest;
 import com.theokanning.openai.completion.chat.ChatMessage;
@@ -29,9 +30,15 @@ import java.nio.file.Path;
 import java.util.*;
 import java.util.concurrent.LinkedBlockingDeque;
 import java.util.function.BiConsumer;
+import java.util.function.Consumer;
 import java.util.logging.Logger;
 
 import static chatserver.third.openai.OpenAi.makeOpenAiService;
+
+
+interface TriConsumer<T, U, V> {
+    void accept(T t, U u, V v);
+}
 
 class VoiceTransfer {
     private static final Logger logger = Logger.getLogger(VoiceTransfer.class.getName());
@@ -47,6 +54,7 @@ class VoiceTransfer {
     private final ByteBuffer byteBuffer;
     private StringBuilder tempFragment;
     private Status status;
+    private Consumer<String> finishCallback;
 
     public VoiceTransfer(BiConsumer<byte[], Boolean> callBack) {
         this.callBack = callBack;
@@ -95,7 +103,10 @@ class VoiceTransfer {
                 }
                 byteBuffer.flip();
                 logger.info("saving TTS");
-                saveTTS(byteBuffer.array(), 0, byteBuffer.limit());
+                var fileName = saveTTS(byteBuffer.array(), 0, byteBuffer.limit());
+                if (this.finishCallback != null) {
+                    this.finishCallback.accept(fileName);
+                }
             });
         }
     }
@@ -104,8 +115,9 @@ class VoiceTransfer {
         queue.add(content);
     }
 
-    public void finish() {
+    public void finish(Consumer<String> finishCallback) {
         this.status = Status.FINISHED;
+        this.finishCallback = finishCallback;
     }
 
     private String saveTTS(byte[] allContent, int offset, int length) {
@@ -131,10 +143,8 @@ class VoiceTransfer {
 @Component
 public class Chat {
     private static final Logger logger = Logger.getLogger(Chat.class.getName());
-
     private final RoomService roomService;
     private final UserCategoryService userCategoryService;
-
     private final ContactService contactService;
     static final String resourcePath = !Strings.isNullOrEmpty(System.getenv("static_dir")) ?
             System.getenv("static_dir") : ".";
@@ -153,7 +163,6 @@ public class Chat {
         if (room == null || room.getUserId() != user.getUserId()) {
             logger.warning("invalid room id: " + request.getRoomId());
             responseObserver.onError(new IllegalStateException("Invalid room id: " + request.getRoomId()));
-            // responseObserver.onCompleted();
             return;
         }
         logger.info("AI UserId is " + room.getAiUserId());
@@ -163,21 +172,18 @@ public class Chat {
         List<Message> messageHistory = roomService.getMessageHistory(request.getRoomId());
 
         var newUserMsg = roomService.addMessage(parseDbMessage(request));
-
         var messageSeq = request.getSeq();
 
         VoiceTransfer voiceTransfer = new VoiceTransfer((data, finished)->{
             chatserver.gen.Message.Builder r = chatserver.gen.Message.newBuilder()
                     .setSeq(messageSeq);
-            ChatResponseStream firstResponse = ChatResponseStream.newBuilder()
-                    .setRequestMessage(r)
+            ChatResponseStream audioResponse = ChatResponseStream.newBuilder()
+                    .setAudio(ByteString.copyFrom(data))
                     .build();
-            responseObserver.onNext(firstResponse);
+            responseObserver.onNext(audioResponse);
             if (finished) {
-                responseObserver.onCompleted();
+                // responseObserver.onCompleted();
             }
-
-            // todo update url to database
         });
 
         chatserver.gen.Message.Builder rr = chatserver.gen.Message.newBuilder()
@@ -230,6 +236,7 @@ public class Chat {
                     throwable.printStackTrace();
                     responseObserver.onError(throwable);
                     hasError[0] = true;
+                    logger.warning(throwable.getMessage());
                 })
                 .blockingForEach(chatCompletionChunk -> {
                     if (chatCompletionChunk.getChoices().size() > 0) {
@@ -268,8 +275,17 @@ public class Chat {
 
         var lastResponse = ChatResponseStream.newBuilder().setResponseMessage(responseMessage).build();
         responseObserver.onNext(lastResponse);
-        voiceTransfer.finish();
-        // responseObserver.onCompleted();
+        final Message dbGptMsg = gptMsg;
+        voiceTransfer.finish((fileName)->{
+            dbGptMsg.setAudioUrl(fileName);
+            roomService.updateMessage(dbGptMsg);
+
+            ChatResponseStream text = ChatResponseStream.newBuilder()
+                    .setResponseMessage(chatserver.gen.Message.newBuilder().setAudioUrl(fileName).build())
+                    .build();
+            responseObserver.onNext(text);
+            responseObserver.onCompleted();
+        });
     }
 
     @Data

@@ -53,10 +53,7 @@ public class AuthTokenInterceptor implements ServerInterceptor {
         }
         logger.info("validation success when access " + methodName);
 
-        Context context = Context.current().withValue(USER, user).withValue(BLACKBOARD, new UserBlackboard());;
-//        if (BLACKBOARD.get() == null) {
-//            context.withValue(BLACKBOARD, new UserBlackboard());
-//        }
+        Context context = Context.current().withValue(USER, user).withValue(BLACKBOARD, new UserBlackboard());
 
         ServerCall<ReqT, RespT> wrappedCall = new ForwardingServerCall.SimpleForwardingServerCall<ReqT, RespT>(serverCall) {
             @Override

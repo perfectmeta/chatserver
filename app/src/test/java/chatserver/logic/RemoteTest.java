@@ -7,6 +7,7 @@ import io.grpc.InsecureChannelCredentials;
 import io.grpc.Metadata;
 import io.grpc.stub.MetadataUtils;
 import io.grpc.stub.StreamObserver;
+import org.assertj.core.util.Strings;
 import org.junit.jupiter.api.*;
 
 import java.io.FileInputStream;
@@ -26,11 +27,11 @@ public class RemoteTest {
     private static final Logger logger = Logger.getLogger(LoginTest.class.getName());
     @BeforeAll
     void init() {
-        // var channel = Grpc.newChannelBuilder("ai.taohuayuaner.com:9080", InsecureChannelCredentials.create()).build();
-        var channel = Grpc.newChannelBuilder("localhost:9080", InsecureChannelCredentials.create()).build();
+        var channel = Grpc.newChannelBuilder("ai.taohuayuaner.com:9080", InsecureChannelCredentials.create()).build();
+        //var channel = Grpc.newChannelBuilder("localhost:9080", InsecureChannelCredentials.create()).build();
         stub = ChatServiceGrpc.newStub(channel);
         Metadata metadata = new Metadata();
-        metadata.put(Metadata.Key.of("auth_token", Metadata.ASCII_STRING_MARSHALLER), "1");
+        metadata.put(Metadata.Key.of("auth_token", Metadata.ASCII_STRING_MARSHALLER), "9");
         stub = stub.withInterceptors(MetadataUtils.newAttachHeadersInterceptor(metadata));
     }
 
@@ -141,7 +142,7 @@ public class RemoteTest {
     @Test
     void sendMessageTest() throws InterruptedException {
         ChatRequest request = ChatRequest.newBuilder()
-                .setRoomId(1)
+                .setRoomId(4)
                 .setText("Hey, 你是AI吗?你有名字吗?")
                 .setSeq("aabb")
                 .setMsgType(MsgType.TEXT)
@@ -150,15 +151,16 @@ public class RemoteTest {
         stub.chat(request, new StreamObserver<>() {
             @Override
             public void onNext(ChatResponseStream value) {
-                if (value.hasRequestMessage()) {
-                    logger.info(value.getRequestMessage().getSeq());
-                    return;
-                }
                 if (value.hasResponseMessage()) {
                     logger.info(value.getResponseMessage().getText());
                     logger.info(value.getResponseMessage().getAudioUrl());
                     return;
                 }
+
+                if (value.getAudio().toByteArray() != null && value.getAudio().toByteArray().length > 0) {
+                    logger.warning("Audio R size " + value.getAudio().size());
+                }
+
                 logger.info("OnNext: " + value.getText());
             }
 
@@ -193,6 +195,9 @@ public class RemoteTest {
                 public void onNext(TextStream value) {
                     logger.info("Get Response Client " + value.getText());
                     bytes.put(value.getText().getBytes(StandardCharsets.UTF_8));
+                    if (!Strings.isNullOrEmpty(value.getAudioUrl())) {
+                        logger.info("Get URL  " + value.getAudioUrl());
+                    }
                 }
 
                 @Override

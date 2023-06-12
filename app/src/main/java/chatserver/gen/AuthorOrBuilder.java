@@ -9,7 +9,7 @@ public interface AuthorOrBuilder extends
 
   /**
    * <pre>
-   * 0: 真人，1：AI英语老师, 2：AI女友
+   * 0: 真人，1：bot， 之后改为UserType
    * </pre>
    *
    * <code>int32 type = 1;</code>

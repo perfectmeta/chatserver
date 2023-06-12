@@ -136,7 +136,7 @@ public enum MsgType
   }
   public static final com.google.protobuf.Descriptors.EnumDescriptor
       getDescriptor() {
-    return chatserver.gen.Chat.getDescriptor().getEnumTypes().get(0);
+    return chatserver.gen.Chat.getDescriptor().getEnumTypes().get(1);
   }
 
   private static final MsgType[] VALUES = values();

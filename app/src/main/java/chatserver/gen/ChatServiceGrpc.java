@@ -325,99 +325,6 @@ public final class ChatServiceGrpc {
     return getDeleteMemoryMethod;
   }
 
-  private static volatile io.grpc.MethodDescriptor<chatserver.gen.CreateMineNPCsRequest,
-      chatserver.gen.CreateMineNPCsResponse> getCreateMineNPCsMethod;
-
-  @io.grpc.stub.annotations.RpcMethod(
-      fullMethodName = SERVICE_NAME + '/' + "CreateMineNPCs",
-      requestType = chatserver.gen.CreateMineNPCsRequest.class,
-      responseType = chatserver.gen.CreateMineNPCsResponse.class,
-      methodType = io.grpc.MethodDescriptor.MethodType.UNARY)
-  public static io.grpc.MethodDescriptor<chatserver.gen.CreateMineNPCsRequest,
-      chatserver.gen.CreateMineNPCsResponse> getCreateMineNPCsMethod() {
-    io.grpc.MethodDescriptor<chatserver.gen.CreateMineNPCsRequest, chatserver.gen.CreateMineNPCsResponse> getCreateMineNPCsMethod;
-    if ((getCreateMineNPCsMethod = ChatServiceGrpc.getCreateMineNPCsMethod) == null) {
-      synchronized (ChatServiceGrpc.class) {
-        if ((getCreateMineNPCsMethod = ChatServiceGrpc.getCreateMineNPCsMethod) == null) {
-          ChatServiceGrpc.getCreateMineNPCsMethod = getCreateMineNPCsMethod =
-              io.grpc.MethodDescriptor.<chatserver.gen.CreateMineNPCsRequest, chatserver.gen.CreateMineNPCsResponse>newBuilder()
-              .setType(io.grpc.MethodDescriptor.MethodType.UNARY)
-              .setFullMethodName(generateFullMethodName(SERVICE_NAME, "CreateMineNPCs"))
-              .setSampledToLocalTracing(true)
-              .setRequestMarshaller(io.grpc.protobuf.ProtoUtils.marshaller(
-                  chatserver.gen.CreateMineNPCsRequest.getDefaultInstance()))
-              .setResponseMarshaller(io.grpc.protobuf.ProtoUtils.marshaller(
-                  chatserver.gen.CreateMineNPCsResponse.getDefaultInstance()))
-              .setSchemaDescriptor(new ChatServiceMethodDescriptorSupplier("CreateMineNPCs"))
-              .build();
-        }
-      }
-    }
-    return getCreateMineNPCsMethod;
-  }
-
-  private static volatile io.grpc.MethodDescriptor<chatserver.gen.EstablishContactWithRequest,
-      chatserver.gen.EstablishContactWithResponse> getEstablishContactWithMethod;
-
-  @io.grpc.stub.annotations.RpcMethod(
-      fullMethodName = SERVICE_NAME + '/' + "EstablishContactWith",
-      requestType = chatserver.gen.EstablishContactWithRequest.class,
-      responseType = chatserver.gen.EstablishContactWithResponse.class,
-      methodType = io.grpc.MethodDescriptor.MethodType.UNARY)
-  public static io.grpc.MethodDescriptor<chatserver.gen.EstablishContactWithRequest,
-      chatserver.gen.EstablishContactWithResponse> getEstablishContactWithMethod() {
-    io.grpc.MethodDescriptor<chatserver.gen.EstablishContactWithRequest, chatserver.gen.EstablishContactWithResponse> getEstablishContactWithMethod;
-    if ((getEstablishContactWithMethod = ChatServiceGrpc.getEstablishContactWithMethod) == null) {
-      synchronized (ChatServiceGrpc.class) {
-        if ((getEstablishContactWithMethod = ChatServiceGrpc.getEstablishContactWithMethod) == null) {
-          ChatServiceGrpc.getEstablishContactWithMethod = getEstablishContactWithMethod =
-              io.grpc.MethodDescriptor.<chatserver.gen.EstablishContactWithRequest, chatserver.gen.EstablishContactWithResponse>newBuilder()
-              .setType(io.grpc.MethodDescriptor.MethodType.UNARY)
-              .setFullMethodName(generateFullMethodName(SERVICE_NAME, "EstablishContactWith"))
-              .setSampledToLocalTracing(true)
-              .setRequestMarshaller(io.grpc.protobuf.ProtoUtils.marshaller(
-                  chatserver.gen.EstablishContactWithRequest.getDefaultInstance()))
-              .setResponseMarshaller(io.grpc.protobuf.ProtoUtils.marshaller(
-                  chatserver.gen.EstablishContactWithResponse.getDefaultInstance()))
-              .setSchemaDescriptor(new ChatServiceMethodDescriptorSupplier("EstablishContactWith"))
-              .build();
-        }
-      }
-    }
-    return getEstablishContactWithMethod;
-  }
-
-  private static volatile io.grpc.MethodDescriptor<chatserver.gen.DeleteContactRequest,
-      chatserver.gen.DeleteContactResponse> getDeleteContactMethod;
-
-  @io.grpc.stub.annotations.RpcMethod(
-      fullMethodName = SERVICE_NAME + '/' + "DeleteContact",
-      requestType = chatserver.gen.DeleteContactRequest.class,
-      responseType = chatserver.gen.DeleteContactResponse.class,
-      methodType = io.grpc.MethodDescriptor.MethodType.UNARY)
-  public static io.grpc.MethodDescriptor<chatserver.gen.DeleteContactRequest,
-      chatserver.gen.DeleteContactResponse> getDeleteContactMethod() {
-    io.grpc.MethodDescriptor<chatserver.gen.DeleteContactRequest, chatserver.gen.DeleteContactResponse> getDeleteContactMethod;
-    if ((getDeleteContactMethod = ChatServiceGrpc.getDeleteContactMethod) == null) {
-      synchronized (ChatServiceGrpc.class) {
-        if ((getDeleteContactMethod = ChatServiceGrpc.getDeleteContactMethod) == null) {
-          ChatServiceGrpc.getDeleteContactMethod = getDeleteContactMethod =
-              io.grpc.MethodDescriptor.<chatserver.gen.DeleteContactRequest, chatserver.gen.DeleteContactResponse>newBuilder()
-              .setType(io.grpc.MethodDescriptor.MethodType.UNARY)
-              .setFullMethodName(generateFullMethodName(SERVICE_NAME, "DeleteContact"))
-              .setSampledToLocalTracing(true)
-              .setRequestMarshaller(io.grpc.protobuf.ProtoUtils.marshaller(
-                  chatserver.gen.DeleteContactRequest.getDefaultInstance()))
-              .setResponseMarshaller(io.grpc.protobuf.ProtoUtils.marshaller(
-                  chatserver.gen.DeleteContactResponse.getDefaultInstance()))
-              .setSchemaDescriptor(new ChatServiceMethodDescriptorSupplier("DeleteContact"))
-              .build();
-        }
-      }
-    }
-    return getDeleteContactMethod;
-  }
-
   /**
    * Creates a new async stub that supports all call types for the service
    */
@@ -517,6 +424,7 @@ public final class ChatServiceGrpc {
     /**
      * <pre>
      * 进入房间，发lastMessageId后，服务器同步给客户端这之后的消息
+     * TODO: 好像不该有这个协议，本来就应该一登录就推送lastMessageId之后的消息
      * </pre>
      */
     default void enterRoom(chatserver.gen.EnterRoomRequest request,
@@ -559,30 +467,6 @@ public final class ChatServiceGrpc {
     default void deleteMemory(chatserver.gen.DeleteMemoryRequest request,
         io.grpc.stub.StreamObserver<chatserver.gen.DeleteMemoryResponse> responseObserver) {
       io.grpc.stub.ServerCalls.asyncUnimplementedUnaryCall(getDeleteMemoryMethod(), responseObserver);
-    }
-
-    /**
-     * <pre>
-     * 创建独属联系人用户
-     * </pre>
-     */
-    default void createMineNPCs(chatserver.gen.CreateMineNPCsRequest request,
-        io.grpc.stub.StreamObserver<chatserver.gen.CreateMineNPCsResponse> responseObserver) {
-      io.grpc.stub.ServerCalls.asyncUnimplementedUnaryCall(getCreateMineNPCsMethod(), responseObserver);
-    }
-
-    /**
-     */
-    default void establishContactWith(chatserver.gen.EstablishContactWithRequest request,
-        io.grpc.stub.StreamObserver<chatserver.gen.EstablishContactWithResponse> responseObserver) {
-      io.grpc.stub.ServerCalls.asyncUnimplementedUnaryCall(getEstablishContactWithMethod(), responseObserver);
-    }
-
-    /**
-     */
-    default void deleteContact(chatserver.gen.DeleteContactRequest request,
-        io.grpc.stub.StreamObserver<chatserver.gen.DeleteContactResponse> responseObserver) {
-      io.grpc.stub.ServerCalls.asyncUnimplementedUnaryCall(getDeleteContactMethod(), responseObserver);
     }
   }
 
@@ -669,6 +553,7 @@ public final class ChatServiceGrpc {
     /**
      * <pre>
      * 进入房间，发lastMessageId后，服务器同步给客户端这之后的消息
+     * TODO: 好像不该有这个协议，本来就应该一登录就推送lastMessageId之后的消息
      * </pre>
      */
     public void enterRoom(chatserver.gen.EnterRoomRequest request,
@@ -716,33 +601,6 @@ public final class ChatServiceGrpc {
         io.grpc.stub.StreamObserver<chatserver.gen.DeleteMemoryResponse> responseObserver) {
       io.grpc.stub.ClientCalls.asyncUnaryCall(
           getChannel().newCall(getDeleteMemoryMethod(), getCallOptions()), request, responseObserver);
-    }
-
-    /**
-     * <pre>
-     * 创建独属联系人用户
-     * </pre>
-     */
-    public void createMineNPCs(chatserver.gen.CreateMineNPCsRequest request,
-        io.grpc.stub.StreamObserver<chatserver.gen.CreateMineNPCsResponse> responseObserver) {
-      io.grpc.stub.ClientCalls.asyncUnaryCall(
-          getChannel().newCall(getCreateMineNPCsMethod(), getCallOptions()), request, responseObserver);
-    }
-
-    /**
-     */
-    public void establishContactWith(chatserver.gen.EstablishContactWithRequest request,
-        io.grpc.stub.StreamObserver<chatserver.gen.EstablishContactWithResponse> responseObserver) {
-      io.grpc.stub.ClientCalls.asyncUnaryCall(
-          getChannel().newCall(getEstablishContactWithMethod(), getCallOptions()), request, responseObserver);
-    }
-
-    /**
-     */
-    public void deleteContact(chatserver.gen.DeleteContactRequest request,
-        io.grpc.stub.StreamObserver<chatserver.gen.DeleteContactResponse> responseObserver) {
-      io.grpc.stub.ClientCalls.asyncUnaryCall(
-          getChannel().newCall(getDeleteContactMethod(), getCallOptions()), request, responseObserver);
     }
   }
 
@@ -816,6 +674,7 @@ public final class ChatServiceGrpc {
     /**
      * <pre>
      * 进入房间，发lastMessageId后，服务器同步给客户端这之后的消息
+     * TODO: 好像不该有这个协议，本来就应该一登录就推送lastMessageId之后的消息
      * </pre>
      */
     public java.util.Iterator<chatserver.gen.Message> enterRoom(
@@ -851,30 +710,6 @@ public final class ChatServiceGrpc {
     public chatserver.gen.DeleteMemoryResponse deleteMemory(chatserver.gen.DeleteMemoryRequest request) {
       return io.grpc.stub.ClientCalls.blockingUnaryCall(
           getChannel(), getDeleteMemoryMethod(), getCallOptions(), request);
-    }
-
-    /**
-     * <pre>
-     * 创建独属联系人用户
-     * </pre>
-     */
-    public chatserver.gen.CreateMineNPCsResponse createMineNPCs(chatserver.gen.CreateMineNPCsRequest request) {
-      return io.grpc.stub.ClientCalls.blockingUnaryCall(
-          getChannel(), getCreateMineNPCsMethod(), getCallOptions(), request);
-    }
-
-    /**
-     */
-    public chatserver.gen.EstablishContactWithResponse establishContactWith(chatserver.gen.EstablishContactWithRequest request) {
-      return io.grpc.stub.ClientCalls.blockingUnaryCall(
-          getChannel(), getEstablishContactWithMethod(), getCallOptions(), request);
-    }
-
-    /**
-     */
-    public chatserver.gen.DeleteContactResponse deleteContact(chatserver.gen.DeleteContactRequest request) {
-      return io.grpc.stub.ClientCalls.blockingUnaryCall(
-          getChannel(), getDeleteContactMethod(), getCallOptions(), request);
     }
   }
 
@@ -924,33 +759,6 @@ public final class ChatServiceGrpc {
       return io.grpc.stub.ClientCalls.futureUnaryCall(
           getChannel().newCall(getDeleteMemoryMethod(), getCallOptions()), request);
     }
-
-    /**
-     * <pre>
-     * 创建独属联系人用户
-     * </pre>
-     */
-    public com.google.common.util.concurrent.ListenableFuture<chatserver.gen.CreateMineNPCsResponse> createMineNPCs(
-        chatserver.gen.CreateMineNPCsRequest request) {
-      return io.grpc.stub.ClientCalls.futureUnaryCall(
-          getChannel().newCall(getCreateMineNPCsMethod(), getCallOptions()), request);
-    }
-
-    /**
-     */
-    public com.google.common.util.concurrent.ListenableFuture<chatserver.gen.EstablishContactWithResponse> establishContactWith(
-        chatserver.gen.EstablishContactWithRequest request) {
-      return io.grpc.stub.ClientCalls.futureUnaryCall(
-          getChannel().newCall(getEstablishContactWithMethod(), getCallOptions()), request);
-    }
-
-    /**
-     */
-    public com.google.common.util.concurrent.ListenableFuture<chatserver.gen.DeleteContactResponse> deleteContact(
-        chatserver.gen.DeleteContactRequest request) {
-      return io.grpc.stub.ClientCalls.futureUnaryCall(
-          getChannel().newCall(getDeleteContactMethod(), getCallOptions()), request);
-    }
   }
 
   private static final int METHODID_SIGNUP = 0;
@@ -962,10 +770,7 @@ public final class ChatServiceGrpc {
   private static final int METHODID_CHAT = 6;
   private static final int METHODID_GET_MEMORY = 7;
   private static final int METHODID_DELETE_MEMORY = 8;
-  private static final int METHODID_CREATE_MINE_NPCS = 9;
-  private static final int METHODID_ESTABLISH_CONTACT_WITH = 10;
-  private static final int METHODID_DELETE_CONTACT = 11;
-  private static final int METHODID_SPEECH_RECOGNIZE = 12;
+  private static final int METHODID_SPEECH_RECOGNIZE = 9;
 
   private static final class MethodHandlers<Req, Resp> implements
       io.grpc.stub.ServerCalls.UnaryMethod<Req, Resp>,
@@ -1019,18 +824,6 @@ public final class ChatServiceGrpc {
         case METHODID_DELETE_MEMORY:
           serviceImpl.deleteMemory((chatserver.gen.DeleteMemoryRequest) request,
               (io.grpc.stub.StreamObserver<chatserver.gen.DeleteMemoryResponse>) responseObserver);
-          break;
-        case METHODID_CREATE_MINE_NPCS:
-          serviceImpl.createMineNPCs((chatserver.gen.CreateMineNPCsRequest) request,
-              (io.grpc.stub.StreamObserver<chatserver.gen.CreateMineNPCsResponse>) responseObserver);
-          break;
-        case METHODID_ESTABLISH_CONTACT_WITH:
-          serviceImpl.establishContactWith((chatserver.gen.EstablishContactWithRequest) request,
-              (io.grpc.stub.StreamObserver<chatserver.gen.EstablishContactWithResponse>) responseObserver);
-          break;
-        case METHODID_DELETE_CONTACT:
-          serviceImpl.deleteContact((chatserver.gen.DeleteContactRequest) request,
-              (io.grpc.stub.StreamObserver<chatserver.gen.DeleteContactResponse>) responseObserver);
           break;
         default:
           throw new AssertionError();
@@ -1123,27 +916,6 @@ public final class ChatServiceGrpc {
               chatserver.gen.DeleteMemoryRequest,
               chatserver.gen.DeleteMemoryResponse>(
                 service, METHODID_DELETE_MEMORY)))
-        .addMethod(
-          getCreateMineNPCsMethod(),
-          io.grpc.stub.ServerCalls.asyncUnaryCall(
-            new MethodHandlers<
-              chatserver.gen.CreateMineNPCsRequest,
-              chatserver.gen.CreateMineNPCsResponse>(
-                service, METHODID_CREATE_MINE_NPCS)))
-        .addMethod(
-          getEstablishContactWithMethod(),
-          io.grpc.stub.ServerCalls.asyncUnaryCall(
-            new MethodHandlers<
-              chatserver.gen.EstablishContactWithRequest,
-              chatserver.gen.EstablishContactWithResponse>(
-                service, METHODID_ESTABLISH_CONTACT_WITH)))
-        .addMethod(
-          getDeleteContactMethod(),
-          io.grpc.stub.ServerCalls.asyncUnaryCall(
-            new MethodHandlers<
-              chatserver.gen.DeleteContactRequest,
-              chatserver.gen.DeleteContactResponse>(
-                service, METHODID_DELETE_CONTACT)))
         .build();
   }
 
@@ -1202,9 +974,6 @@ public final class ChatServiceGrpc {
               .addMethod(getChatMethod())
               .addMethod(getGetMemoryMethod())
               .addMethod(getDeleteMemoryMethod())
-              .addMethod(getCreateMineNPCsMethod())
-              .addMethod(getEstablishContactWithMethod())
-              .addMethod(getDeleteContactMethod())
               .build();
         }
       }

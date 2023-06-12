@@ -31,7 +31,5 @@ public class Room {
     private long firstMessageId;
     private long lastMessageId;
 
-    // 不要这里去聚合了，用单独的MessageRepository，因为将来有page的需求
-//    @OneToMany
-//    private List<Message> messages;
+    private int memoryFree;
 }

@@ -5,6 +5,7 @@ import chatserver.entity.User;
 import chatserver.entity.UserCategory;
 import chatserver.service.UserCategoryService;
 import chatserver.service.UserService;
+import chatserver.util.RandomGenerator;
 import org.springframework.stereotype.Component;
 
 import java.util.logging.Logger;
@@ -32,6 +33,8 @@ public class SignupBot {
         user.setBotId(userCategory.getUserCategoryName());
         user.setGender(userCategory.getGender());
         user.setNickName(userCategory.getUserCategoryName());
+        user.setPhone(RandomGenerator.randomPhoneNumber());
+        user.setEmail(RandomGenerator.randomEmailAddress());
         user = userService.addUser(user);
         return user;
     }

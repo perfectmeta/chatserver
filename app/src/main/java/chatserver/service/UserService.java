@@ -8,7 +8,6 @@ import org.springframework.cache.annotation.Cacheable;
 import org.springframework.cache.annotation.Caching;
 import org.springframework.stereotype.Service;
 
-import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
@@ -58,5 +57,9 @@ public class UserService {  // 不抽象成接口，直接用，因为这里不�
 
     public List<User> addUsers(Collection<User> needRegisters) {
         return users.saveAllAndFlush(needRegisters);
+    }
+
+    public User findByNickName(String nickName) {
+        return users.findByNickName(nickName);
     }
 }

@@ -101,7 +101,7 @@ private static final long serialVersionUID = 0L;
   private int type_;
   /**
    * <pre>
-   * 0: 真人，1：AI英语老师, 2：AI女友
+   * 0: 真人，1：bot， 之后改为UserType
    * </pre>
    *
    * <code>int32 type = 1;</code>
@@ -501,7 +501,7 @@ private static final long serialVersionUID = 0L;
     private int type_ ;
     /**
      * <pre>
-     * 0: 真人，1：AI英语老师, 2：AI女友
+     * 0: 真人，1：bot， 之后改为UserType
      * </pre>
      *
      * <code>int32 type = 1;</code>
@@ -513,7 +513,7 @@ private static final long serialVersionUID = 0L;
     }
     /**
      * <pre>
-     * 0: 真人，1：AI英语老师, 2：AI女友
+     * 0: 真人，1：bot， 之后改为UserType
      * </pre>
      *
      * <code>int32 type = 1;</code>
@@ -528,7 +528,7 @@ private static final long serialVersionUID = 0L;
     }
     /**
      * <pre>
-     * 0: 真人，1：AI英语老师, 2：AI女友
+     * 0: 真人，1：bot， 之后改为UserType
      * </pre>
      *
      * <code>int32 type = 1;</code>
