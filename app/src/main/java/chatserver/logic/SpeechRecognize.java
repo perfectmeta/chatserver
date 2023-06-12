@@ -37,15 +37,14 @@ public class SpeechRecognize {
 
         private String save() {
             bf.flip();
-            var fileName = bf.remaining() + "_" + Digest.calculateMD5(bf.array()) + ".pcm";
+            var fileName = bf.limit() + "_" + Digest.calculateMD5(bf.array()) + ".pcm";
             try {
                 var file = Files.createFile(Path.of(resourcePath, fileName));
                 try (var fout = new FileOutputStream(file.toFile())) {
-                    fout.write(bf.array(), 0, bf.remaining());
+                    fout.write(bf.array(), 0, bf.limit());
                 }
             } catch (IOException e) {
                 e.printStackTrace();
-                // throw new RuntimeException(e);
             }
             return fileName;
         }
