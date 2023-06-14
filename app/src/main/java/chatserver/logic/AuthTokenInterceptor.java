@@ -47,7 +47,7 @@ public class AuthTokenInterceptor implements ServerInterceptor {
         }
 
         if (user == null) {
-            logger.warning("validation failed when access " + methodName);
+            logger.warning("validation failed when access " + methodName + " token " + authToken);
             serverCall.close(Status.PERMISSION_DENIED, new Metadata());
             return new ServerCall.Listener<>() {};
         }

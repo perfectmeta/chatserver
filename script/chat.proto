@@ -217,9 +217,4 @@ service ChatService {
   rpc GetMemory(GetMemoryRequest) returns (stream Memory);
 
   rpc DeleteMemory(DeleteMemoryRequest) returns (DeleteMemoryResponse);
-
-  // 创建独属联系人用户
-  rpc CreateMineNPCs(CreateMineNPCsRequest) returns(CreateMineNPCsResponse);
-  rpc EstablishContactWith(EstablishContactWithRequest) returns(EstablishContactWithResponse);
-  rpc DeleteContact(DeleteContactRequest) returns(DeleteContactResponse);
 }
