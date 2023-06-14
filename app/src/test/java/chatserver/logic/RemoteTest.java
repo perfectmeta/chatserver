@@ -27,7 +27,7 @@ public class RemoteTest {
     private static final Logger logger = Logger.getLogger(LoginTest.class.getName());
     @BeforeAll
     void init() {
-        var channel = Grpc.newChannelBuilder("ai.taohuayuaner.com:9080", InsecureChannelCredentials.create()).build();
+        var channel = Grpc.newChannelBuilder("ai.taohuayuaner.com:7080", InsecureChannelCredentials.create()).build();
         // var channel = Grpc.newChannelBuilder("localhost:9080", InsecureChannelCredentials.create()).build();
         stub = ChatServiceGrpc.newStub(channel);
         Metadata metadata = new Metadata();
@@ -111,8 +111,11 @@ public class RemoteTest {
         var success = new boolean[]{false};
         stub.enterRoom(enterRoomRequest, new StreamObserver<>() {
             @Override
-            public void onNext(Message value) {
-                logger.info("new message received: " + value.getText());
+            public void onNext(MessageList value) {
+                logger.info("enter room response recived, msg size " + value.getMessageListCount());
+                for (var msg : value.getMessageListList()) {
+                    logger.info("new message received: " + msg.getText());
+                }
             }
 
             @Override
@@ -260,7 +263,7 @@ public class RemoteTest {
         CountDownLatch latch = new CountDownLatch(1);
         stub.getMemory(request, new StreamObserver<>() {
             @Override
-            public void onNext(Memory value) {
+            public void onNext(MemoryList value) {
                 logger.info(value.toString());
             }
 

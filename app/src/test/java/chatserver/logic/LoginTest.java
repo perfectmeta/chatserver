@@ -122,8 +122,11 @@ public class LoginTest {
         var success = new boolean[]{false};
         stub.enterRoom(enterRoomRequest, new StreamObserver<>() {
             @Override
-            public void onNext(Message value) {
-                logger.info("new message received: " + value);
+            public void onNext(MessageList value) {
+                logger.info("enter room response");
+                for (var msg : value.getMessageListList()) {
+                    logger.info("new message received: " + msg.getText());
+                }
             }
 
             @Override
@@ -265,7 +268,7 @@ public class LoginTest {
         CountDownLatch latch = new CountDownLatch(1);
         stub.getMemory(request, new StreamObserver<>() {
             @Override
-            public void onNext(Memory value) {
+            public void onNext(MemoryList value) {
                 logger.info(value.toString());
             }
 
