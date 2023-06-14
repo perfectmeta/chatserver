@@ -17,4 +17,5 @@ public class Memory {
     private String memo;
 
     private long createdTime;
+    private long createMessageId;
 }

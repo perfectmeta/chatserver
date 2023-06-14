@@ -46,6 +46,10 @@ public class ContactService {
         return memoryRepository.findTopByUserIdAndOtherUserIdOrderByCreatedTimeDesc(userId, otherId);
     }
 
+    public Memory addMemory(Memory newMemory) {
+        return memoryRepository.save(newMemory);
+    }
+
     @Transactional
     public int deleteMemoryByUserIdAndOtherUserIdAndMemoryId(long userId, long otherId, long memoryId) {
         return memoryRepository.deleteByUserIdAndOtherUserIdAndMemoryId(userId, otherId, memoryId);

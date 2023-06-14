@@ -3,11 +3,11 @@ package chatserver.logic;
 import chatserver.entity.*;
 import chatserver.gen.ChatRequest;
 import chatserver.gen.ChatResponseStream;
+import chatserver.logic.internal.SummaryMemory;
+import chatserver.logic.voice.VoiceTransfer;
 import chatserver.service.ContactService;
 import chatserver.service.RoomService;
 import chatserver.service.UserCategoryService;
-import chatserver.third.tts.XFYtts;
-import chatserver.util.Digest;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.base.Strings;
@@ -22,142 +22,35 @@ import lombok.Data;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.nio.ByteBuffer;
-import java.nio.file.Files;
-import java.nio.file.Path;
 import java.util.*;
-import java.util.concurrent.LinkedBlockingDeque;
-import java.util.function.BiConsumer;
-import java.util.function.Consumer;
 import java.util.logging.Logger;
 
 import static chatserver.third.openai.OpenAi.makeOpenAiService;
 
 
-interface TriConsumer<T, U, V> {
-    void accept(T t, U u, V v);
-}
-
-class VoiceTransfer {
-    private static final Logger logger = Logger.getLogger(VoiceTransfer.class.getName());
-    enum Status {
-        READY,
-        START,
-        FINISHED
-    }
-    private static final String[] _spliters = {",", "。", ".", "，", "?", "？", "!", "！"};
-    private static final Set<String> spliters = new HashSet<>(Arrays.asList(_spliters));
-    private final BiConsumer<byte[], Boolean> callBack;
-    private final Queue<String> queue;
-    private final ByteBuffer byteBuffer;
-    private StringBuilder tempFragment;
-    private Status status;
-    private Consumer<String> finishCallback;
-
-    public VoiceTransfer(BiConsumer<byte[], Boolean> callBack) {
-        this.callBack = callBack;
-        this.queue = new LinkedBlockingDeque<>();
-        this.status = Status.READY;
-        this.tempFragment = new StringBuilder();
-        this.byteBuffer = ByteBuffer.allocate(1024*1024);
-    }
-
-    public void update(String newMessage) {
-        int offset = 0;
-        for (int i = 0; i < newMessage.length(); i++) {
-            if (spliters.contains(newMessage.substring(i, i+1))) {
-                tempFragment.append(newMessage, offset, i+1);
-                offset = i+1;
-                var fragment = tempFragment.toString();
-                if (!Strings.isNullOrEmpty(fragment)) {
-                    addTask(fragment);
-                    logger.info("Add Task: " + fragment);
-                }
-                tempFragment = new StringBuilder();
-            }
-        }
-
-        tempFragment.append(newMessage, offset, newMessage.length());
-
-        if (status == Status.READY) {
-            status = Status.START;
-            Thread.startVirtualThread(() -> {
-                while (status != Status.FINISHED || !queue.isEmpty()) {
-                    var content = queue.poll();
-                    if (Strings.isNullOrEmpty(content)) {
-                        continue;
-                    }
-                    try (var audioStream = XFYtts.makeSession(content)) {
-                        byte[] audio = audioStream.readAllBytes();
-                        byteBuffer.put(audio);
-                        boolean finished = status == Status.FINISHED && queue.isEmpty();
-                        callBack.accept(audio, finished);
-                        if (finished) {
-                            break;
-                        }
-                    } catch (IOException e) {
-                        throw new RuntimeException(e);
-                    }
-                }
-                byteBuffer.flip();
-                logger.info("saving TTS");
-                var fileName = saveTTS(byteBuffer.array(), 0, byteBuffer.limit());
-                if (this.finishCallback != null) {
-                    this.finishCallback.accept(fileName);
-                }
-            });
-        }
-    }
-
-    private void addTask(String content) {
-        queue.add(content);
-    }
-
-    public void finish(Consumer<String> finishCallback) {
-        this.status = Status.FINISHED;
-        this.finishCallback = finishCallback;
-    }
-
-    private String saveTTS(byte[] allContent, int offset, int length) {
-        var fileName = length + "_" + Digest.calculateMD5(allContent, offset, length) + ".mp3";
-        Path file;
-        try {
-            //这一步可能文件已经存在了，就不需要再写入文件，直接返回文件名即可
-            file = Files.createFile(Path.of(Chat.resourcePath, fileName));
-            logger.info("Save mp3 file " + file);
-        } catch (IOException e) {
-            logger.warning("conflict file " + fileName);
-            return fileName;
-        }
-        try (var fout = new FileOutputStream(file.toFile())) {
-            fout.write(allContent, offset, length);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        return fileName;
-    }
-}
-
 @Component
 public class Chat {
+    private static final int MEMORY_INTERVAL = 2;
     private static final Logger logger = Logger.getLogger(Chat.class.getName());
     private final RoomService roomService;
     private final UserCategoryService userCategoryService;
     private final ContactService contactService;
+    private final SummaryMemory summaryMemory;
     static final String resourcePath = !Strings.isNullOrEmpty(System.getenv("static_dir")) ?
             System.getenv("static_dir") : ".";
 
     @Autowired
-    public Chat(RoomService roomService, UserCategoryService userCategoryService, ContactService contactService) {
+    public Chat(RoomService roomService,
+                UserCategoryService userCategoryService,
+                ContactService contactService,
+                SummaryMemory summaryMemory) {
         this.roomService = roomService;
         this.userCategoryService = userCategoryService;
         this.contactService = contactService;
+        this.summaryMemory = summaryMemory;
     }
 
     public void run(ChatRequest request, StreamObserver<ChatResponseStream> responseObserver) {
-        // check room id first
         User user = AuthTokenInterceptor.USER.get();
         var room = roomService.findRoomById(request.getRoomId());
         if (room == null || room.getUserId() != user.getUserId()) {
@@ -174,17 +67,14 @@ public class Chat {
         var newUserMsg = roomService.addMessage(parseDbMessage(request));
         var messageSeq = request.getSeq();
 
-        VoiceTransfer voiceTransfer = new VoiceTransfer((data, finished)->{
+        VoiceTransfer voiceTransfer = new VoiceTransfer((data, finished) -> {
             chatserver.gen.Message.Builder r = chatserver.gen.Message.newBuilder()
                     .setSeq(messageSeq);
             ChatResponseStream audioResponse = ChatResponseStream.newBuilder()
                     .setAudio(ByteString.copyFrom(data))
                     .build();
             responseObserver.onNext(audioResponse);
-            if (finished) {
-                // responseObserver.onCompleted();
-            }
-        });
+        }, resourcePath);
 
         chatserver.gen.Message.Builder rr = chatserver.gen.Message.newBuilder()
                 .setMessageId(newUserMsg.getMessageId())
@@ -195,7 +85,7 @@ public class Chat {
         responseObserver.onNext(firstResponse);
 
         final List<ChatMessage> messages = new ArrayList<>();
-        Memory memory = contactService.getNewestMemory(user.getUserId(), room.getAiUserId());
+        Memory memory = contactService.getNewestMemory(room.getAiUserId(), user.getUserId());
         preparePromptMessage(messages, prompt);
         if (memory != null) {
             String memoryPrompt = "以下是你和将要和你对话的用户的一些对话摘要:" + memory.getMemo();
@@ -259,14 +149,11 @@ public class Chat {
         if (hasError[0]) {
             logger.warning("chat gpt returned error");
         }
-        Message gptMsg = new Message();
-        gptMsg.setRoomId(request.getRoomId());
-        gptMsg.setAuthorUserType(EUserType.BOT);
-        gptMsg.setAuthorShowName(userCategory.getUserCategoryName());
-        gptMsg.setCreatedTime(System.currentTimeMillis());
-        gptMsg.setMsgType(EMsgType.TEXT_WITH_AUDIO);
-        gptMsg.setText(gptReturn.toString());
-        gptMsg = roomService.addMessage(gptMsg);
+
+        Message gptMsg = saveDBMessage(request.getRoomId(),
+                room.getAiUserId(),
+                userCategory.getUserCategoryName(),
+                gptReturn.toString());
 
         var responseMessage = chatserver.gen.Message.newBuilder()
                 .setMessageId(gptMsg.getMessageId())
@@ -276,7 +163,7 @@ public class Chat {
         var lastResponse = ChatResponseStream.newBuilder().setResponseMessage(responseMessage).build();
         responseObserver.onNext(lastResponse);
         final Message dbGptMsg = gptMsg;
-        voiceTransfer.finish((fileName)->{
+        voiceTransfer.finish((fileName) -> {
             dbGptMsg.setAudioUrl(fileName);
             roomService.updateMessage(dbGptMsg);
 
@@ -286,6 +173,54 @@ public class Chat {
             responseObserver.onNext(text);
             responseObserver.onCompleted();
         });
+
+    }
+
+    private void summaryMemory(User user,
+                               Memory memory,
+                               UserCategory userCategory,
+                               List<Message> messageHistory,
+                               Message message,
+                               List<ChatMessage> messages,
+                               Room room) {
+        var role2Name = new HashMap<String, String>();
+        role2Name.put(ChatMessageRole.USER.value(), user.getNickName());
+        role2Name.put(ChatMessageRole.ASSISTANT.value(), userCategory.getUserCategoryName());
+        if (memory == null) {
+            if (messageHistory.size() >= MEMORY_INTERVAL) {
+                String newSummary = summaryMemory.run(parseMessageList(messages, role2Name), "",
+                        messageHistory.get(messageHistory.size() - 1).getMessageId());
+                Memory newMemory = new Memory();
+                newMemory.setMemo(newSummary);
+                newMemory.setUserId(room.getAiUserId());
+                newMemory.setCreatedTime(System.currentTimeMillis());
+                newMemory.setOtherUserId(user.getUserId());
+                contactService.addMemory(newMemory);
+            }
+        } else {
+            var lastMemoryId = memory.getCreateMessageId();
+            var skippedMessagesCnt = 0;
+            for (int i = messageHistory.size() - 1; i >= 0; i--) {
+                if (messageHistory.get(i).getMessageId() > lastMemoryId) {
+                    skippedMessagesCnt += 1;
+                } else {
+                    break;
+                }
+            }
+            if (skippedMessagesCnt >= MEMORY_INTERVAL) {
+                String newSummary = summaryMemory.run(parseMessageList(
+                                messages.subList(Math.max(0, messages.size() - skippedMessagesCnt), messages.size()),
+                                role2Name), memory.getMemo(),
+                        messageHistory.get(messageHistory.size() - 1).getMessageId());
+
+                Memory newMemory = new Memory();
+                newMemory.setMemo(newSummary);
+                newMemory.setUserId(room.getAiUserId());
+                newMemory.setCreatedTime(System.currentTimeMillis());
+                newMemory.setOtherUserId(user.getUserId());
+                contactService.addMemory(newMemory);
+            }
+        }
     }
 
     @Data
@@ -341,6 +276,18 @@ public class Chat {
         messages.forEach(m -> logger.info("[" + m.getRole() + "]:" + m.getContent()));
     }
 
+    private Message saveDBMessage(long roomId, long userId, String categoryName, String text) {
+        Message gptMsg = new Message();
+        gptMsg.setRoomId(roomId);
+        gptMsg.setAuthorUserType(EUserType.BOT);
+        gptMsg.setAuthorShowName(categoryName);
+        gptMsg.setAuthorUserId(userId);
+        gptMsg.setCreatedTime(System.currentTimeMillis());
+        gptMsg.setMsgType(EMsgType.TEXT_WITH_AUDIO);
+        gptMsg.setText(text);
+        return roomService.addMessage(gptMsg);
+    }
+
     private Message parseDbMessage(ChatRequest request) {
         Message newUserMsg = new Message();
         newUserMsg.setRoomId(request.getRoomId());
@@ -353,4 +300,15 @@ public class Chat {
         return newUserMsg;
     }
 
+    private List<String> parseMessageList(List<ChatMessage> messageList, Map<String, String> role2Name) {
+        var result = new ArrayList<String>();
+        for (ChatMessage message : messageList) {
+            if (message.getRole().equals(ChatMessageRole.USER.value())) {
+                result.add(role2Name.get(ChatMessageRole.USER.value()) + ":" + message.getContent());
+            } else if (message.getRole().equals(ChatMessageRole.ASSISTANT.value())) {
+                result.add(role2Name.get(ChatMessageRole.ASSISTANT.value()) + ":" + message.getContent());
+            }
+        }
+        return result;
+    }
 }
