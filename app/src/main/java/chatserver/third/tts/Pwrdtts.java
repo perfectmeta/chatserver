@@ -36,7 +36,7 @@ public class Pwrdtts {
     }
 
     public static byte[] tts(String txt) {
-        String url = String.format("http://%s/tts?speaker=yaohua&emotion=normal&text=%s", ServerPort, txt);
+        String url = String.format("http://%s/tts?speaker=yaohua&emotion=normal&return_type=mp3&text=%s", ServerPort, txt);
         Request request = new Request.Builder().url(url).build();
 
         try (Response response = XFYtts.client.newCall(request).execute()) {
