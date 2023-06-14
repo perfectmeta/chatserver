@@ -9,3 +9,4 @@ build
 /app/key.properties
 static
 /.jpb
+/app/tts.wav

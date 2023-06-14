@@ -1,5 +1,6 @@
 package chatserver.logic.voice;
 
+import chatserver.third.tts.Pwrdtts;
 import chatserver.third.tts.XFYtts;
 import chatserver.util.Digest;
 import com.google.common.base.Strings;
@@ -36,14 +37,16 @@ public class VoiceTransfer {
     private StringBuilder tempFragment;
     private Status status;
     private Consumer<String> finishCallback;
+    private boolean isUsePwrdtts;
 
-    public VoiceTransfer(BiConsumer<byte[], Boolean> callBack, String resourcePath) {
+    public VoiceTransfer(BiConsumer<byte[], Boolean> callBack, String resourcePath, boolean isUsePwrdtts) {
         this.callBack = callBack;
         this.queue = new LinkedBlockingDeque<>();
         this.status = Status.READY;
         this.tempFragment = new StringBuilder();
         this.byteBuffer = ByteBuffer.allocate(1024 * 1024);
         this.resourcePath = resourcePath;
+        this.isUsePwrdtts = isUsePwrdtts;
     }
 
     public void update(String newMessage) {
@@ -71,17 +74,30 @@ public class VoiceTransfer {
                     if (Strings.isNullOrEmpty(content)) {
                         continue;
                     }
-                    try (var audioStream = XFYtts.makeSession(content)) {
-                        byte[] audio = audioStream.readAllBytes();
+
+                    if (isUsePwrdtts){
+                        byte[] audio = Pwrdtts.tts(content);
                         byteBuffer.put(audio);
                         boolean finished = status == Status.FINISHED && queue.isEmpty();
                         callBack.accept(audio, finished);
                         if (finished) {
                             break;
                         }
-                    } catch (IOException e) {
-                        throw new RuntimeException(e);
+
+                    }else{
+                        try (var audioStream = XFYtts.makeSession(content)) {
+                            byte[] audio = audioStream.readAllBytes();
+                            byteBuffer.put(audio);
+                            boolean finished = status == Status.FINISHED && queue.isEmpty();
+                            callBack.accept(audio, finished);
+                            if (finished) {
+                                break;
+                            }
+                        } catch (IOException e) {
+                            throw new RuntimeException(e);
+                        }
                     }
+
                 }
                 byteBuffer.flip();
                 logger.info("saving TTS");

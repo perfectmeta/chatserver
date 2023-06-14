@@ -74,7 +74,7 @@ public class Chat {
                     .setAudio(ByteString.copyFrom(data))
                     .build();
             responseObserver.onNext(audioResponse);
-        }, resourcePath);
+        }, resourcePath, false);
 
         chatserver.gen.Message.Builder rr = chatserver.gen.Message.newBuilder()
                 .setMessageId(newUserMsg.getMessageId())
