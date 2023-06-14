@@ -2,6 +2,7 @@ package chatserver.logic;
 
 import chatserver.gen.GetMemoryRequest;
 import chatserver.gen.Memory;
+import chatserver.gen.MemoryList;
 import chatserver.service.ContactService;
 import io.grpc.stub.StreamObserver;
 import org.springframework.stereotype.Component;
@@ -17,16 +18,16 @@ public class GetMemory {
         this.contactService = contactService;
     }
 
-    public void run(GetMemoryRequest request, StreamObserver<Memory> responseObserver) {
+    public void run(GetMemoryRequest request, StreamObserver<MemoryList> responseObserver) {
         var userId = request.getUserId();
         var otherUserId = request.getOtherUserId();
 
         var memories = contactService.getAllMemory(userId, otherUserId);
-        for (var m : memories) {
-            responseObserver.onNext(parseMemoryFromDb(m));
-        }
+        var memoryListBuilder = MemoryList.newBuilder();
+        memories.stream().map(GetMemory::parseMemoryFromDb).forEach(memoryListBuilder::addMemoryList);
+        responseObserver.onNext(memoryListBuilder.build());
         responseObserver.onCompleted();
-        logger.info("get memory finised");
+        logger.info("get memory finised, size " + memories.size());
     }
 
     public static Memory parseMemoryFromDb(chatserver.entity.Memory dbMemory) {

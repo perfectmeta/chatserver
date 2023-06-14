@@ -129,6 +129,16 @@ public final class Chat {
   static final 
     com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
       internal_static_DeleteContactResponse_fieldAccessorTable;
+  static final com.google.protobuf.Descriptors.Descriptor
+    internal_static_MessageList_descriptor;
+  static final 
+    com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
+      internal_static_MessageList_fieldAccessorTable;
+  static final com.google.protobuf.Descriptors.Descriptor
+    internal_static_MemoryList_descriptor;
+  static final 
+    com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
+      internal_static_MemoryList_fieldAccessorTable;
 
   public static com.google.protobuf.Descriptors.FileDescriptor
       getDescriptor() {
@@ -186,23 +196,25 @@ public final class Chat {
       "\022\016\n\006userId\030\001 \001(\003\"1\n\034EstablishContactWith" +
       "Response\022\021\n\tcontactId\030\001 \001(\003\"&\n\024DeleteCon" +
       "tactRequest\022\016\n\006userId\030\001 \001(\003\"(\n\025DeleteCon" +
-      "tactResponse\022\017\n\007errCode\030\001 \001(\003*\036\n\010UserTyp" +
-      "e\022\t\n\005HUMAN\020\000\022\007\n\003BOT\020\001*S\n\007MsgType\022\023\n\017AUDI" +
-      "O_WITH_TEXT\020\000\022\023\n\017TEXT_WITH_AUDIO\020\001\022\010\n\004TE" +
-      "XT\020\002\022\t\n\005IMAGE\020\003\022\t\n\005VIDEO\020\0042\306\003\n\013ChatServi" +
-      "ce\022*\n\006Signup\022\r.RegisterInfo\032\021.RegisterFe" +
-      "edback\022\037\n\013GetSelfInfo\022\006.Hello\032\010.Contact\022" +
-      "$\n\rGetRoomStream\022\006.Hello\032\t.RoomInfo0\001\022&\n" +
-      "\020GetContactStream\022\006.Hello\032\010.Contact0\001\022)\n" +
-      "\023GetNewMessageStream\022\006.Hello\032\010.Message0\001" +
-      "\022*\n\tEnterRoom\022\021.EnterRoomRequest\032\010.Messa" +
-      "ge0\001\0220\n\017SpeechRecognize\022\014.AudioStream\032\013." +
-      "TextStream(\0010\001\022+\n\004Chat\022\014.ChatRequest\032\023.C" +
-      "hatResponseStream0\001\022)\n\tGetMemory\022\021.GetMe" +
-      "moryRequest\032\007.Memory0\001\022;\n\014DeleteMemory\022\024" +
-      ".DeleteMemoryRequest\032\025.DeleteMemoryRespo" +
-      "nseB\035\n\016chatserver.genP\001\252\002\010Chat.Genb\006prot" +
-      "o3"
+      "tactResponse\022\017\n\007errCode\030\001 \001(\003\",\n\013Message" +
+      "List\022\035\n\013messageList\030\001 \003(\0132\010.Message\")\n\nM" +
+      "emoryList\022\033\n\nmemoryList\030\001 \003(\0132\007.Memory*\036" +
+      "\n\010UserType\022\t\n\005HUMAN\020\000\022\007\n\003BOT\020\001*S\n\007MsgTyp" +
+      "e\022\023\n\017AUDIO_WITH_TEXT\020\000\022\023\n\017TEXT_WITH_AUDI" +
+      "O\020\001\022\010\n\004TEXT\020\002\022\t\n\005IMAGE\020\003\022\t\n\005VIDEO\020\0042\312\003\n\013" +
+      "ChatService\022*\n\006Signup\022\r.RegisterInfo\032\021.R" +
+      "egisterFeedback\022\037\n\013GetSelfInfo\022\006.Hello\032\010" +
+      ".Contact\022$\n\rGetRoomStream\022\006.Hello\032\t.Room" +
+      "Info0\001\022&\n\020GetContactStream\022\006.Hello\032\010.Con" +
+      "tact0\001\022)\n\023GetNewMessageStream\022\006.Hello\032\010." +
+      "Message0\001\022,\n\tEnterRoom\022\021.EnterRoomReques" +
+      "t\032\014.MessageList\0220\n\017SpeechRecognize\022\014.Aud" +
+      "ioStream\032\013.TextStream(\0010\001\022+\n\004Chat\022\014.Chat" +
+      "Request\032\023.ChatResponseStream0\001\022+\n\tGetMem" +
+      "ory\022\021.GetMemoryRequest\032\013.MemoryList\022;\n\014D" +
+      "eleteMemory\022\024.DeleteMemoryRequest\032\025.Dele" +
+      "teMemoryResponseB\035\n\016chatserver.genP\001\252\002\010C" +
+      "hat.Genb\006proto3"
     };
     descriptor = com.google.protobuf.Descriptors.FileDescriptor
       .internalBuildGeneratedFileFrom(descriptorData,
@@ -346,6 +358,18 @@ public final class Chat {
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_DeleteContactResponse_descriptor,
         new java.lang.String[] { "ErrCode", });
+    internal_static_MessageList_descriptor =
+      getDescriptor().getMessageTypes().get(23);
+    internal_static_MessageList_fieldAccessorTable = new
+      com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
+        internal_static_MessageList_descriptor,
+        new java.lang.String[] { "MessageList", });
+    internal_static_MemoryList_descriptor =
+      getDescriptor().getMessageTypes().get(24);
+    internal_static_MemoryList_fieldAccessorTable = new
+      com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
+        internal_static_MemoryList_descriptor,
+        new java.lang.String[] { "MemoryList", });
   }
 
   // @@protoc_insertion_point(outer_class_scope)

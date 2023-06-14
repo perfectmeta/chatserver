@@ -62,7 +62,7 @@ public class ChatService extends ChatServiceGrpc.ChatServiceImplBase {
     }
 
     @Override
-    public void enterRoom(EnterRoomRequest request, StreamObserver<Message> responseObserver) {
+    public void enterRoom(EnterRoomRequest request, StreamObserver<MessageList> responseObserver) {
         enterRoom.run(request, responseObserver);
     }
 
@@ -82,7 +82,7 @@ public class ChatService extends ChatServiceGrpc.ChatServiceImplBase {
     }
 
     @Override
-    public void getMemory(GetMemoryRequest request, StreamObserver<Memory> responseObserver) {
+    public void getMemory(GetMemoryRequest request, StreamObserver<MemoryList> responseObserver) {
         getMemory.run(request, responseObserver);
     }
 

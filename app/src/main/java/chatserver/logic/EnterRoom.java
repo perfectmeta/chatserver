@@ -3,10 +3,9 @@ package chatserver.logic;
 import chatserver.entity.Room;
 import chatserver.entity.User;
 import chatserver.gen.EnterRoomRequest;
-import chatserver.gen.Message;
+import chatserver.gen.MessageList;
 import chatserver.service.RoomService;
 import io.grpc.stub.StreamObserver;
-import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -24,7 +23,7 @@ public class EnterRoom {
         this.roomService = roomService;
     }
 
-    public void run(EnterRoomRequest request, StreamObserver<Message> responseObserver) {
+    public void run(EnterRoomRequest request, StreamObserver<MessageList> responseObserver) {
         Room room = roomService.findRoomById(request.getRoomId());
         User user = AuthTokenInterceptor.USER.get();
 
@@ -37,14 +36,13 @@ public class EnterRoom {
         List<chatserver.entity.Message> messageHistory =
                 roomService.getMessageHistorySince(request.getRoomId(), request.getLastMessageId());
 
-        for (chatserver.entity.Message message : messageHistory) {
-            Message msg = Msg.fromDb(message);
-            responseObserver.onNext(msg);
-        }
+        var messageListBuilder = MessageList.newBuilder();
+        messageHistory.stream().map(Msg::fromDb).forEach(messageListBuilder::addMessageList);
+        responseObserver.onNext(messageListBuilder.build());
         responseObserver.onCompleted();
 
-        //FIXME 进入房间后，最新的消息应该更新到最新了, 当前阶段，先注释掉这个，让每次都能获取完整的消息列表吧
-        //room.setLastMessageId(roomService.getRoomMaxMessageId(room.getRoomId()));
-        //roomService.upsertRoom(room);
+        // FIXME 进入房间后，最新的消息应该更新到最新了, 当前阶段，先注释掉这个，让每次都能获取完整的消息列表吧
+        // room.setLastMessageId(roomService.getRoomMaxMessageId(room.getRoomId()));
+        // roomService.upsertRoom(room);
     }
 }

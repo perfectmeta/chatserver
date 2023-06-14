@@ -187,6 +187,14 @@ message DeleteContactResponse {
   int64 errCode = 1;
 }
 
+message MessageList {
+  repeated Message messageList = 1;
+}
+
+message MemoryList {
+  repeated Memory memoryList = 1;
+}
+
 //////////////////////////////////////
 
 service ChatService {
@@ -204,7 +212,7 @@ service ChatService {
 
   // 进入房间，发lastMessageId后，服务器同步给客户端这之后的消息
   // TODO: 好像不该有这个协议，本来就应该一登录就推送lastMessageId之后的消息
-  rpc EnterRoom(EnterRoomRequest) returns (stream Message);
+  rpc EnterRoom(EnterRoomRequest) returns (MessageList);
 
   // 流式语音识别，这个是不管接下来的chat的
   rpc SpeechRecognize(stream AudioStream) returns (stream TextStream);
@@ -214,7 +222,7 @@ service ChatService {
 
 
   // 取记忆，会complete
-  rpc GetMemory(GetMemoryRequest) returns (stream Memory);
+  rpc GetMemory(GetMemoryRequest) returns (MemoryList);
 
   rpc DeleteMemory(DeleteMemoryRequest) returns (DeleteMemoryResponse);
 }

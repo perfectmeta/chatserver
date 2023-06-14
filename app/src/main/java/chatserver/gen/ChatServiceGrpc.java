@@ -171,28 +171,28 @@ public final class ChatServiceGrpc {
   }
 
   private static volatile io.grpc.MethodDescriptor<chatserver.gen.EnterRoomRequest,
-      chatserver.gen.Message> getEnterRoomMethod;
+      chatserver.gen.MessageList> getEnterRoomMethod;
 
   @io.grpc.stub.annotations.RpcMethod(
       fullMethodName = SERVICE_NAME + '/' + "EnterRoom",
       requestType = chatserver.gen.EnterRoomRequest.class,
-      responseType = chatserver.gen.Message.class,
-      methodType = io.grpc.MethodDescriptor.MethodType.SERVER_STREAMING)
+      responseType = chatserver.gen.MessageList.class,
+      methodType = io.grpc.MethodDescriptor.MethodType.UNARY)
   public static io.grpc.MethodDescriptor<chatserver.gen.EnterRoomRequest,
-      chatserver.gen.Message> getEnterRoomMethod() {
-    io.grpc.MethodDescriptor<chatserver.gen.EnterRoomRequest, chatserver.gen.Message> getEnterRoomMethod;
+      chatserver.gen.MessageList> getEnterRoomMethod() {
+    io.grpc.MethodDescriptor<chatserver.gen.EnterRoomRequest, chatserver.gen.MessageList> getEnterRoomMethod;
     if ((getEnterRoomMethod = ChatServiceGrpc.getEnterRoomMethod) == null) {
       synchronized (ChatServiceGrpc.class) {
         if ((getEnterRoomMethod = ChatServiceGrpc.getEnterRoomMethod) == null) {
           ChatServiceGrpc.getEnterRoomMethod = getEnterRoomMethod =
-              io.grpc.MethodDescriptor.<chatserver.gen.EnterRoomRequest, chatserver.gen.Message>newBuilder()
-              .setType(io.grpc.MethodDescriptor.MethodType.SERVER_STREAMING)
+              io.grpc.MethodDescriptor.<chatserver.gen.EnterRoomRequest, chatserver.gen.MessageList>newBuilder()
+              .setType(io.grpc.MethodDescriptor.MethodType.UNARY)
               .setFullMethodName(generateFullMethodName(SERVICE_NAME, "EnterRoom"))
               .setSampledToLocalTracing(true)
               .setRequestMarshaller(io.grpc.protobuf.ProtoUtils.marshaller(
                   chatserver.gen.EnterRoomRequest.getDefaultInstance()))
               .setResponseMarshaller(io.grpc.protobuf.ProtoUtils.marshaller(
-                  chatserver.gen.Message.getDefaultInstance()))
+                  chatserver.gen.MessageList.getDefaultInstance()))
               .setSchemaDescriptor(new ChatServiceMethodDescriptorSupplier("EnterRoom"))
               .build();
         }
@@ -264,28 +264,28 @@ public final class ChatServiceGrpc {
   }
 
   private static volatile io.grpc.MethodDescriptor<chatserver.gen.GetMemoryRequest,
-      chatserver.gen.Memory> getGetMemoryMethod;
+      chatserver.gen.MemoryList> getGetMemoryMethod;
 
   @io.grpc.stub.annotations.RpcMethod(
       fullMethodName = SERVICE_NAME + '/' + "GetMemory",
       requestType = chatserver.gen.GetMemoryRequest.class,
-      responseType = chatserver.gen.Memory.class,
-      methodType = io.grpc.MethodDescriptor.MethodType.SERVER_STREAMING)
+      responseType = chatserver.gen.MemoryList.class,
+      methodType = io.grpc.MethodDescriptor.MethodType.UNARY)
   public static io.grpc.MethodDescriptor<chatserver.gen.GetMemoryRequest,
-      chatserver.gen.Memory> getGetMemoryMethod() {
-    io.grpc.MethodDescriptor<chatserver.gen.GetMemoryRequest, chatserver.gen.Memory> getGetMemoryMethod;
+      chatserver.gen.MemoryList> getGetMemoryMethod() {
+    io.grpc.MethodDescriptor<chatserver.gen.GetMemoryRequest, chatserver.gen.MemoryList> getGetMemoryMethod;
     if ((getGetMemoryMethod = ChatServiceGrpc.getGetMemoryMethod) == null) {
       synchronized (ChatServiceGrpc.class) {
         if ((getGetMemoryMethod = ChatServiceGrpc.getGetMemoryMethod) == null) {
           ChatServiceGrpc.getGetMemoryMethod = getGetMemoryMethod =
-              io.grpc.MethodDescriptor.<chatserver.gen.GetMemoryRequest, chatserver.gen.Memory>newBuilder()
-              .setType(io.grpc.MethodDescriptor.MethodType.SERVER_STREAMING)
+              io.grpc.MethodDescriptor.<chatserver.gen.GetMemoryRequest, chatserver.gen.MemoryList>newBuilder()
+              .setType(io.grpc.MethodDescriptor.MethodType.UNARY)
               .setFullMethodName(generateFullMethodName(SERVICE_NAME, "GetMemory"))
               .setSampledToLocalTracing(true)
               .setRequestMarshaller(io.grpc.protobuf.ProtoUtils.marshaller(
                   chatserver.gen.GetMemoryRequest.getDefaultInstance()))
               .setResponseMarshaller(io.grpc.protobuf.ProtoUtils.marshaller(
-                  chatserver.gen.Memory.getDefaultInstance()))
+                  chatserver.gen.MemoryList.getDefaultInstance()))
               .setSchemaDescriptor(new ChatServiceMethodDescriptorSupplier("GetMemory"))
               .build();
         }
@@ -428,7 +428,7 @@ public final class ChatServiceGrpc {
      * </pre>
      */
     default void enterRoom(chatserver.gen.EnterRoomRequest request,
-        io.grpc.stub.StreamObserver<chatserver.gen.Message> responseObserver) {
+        io.grpc.stub.StreamObserver<chatserver.gen.MessageList> responseObserver) {
       io.grpc.stub.ServerCalls.asyncUnimplementedUnaryCall(getEnterRoomMethod(), responseObserver);
     }
 
@@ -458,7 +458,7 @@ public final class ChatServiceGrpc {
      * </pre>
      */
     default void getMemory(chatserver.gen.GetMemoryRequest request,
-        io.grpc.stub.StreamObserver<chatserver.gen.Memory> responseObserver) {
+        io.grpc.stub.StreamObserver<chatserver.gen.MemoryList> responseObserver) {
       io.grpc.stub.ServerCalls.asyncUnimplementedUnaryCall(getGetMemoryMethod(), responseObserver);
     }
 
@@ -557,8 +557,8 @@ public final class ChatServiceGrpc {
      * </pre>
      */
     public void enterRoom(chatserver.gen.EnterRoomRequest request,
-        io.grpc.stub.StreamObserver<chatserver.gen.Message> responseObserver) {
-      io.grpc.stub.ClientCalls.asyncServerStreamingCall(
+        io.grpc.stub.StreamObserver<chatserver.gen.MessageList> responseObserver) {
+      io.grpc.stub.ClientCalls.asyncUnaryCall(
           getChannel().newCall(getEnterRoomMethod(), getCallOptions()), request, responseObserver);
     }
 
@@ -590,8 +590,8 @@ public final class ChatServiceGrpc {
      * </pre>
      */
     public void getMemory(chatserver.gen.GetMemoryRequest request,
-        io.grpc.stub.StreamObserver<chatserver.gen.Memory> responseObserver) {
-      io.grpc.stub.ClientCalls.asyncServerStreamingCall(
+        io.grpc.stub.StreamObserver<chatserver.gen.MemoryList> responseObserver) {
+      io.grpc.stub.ClientCalls.asyncUnaryCall(
           getChannel().newCall(getGetMemoryMethod(), getCallOptions()), request, responseObserver);
     }
 
@@ -677,9 +677,8 @@ public final class ChatServiceGrpc {
      * TODO: 好像不该有这个协议，本来就应该一登录就推送lastMessageId之后的消息
      * </pre>
      */
-    public java.util.Iterator<chatserver.gen.Message> enterRoom(
-        chatserver.gen.EnterRoomRequest request) {
-      return io.grpc.stub.ClientCalls.blockingServerStreamingCall(
+    public chatserver.gen.MessageList enterRoom(chatserver.gen.EnterRoomRequest request) {
+      return io.grpc.stub.ClientCalls.blockingUnaryCall(
           getChannel(), getEnterRoomMethod(), getCallOptions(), request);
     }
 
@@ -699,9 +698,8 @@ public final class ChatServiceGrpc {
      * 取记忆，会complete
      * </pre>
      */
-    public java.util.Iterator<chatserver.gen.Memory> getMemory(
-        chatserver.gen.GetMemoryRequest request) {
-      return io.grpc.stub.ClientCalls.blockingServerStreamingCall(
+    public chatserver.gen.MemoryList getMemory(chatserver.gen.GetMemoryRequest request) {
+      return io.grpc.stub.ClientCalls.blockingUnaryCall(
           getChannel(), getGetMemoryMethod(), getCallOptions(), request);
     }
 
@@ -750,6 +748,29 @@ public final class ChatServiceGrpc {
         chatserver.gen.Hello request) {
       return io.grpc.stub.ClientCalls.futureUnaryCall(
           getChannel().newCall(getGetSelfInfoMethod(), getCallOptions()), request);
+    }
+
+    /**
+     * <pre>
+     * 进入房间，发lastMessageId后，服务器同步给客户端这之后的消息
+     * TODO: 好像不该有这个协议，本来就应该一登录就推送lastMessageId之后的消息
+     * </pre>
+     */
+    public com.google.common.util.concurrent.ListenableFuture<chatserver.gen.MessageList> enterRoom(
+        chatserver.gen.EnterRoomRequest request) {
+      return io.grpc.stub.ClientCalls.futureUnaryCall(
+          getChannel().newCall(getEnterRoomMethod(), getCallOptions()), request);
+    }
+
+    /**
+     * <pre>
+     * 取记忆，会complete
+     * </pre>
+     */
+    public com.google.common.util.concurrent.ListenableFuture<chatserver.gen.MemoryList> getMemory(
+        chatserver.gen.GetMemoryRequest request) {
+      return io.grpc.stub.ClientCalls.futureUnaryCall(
+          getChannel().newCall(getGetMemoryMethod(), getCallOptions()), request);
     }
 
     /**
@@ -811,7 +832,7 @@ public final class ChatServiceGrpc {
           break;
         case METHODID_ENTER_ROOM:
           serviceImpl.enterRoom((chatserver.gen.EnterRoomRequest) request,
-              (io.grpc.stub.StreamObserver<chatserver.gen.Message>) responseObserver);
+              (io.grpc.stub.StreamObserver<chatserver.gen.MessageList>) responseObserver);
           break;
         case METHODID_CHAT:
           serviceImpl.chat((chatserver.gen.ChatRequest) request,
@@ -819,7 +840,7 @@ public final class ChatServiceGrpc {
           break;
         case METHODID_GET_MEMORY:
           serviceImpl.getMemory((chatserver.gen.GetMemoryRequest) request,
-              (io.grpc.stub.StreamObserver<chatserver.gen.Memory>) responseObserver);
+              (io.grpc.stub.StreamObserver<chatserver.gen.MemoryList>) responseObserver);
           break;
         case METHODID_DELETE_MEMORY:
           serviceImpl.deleteMemory((chatserver.gen.DeleteMemoryRequest) request,
@@ -883,10 +904,10 @@ public final class ChatServiceGrpc {
                 service, METHODID_GET_NEW_MESSAGE_STREAM)))
         .addMethod(
           getEnterRoomMethod(),
-          io.grpc.stub.ServerCalls.asyncServerStreamingCall(
+          io.grpc.stub.ServerCalls.asyncUnaryCall(
             new MethodHandlers<
               chatserver.gen.EnterRoomRequest,
-              chatserver.gen.Message>(
+              chatserver.gen.MessageList>(
                 service, METHODID_ENTER_ROOM)))
         .addMethod(
           getSpeechRecognizeMethod(),
@@ -904,10 +925,10 @@ public final class ChatServiceGrpc {
                 service, METHODID_CHAT)))
         .addMethod(
           getGetMemoryMethod(),
-          io.grpc.stub.ServerCalls.asyncServerStreamingCall(
+          io.grpc.stub.ServerCalls.asyncUnaryCall(
             new MethodHandlers<
               chatserver.gen.GetMemoryRequest,
-              chatserver.gen.Memory>(
+              chatserver.gen.MemoryList>(
                 service, METHODID_GET_MEMORY)))
         .addMethod(
           getDeleteMemoryMethod(),
