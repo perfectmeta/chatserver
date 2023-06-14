@@ -52,7 +52,7 @@ public class GetRoomStream {
             var room = makeRoom(character, user);
             if (room != null) {
                 userRooms.add(room);
-                fillFirstMessage(room.getRoomId(), character.getUserCategoryName(), user.getNickName());
+                fillFirstMessage(room.getRoomId(), room.getAiUserId(), character.getUserCategoryName(), user.getNickName());
             }
         }
     }
@@ -72,11 +72,12 @@ public class GetRoomStream {
         return roomService.upsertRoom(newRoom);
     }
 
-    private void fillFirstMessage(long roomId, String userCategoryName, String nickName) {
+    private void fillFirstMessage(long roomId, long userId, String userCategoryName, String nickName) {
         Message message = new Message();
         message.setRoomId(roomId);
         message.setCreatedTime(System.currentTimeMillis());
         message.setMsgType(EMsgType.TEXT);
+        message.setAuthorUserId(userId);
         message.setAuthorShowName(nickName);
         message.setAuthorUserType(EUserType.BOT);
         message.setText("你好呀%s, 我是%s，很高兴认识你!".formatted(nickName, userCategoryName));
