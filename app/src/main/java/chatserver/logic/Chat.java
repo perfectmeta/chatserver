@@ -68,13 +68,11 @@ public class Chat {
         var messageSeq = request.getSeq();
 
         VoiceTransfer voiceTransfer = new VoiceTransfer((data, finished) -> {
-            chatserver.gen.Message.Builder r = chatserver.gen.Message.newBuilder()
-                    .setSeq(messageSeq);
             ChatResponseStream audioResponse = ChatResponseStream.newBuilder()
                     .setAudio(ByteString.copyFrom(data))
                     .build();
             responseObserver.onNext(audioResponse);
-        }, resourcePath, false);
+        }, resourcePath, true);
 
         chatserver.gen.Message.Builder rr = chatserver.gen.Message.newBuilder()
                 .setMessageId(newUserMsg.getMessageId())

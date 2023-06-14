@@ -77,13 +77,14 @@ public class VoiceTransfer {
 
                     if (isUsePwrdtts){
                         byte[] audio = Pwrdtts.tts(content);
-                        byteBuffer.put(audio);
                         boolean finished = status == Status.FINISHED && queue.isEmpty();
-                        callBack.accept(audio, finished);
+                        if (audio != null) {
+                            byteBuffer.put(audio);
+                            callBack.accept(audio, finished);
+                        }
                         if (finished) {
                             break;
                         }
-
                     }else{
                         try (var audioStream = XFYtts.makeSession(content)) {
                             byte[] audio = audioStream.readAllBytes();
