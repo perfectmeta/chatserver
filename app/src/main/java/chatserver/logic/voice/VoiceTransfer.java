@@ -75,7 +75,7 @@ public class VoiceTransfer {
                         continue;
                     }
 
-                    if (isUsePwrdtts){
+                    if (isUsePwrdtts) {
                         byte[] audio = Pwrdtts.tts(content);
                         boolean finished = status == Status.FINISHED && queue.isEmpty();
                         if (audio != null) {
@@ -85,7 +85,7 @@ public class VoiceTransfer {
                         if (finished) {
                             break;
                         }
-                    }else{
+                    } else {
                         try (var audioStream = XFYtts.makeSession(content)) {
                             byte[] audio = audioStream.readAllBytes();
                             byteBuffer.put(audio);

@@ -31,7 +31,7 @@ public class RemoteTest {
         // var channel = Grpc.newChannelBuilder("localhost:9080", InsecureChannelCredentials.create()).build();
         stub = ChatServiceGrpc.newStub(channel);
         Metadata metadata = new Metadata();
-        metadata.put(Metadata.Key.of("auth_token", Metadata.ASCII_STRING_MARSHALLER), "3");
+        metadata.put(Metadata.Key.of("auth_token", Metadata.ASCII_STRING_MARSHALLER), "44");
         stub = stub.withInterceptors(MetadataUtils.newAttachHeadersInterceptor(metadata));
     }
 
@@ -102,7 +102,7 @@ public class RemoteTest {
 
     @Test
     void enterRoomTest() throws InterruptedException {
-        var roomId = 1;
+        var roomId = 19;
         var lastMessageId = 0;
         var enterRoomRequest = EnterRoomRequest.newBuilder()
                 .setRoomId(roomId)

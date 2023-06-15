@@ -15,7 +15,8 @@ public class Pwrdtts {
 
     public static final Logger logger = Logger.getLogger(Pwrdtts.class.getName());
 
-    public static String ServerPort = "10.6.12.163:5002";
+    // public static String ServerPort = "10.6.12.163:5002";
+    public static String ttsHost = "111.207.225.93:4000/yaohua";
 
     /*
     {
@@ -36,7 +37,7 @@ public class Pwrdtts {
     }
 
     public static byte[] tts(String txt) {
-        String url = String.format("http://%s/tts?speaker=yaohua&emotion=normal&return_type=mp3&text=%s", ServerPort, txt);
+        String url = String.format("http://%s/tts?speaker=yaohua&emotion=normal&return_type=mp3&text=%s", ttsHost, txt);
         Request request = new Request.Builder().url(url).build();
 
         try (Response response = XFYtts.client.newCall(request).execute()) {

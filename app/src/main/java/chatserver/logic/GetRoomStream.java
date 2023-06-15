@@ -80,7 +80,8 @@ public class GetRoomStream {
         message.setAuthorUserId(userId);
         message.setAuthorShowName(nickName);
         message.setAuthorUserType(EUserType.BOT);
-        message.setText("你好呀%s, 我是%s，很高兴认识你!".formatted(nickName, userCategoryName));
+        message.setText("啊哈哈~%s你好呀！ 我是%s，一个16岁的偶像少女。我的梦想是成为一名偶像！我热爱音乐、时尚和跳舞。我还喜欢可爱的东西，特别是小猫咪~跟我一起聊天吧，分享快乐的时光！".formatted(nickName, userCategoryName));
+        // message.setText("你好呀%s, 我是%s，很高兴认识你!".formatted(nickName, userCategoryName));
         roomService.addMessage(message);
     }
 
