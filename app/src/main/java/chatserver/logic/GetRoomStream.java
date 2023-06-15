@@ -17,6 +17,10 @@ import java.util.logging.Logger;
 @Component
 public class GetRoomStream {
     private static final Logger logger = Logger.getLogger(GetRoomStream.class.getName());
+    private static final String greetings =
+            "%s 你好！ 我是%s！是一个16岁的偶像少女。我的梦想是成为一名偶像！我非常热爱音乐、还喜欢时尚和跳舞。" +
+                    "我还喜欢可爱的东西，特别是小猫咪~快跟我一起聊天吧，分享彼此快乐的时光！";
+
 
     private final RoomService roomService;
     private final UserCategoryService userCategoryService;
@@ -28,7 +32,7 @@ public class GetRoomStream {
     }
 
     private boolean containRoom(long aiCharacter, Collection<Room> rooms) {
-        return rooms.stream().mapToLong(Room::getAiUserId).anyMatch(r->r==aiCharacter);
+        return rooms.stream().mapToLong(Room::getAiUserId).anyMatch(r -> r == aiCharacter);
     }
 
     public void run(Hello ignoredRequest, StreamObserver<RoomInfo> responseObserver) {
@@ -80,8 +84,7 @@ public class GetRoomStream {
         message.setAuthorUserId(userId);
         message.setAuthorShowName(nickName);
         message.setAuthorUserType(EUserType.BOT);
-        message.setText("啊哈哈~%s你好呀！ 我是%s，一个16岁的偶像少女。我的梦想是成为一名偶像！我热爱音乐、时尚和跳舞。我还喜欢可爱的东西，特别是小猫咪~跟我一起聊天吧，分享快乐的时光！".formatted(nickName, userCategoryName));
-        // message.setText("你好呀%s, 我是%s，很高兴认识你!".formatted(nickName, userCategoryName));
+        message.setText(greetings.formatted(nickName, userCategoryName));
         roomService.addMessage(message);
     }
 
