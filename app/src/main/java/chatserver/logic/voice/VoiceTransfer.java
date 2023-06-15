@@ -7,13 +7,9 @@ import com.google.common.base.Strings;
 
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.nio.ByteBuffer;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.Queue;
-import java.util.Set;
+import java.util.*;
 import java.util.concurrent.LinkedBlockingDeque;
 import java.util.function.BiConsumer;
 import java.util.function.Consumer;
@@ -32,25 +28,26 @@ public class VoiceTransfer {
     private static final Set<String> spliters = new HashSet<>(Arrays.asList(_spliters));
     private final String resourcePath;
     private final BiConsumer<byte[], Boolean> callBack;
-    private final Queue<String> queue;
-    private final ByteBuffer byteBuffer;
+    private final Queue<String> taskQueue;
+    private final List<String> rawTexts;
     private StringBuilder tempFragment;
     private Status status;
     private Consumer<String> finishCallback;
-    private boolean isUsePwrdtts;
+    private final boolean isUsePwrdtts;
 
     public VoiceTransfer(BiConsumer<byte[], Boolean> callBack, String resourcePath, boolean isUsePwrdtts) {
         this.callBack = callBack;
-        this.queue = new LinkedBlockingDeque<>();
+        this.taskQueue = new LinkedBlockingDeque<>();
+        this.rawTexts = new ArrayList<>();
         this.status = Status.READY;
         this.tempFragment = new StringBuilder();
-        this.byteBuffer = ByteBuffer.allocate(1024 * 1024);
         this.resourcePath = resourcePath;
         this.isUsePwrdtts = isUsePwrdtts;
     }
 
     public void update(String newMessage) {
         int offset = 0;
+        rawTexts.add(newMessage);
         for (int i = 0; i < newMessage.length(); i++) {
             if (spliters.contains(newMessage.substring(i, i + 1))) {
                 tempFragment.append(newMessage, offset, i + 1);
@@ -69,40 +66,53 @@ public class VoiceTransfer {
         if (status == Status.READY) {
             status = Status.START;
             Thread.startVirtualThread(() -> {
-                while (status != Status.FINISHED || !queue.isEmpty()) {
-                    var content = queue.poll();
+                while (status != Status.FINISHED || !taskQueue.isEmpty()) {
+                    var content = taskQueue.poll();
                     if (Strings.isNullOrEmpty(content)) {
                         continue;
                     }
 
+                    var finished = status == Status.FINISHED && taskQueue.isEmpty();
                     if (isUsePwrdtts) {
                         byte[] audio = Pwrdtts.tts(content);
-                        boolean finished = status == Status.FINISHED && queue.isEmpty();
                         if (audio != null) {
-                            byteBuffer.put(audio);
                             callBack.accept(audio, finished);
                         }
-                        if (finished) {
-                            break;
-                        }
+
                     } else {
                         try (var audioStream = XFYtts.makeSession(content)) {
-                            byte[] audio = audioStream.readAllBytes();
-                            byteBuffer.put(audio);
-                            boolean finished = status == Status.FINISHED && queue.isEmpty();
-                            callBack.accept(audio, finished);
-                            if (finished) {
-                                break;
-                            }
+                            callBack.accept(audioStream.readAllBytes(), finished);
                         } catch (IOException e) {
                             throw new RuntimeException(e);
                         }
                     }
-
+                    logger.info("finishe ars task for content: " + content);
+                    if (finished) {
+                        break;
+                    }
                 }
-                byteBuffer.flip();
-                logger.info("saving TTS");
-                var fileName = saveTTS(byteBuffer.array(), 0, byteBuffer.limit());
+
+                var fullContent = String.join("", rawTexts);
+                byte[] audio = {};
+                if (isUsePwrdtts) {
+                    audio = Pwrdtts.tts(fullContent);
+                } else {
+                    try (var audioStream = XFYtts.makeSession(fullContent)) {
+                        audio = audioStream.readAllBytes();
+                    } catch (IOException e) {
+                        logger.warning(e.getMessage());
+                        e.printStackTrace();
+                        throw new RuntimeException(e);
+                    }
+                }
+
+                var fileName = "failed";
+                if (audio != null) {
+                    logger.info("saving TTS");
+                    fileName = saveTTS(audio);
+                } else {
+                    logger.warning("saving TTS failed since full content audio generate failed");
+                }
                 if (this.finishCallback != null) {
                     this.finishCallback.accept(fileName);
                 }
@@ -111,7 +121,7 @@ public class VoiceTransfer {
     }
 
     private void addTask(String content) {
-        queue.add(content);
+        taskQueue.add(content);
     }
 
     public void finish(Consumer<String> finishCallback) {
@@ -119,8 +129,8 @@ public class VoiceTransfer {
         this.finishCallback = finishCallback;
     }
 
-    private String saveTTS(byte[] allContent, int offset, int length) {
-        var fileName = length + "_" + Digest.calculateMD5(allContent, offset, length) + ".mp3";
+    private String saveTTS(byte[] allContent) {
+        var fileName = allContent.length + "_" + Digest.calculateMD5(allContent) + ".mp3";
         Path file;
         try {
             //这一步可能文件已经存在了，就不需要再写入文件，直接返回文件名即可
@@ -131,7 +141,7 @@ public class VoiceTransfer {
             return fileName;
         }
         try (var fout = new FileOutputStream(file.toFile())) {
-            fout.write(allContent, offset, length);
+            fout.write(allContent);
         } catch (IOException e) {
             e.printStackTrace();
         }
