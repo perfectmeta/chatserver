@@ -36,6 +36,7 @@ public class Chat {
     private final UserCategoryService userCategoryService;
     private final ContactService contactService;
     private final SummaryMemory summaryMemory;
+    private final OpenAiService service = makeOpenAiService();
     static final String resourcePath = !Strings.isNullOrEmpty(System.getenv("static_dir")) ?
             System.getenv("static_dir") : ".";
 
@@ -61,7 +62,6 @@ public class Chat {
         logger.info("AI UserId is " + room.getAiUserId());
         UserCategory userCategory = userCategoryService.findUserCategoryByUserId(room.getAiUserId());
         var prompt = userCategory.getPrompt();
-        OpenAiService service = makeOpenAiService();
         List<Message> messageHistory = roomService.getMessageHistory(request.getRoomId());
 
         var newUserMsg = roomService.addMessage(parseDbMessage(request));
