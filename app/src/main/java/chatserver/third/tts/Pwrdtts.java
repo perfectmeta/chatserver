@@ -1,7 +1,7 @@
 package chatserver.third.tts;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import io.grpc.Server;
+import com.google.common.base.Strings;
 import okhttp3.Request;
 import okhttp3.Response;
 
@@ -15,29 +15,25 @@ public class Pwrdtts {
 
     public static final Logger logger = Logger.getLogger(Pwrdtts.class.getName());
 
-    // public static String ServerPort = "10.6.12.163:5002";
-    public static String ttsHost = "111.207.225.93:4000/yaohua";
+    public static String ttsHost = "ip:port";
+    public static String speaker = "zhy";
 
-    /*
-    {
-     "code": 20000,
-     "message": "Success",
-     "text": "xxx",
-     "type":"wav",
-     "result":"Base64encode(audio_file)"
-     "dutaion":{'ce4':2,'shi4':3}
-     "emoji_status":20000
-     "emoji":[[1.1,1,2],
-              [2.2,2.3]]
+    static {
+        String envHost = System.getenv("pwrdtts_host");
+        if (!Strings.isNullOrEmpty(envHost)) {
+            ttsHost = envHost;
+        }
+        String envSpeaker = System.getenv("pwrdtts_speaker");
+        if (!Strings.isNullOrEmpty(envSpeaker)) {
+            speaker = envSpeaker;
+        }
     }
-    */
 
-    public record TTSResponse(int code, String message, String text, String type, String result) {
-
-    }
+    public record TTSResponse(int code, String message, String text, String type, String result) { }
 
     public static byte[] tts(String txt) {
-        String url = String.format("http://%s/tts?speaker=yaohua&emotion=normal&return_type=mp3&text=%s", ttsHost, txt);
+        String url = String.format("http://%s/%s/tts?speaker=%s&emotion=normal&return_type=mp3&text=%s",
+                ttsHost, speaker, speaker, txt);
         Request request = new Request.Builder().url(url).build();
 
         try (Response response = XFYtts.client.newCall(request).execute()) {
@@ -51,8 +47,7 @@ public class Pwrdtts {
             ObjectMapper mapper = new ObjectMapper();
             var res = mapper.readValue(body, TTSResponse.class);
             if (res.code() == 20000) {
-                byte[] result = Base64.getDecoder().decode(res.result);
-                return result;
+                return Base64.getDecoder().decode(res.result);
             } else {
                 logger.info("code = " + res.code());
                 return null;
