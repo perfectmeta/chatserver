@@ -93,7 +93,7 @@ public class VoiceTransfer {
                 }
 
                 var fullContent = String.join("", rawTexts);
-                byte[] audio = {};
+                byte[] audio;
                 if (isUsePwrdtts) {
                     audio = Pwrdtts.tts(fullContent);
                 } else {
