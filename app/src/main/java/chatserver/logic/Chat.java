@@ -64,6 +64,7 @@ public class Chat {
         var prompt = userCategory.getPrompt();
         OpenAiService service = makeOpenAiService();
         List<Message> messageHistory = roomService.getMessageHistory(request.getRoomId());
+        Collections.reverse(messageHistory);
 
         var newUserMsg = roomService.addMessage(parseDbMessage(request));
         var messageSeq = request.getSeq();

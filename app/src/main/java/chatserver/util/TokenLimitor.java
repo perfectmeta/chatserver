@@ -5,7 +5,6 @@ import com.knuddels.jtokkit.api.Encoding;
 import com.knuddels.jtokkit.api.EncodingRegistry;
 import com.knuddels.jtokkit.api.EncodingType;
 import com.theokanning.openai.completion.chat.ChatMessage;
-import com.theokanning.openai.completion.chat.ChatMessageRole;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -13,14 +12,13 @@ import java.util.List;
 
 public class TokenLimitor {
 
-    private static final String SYSTEM = ChatMessageRole.SYSTEM.value();
     private static final int ADDITIONAL_TOKEN_PER_MESSAGE = 5;
 
     public static int limit(List<ChatMessage> messages, int limit, int keep) {
         EncodingRegistry registry = Encodings.newDefaultEncodingRegistry();
         Encoding enc = registry.getEncoding(EncodingType.CL100K_BASE);
 
-        var tokenCnt = 0;
+        var tokenCnt = 3;
         var reverseResult = new ArrayList<ChatMessage>();
         var keepResult = new ArrayList<ChatMessage>();
 
