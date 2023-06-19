@@ -111,7 +111,8 @@ public class Chat {
         final ChatMessage ask = new ChatMessage(ChatMessageRole.USER.value(), requestText);
         messages.add(ask);
 
-        TokenLimitor.limit(messages, 4097);
+        var tokenCnt = TokenLimitor.limit(messages, 4097, 10);
+        logger.info("Chat use token " + tokenCnt);
 
         ChatCompletionRequest chatCompletionRequest = ChatCompletionRequest
                 .builder()
@@ -149,6 +150,7 @@ public class Chat {
 
         if (hasError[0]) {
             logger.warning("chat gpt returned error");
+            return;
         }
 
         Message gptMsg = saveDBMessage(request.getRoomId(),
