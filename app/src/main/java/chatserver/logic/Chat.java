@@ -8,6 +8,7 @@ import chatserver.logic.voice.VoiceTransfer;
 import chatserver.service.ContactService;
 import chatserver.service.RoomService;
 import chatserver.service.UserCategoryService;
+import chatserver.util.TokenLimitor;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.base.Strings;
@@ -109,6 +110,8 @@ public class Chat {
         }
         final ChatMessage ask = new ChatMessage(ChatMessageRole.USER.value(), requestText);
         messages.add(ask);
+
+        TokenLimitor.limit(messages, 4097);
 
         ChatCompletionRequest chatCompletionRequest = ChatCompletionRequest
                 .builder()

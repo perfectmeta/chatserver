@@ -27,11 +27,11 @@ public class RemoteTest {
     private static final Logger logger = Logger.getLogger(LoginTest.class.getName());
     @BeforeAll
     void init() {
-        var channel = Grpc.newChannelBuilder("ai.taohuayuaner.com:7080", InsecureChannelCredentials.create()).build();
-        // var channel = Grpc.newChannelBuilder("localhost:7080", InsecureChannelCredentials.create()).build();
+        // var channel = Grpc.newChannelBuilder("ai.taohuayuaner.com:7080", InsecureChannelCredentials.create()).build();
+        var channel = Grpc.newChannelBuilder("localhost:7080", InsecureChannelCredentials.create()).build();
         stub = ChatServiceGrpc.newStub(channel);
         Metadata metadata = new Metadata();
-        metadata.put(Metadata.Key.of("auth_token", Metadata.ASCII_STRING_MARSHALLER), "84");
+        metadata.put(Metadata.Key.of("auth_token", Metadata.ASCII_STRING_MARSHALLER), "2");
         stub = stub.withInterceptors(MetadataUtils.newAttachHeadersInterceptor(metadata));
     }
 
@@ -145,7 +145,7 @@ public class RemoteTest {
     @Test
     void sendMessageTest() throws InterruptedException {
         ChatRequest request = ChatRequest.newBuilder()
-                .setRoomId(38)
+                .setRoomId(1)
                 .setText("Hey, 你是AI吗?你有名字吗?")
                 .setSeq("aabb")
                 .setMsgType(MsgType.TEXT)
