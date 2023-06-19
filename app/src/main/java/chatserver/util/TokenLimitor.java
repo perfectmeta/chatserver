@@ -14,20 +14,19 @@ import java.util.List;
 public class TokenLimitor {
 
     private static final String SYSTEM = ChatMessageRole.SYSTEM.value();
+    private static final int ADDITIONAL_TOKEN_PER_MESSAGE = 5;
 
     public static int limit(List<ChatMessage> messages, int limit, int keep) {
         EncodingRegistry registry = Encodings.newDefaultEncodingRegistry();
         Encoding enc = registry.getEncoding(EncodingType.CL100K_BASE);
 
         var tokenCnt = 0;
-        ChatMessage system = null;
-        var prompts = new ArrayList<ChatMessage>();
         var reverseResult = new ArrayList<ChatMessage>();
         var keepResult = new ArrayList<ChatMessage>();
 
         for (int i = 0; i < Math.min(messages.size(), keep) ; i++) {
             var msg = messages.get(i);
-            tokenCnt += enc.encode(msg.getContent()).size();
+            tokenCnt += enc.encode(msg.getContent()).size() + ADDITIONAL_TOKEN_PER_MESSAGE;
             keepResult.add(msg);
         }
 
@@ -35,10 +34,10 @@ public class TokenLimitor {
         for (int i = remainMessages.size()-1; i >= 0; i--) {
             var msg = remainMessages.get(i);
             var coders = enc.encode(msg.getContent());
-            if (tokenCnt + coders.size() > limit) {
+            if (tokenCnt + coders.size() + ADDITIONAL_TOKEN_PER_MESSAGE > limit) {
                 break;
             }
-            tokenCnt += coders.size();
+            tokenCnt += coders.size() + ADDITIONAL_TOKEN_PER_MESSAGE;
             reverseResult.add(msg);
         }
 

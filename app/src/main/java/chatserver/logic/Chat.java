@@ -98,8 +98,8 @@ public class Chat {
             }
             var content = msg.getText();
             if (Strings.isNullOrEmpty(content)) {
-                content = "";
                 logger.warning("content is null " + msg.getMessageId());
+                continue;
             }
             ChatMessage cm = new ChatMessage(role, content);
             messages.add(cm);
