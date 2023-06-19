@@ -9,14 +9,12 @@ import com.google.common.base.Strings;
 import io.grpc.stub.StreamObserver;
 import org.springframework.stereotype.Component;
 
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.PipedInputStream;
-import java.io.PipedOutputStream;
+import java.io.*;
 import java.nio.ByteBuffer;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.concurrent.BlockingQueue;
+import java.util.concurrent.TimeUnit;
 import java.util.logging.Logger;
 
 @Component
@@ -26,6 +24,7 @@ public class SpeechRecognize {
             System.getenv("static_dir") : "./static";
 
     static class AudioBuffer {
+        private static final Logger logger = Logger.getLogger(AudioBuffer.class.getName());
         private final ByteBuffer bf;
         public AudioBuffer() {
             bf = ByteBuffer.allocate(1024*1024*8);
@@ -44,7 +43,10 @@ public class SpeechRecognize {
                     fout.write(bf.array(), 0, bf.limit());
                 }
             } catch (IOException e) {
-                e.printStackTrace();
+                if (!(e instanceof FileNotFoundException)) {
+                    e.printStackTrace();
+                    logger.warning(e.getMessage());
+                }
             }
             return fileName;
         }
@@ -65,9 +67,11 @@ public class SpeechRecognize {
         Thread.startVirtualThread(() -> {
             try {
                 while (true) {
-                    var o = blockingQueue.take();
-                    if (o instanceof StopSignal) {
-                        logger.warning("StopSignal received");
+                    var o = blockingQueue.poll(15, TimeUnit.SECONDS);
+                    if (o == null || o instanceof StopSignal) {
+                        if (o != null) {
+                            logger.warning("StopSignal received");
+                        }
                         break;
                     }
                     TextStream textStream = (TextStream) o;
@@ -76,15 +80,16 @@ public class SpeechRecognize {
                 }
                 var filePath = audioBuffer.save();
                 responseObserver.onNext(TextStream.newBuilder().setAudioUrl(filePath).build());
-                responseObserver.onCompleted();
-                logger.info("Sent response: finished");
+                logger.info("Sent response: finished url: " + filePath);
             }
             catch (InterruptedException e) {
                 throw new RuntimeException(e);
+            } finally {
+                responseObserver.onCompleted();
             }
         });
         return new StreamObserver<>() {
-            private final ByteBuffer audioContent = ByteBuffer.allocate(1024 * 1024);
+            private final ByteBuffer audioContent = ByteBuffer.allocate(1024 * 1024 * 8);
 
             @Override
             public void onNext(AudioStream value) {
@@ -109,7 +114,7 @@ public class SpeechRecognize {
                     t.printStackTrace();
                 } catch (IOException e) {
                     e.printStackTrace();
-                    throw new RuntimeException(e);
+                    logger.warning(t.getMessage());
                 }
             }
 
@@ -118,7 +123,8 @@ public class SpeechRecognize {
                 try {
                     out.close();
                 } catch (IOException e) {
-                    throw new RuntimeException(e);
+                    e.printStackTrace();
+                    logger.warning(e.getMessage());
                 }
                 logger.info("Recieved audio data finished");
             }

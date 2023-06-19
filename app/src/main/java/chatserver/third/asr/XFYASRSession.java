@@ -59,14 +59,14 @@ public class XFYASRSession extends org.java_websocket.client.WebSocketClient imp
                     send(requestContent);
                     // Thread.sleep(40);   //fixme 后面想个办法给去掉这个限制
                 }
+            } catch (IOException e) { // | InterruptedException e) {
+                logger.warning(e.getMessage());
+                e.printStackTrace();
+            } finally {
                 var lastRequest = makeEndRequest();
                 logger.info("content last: " + lastRequest);
                 send(lastRequest);
                 status = SessionStatus.WAITING_FOR_REMOTE;
-            } catch (IOException e) { // | InterruptedException e) {
-                logger.warning(e.getMessage());
-                e.printStackTrace();
-                throw new RuntimeException(e);
             }
         });
     }
@@ -83,7 +83,8 @@ public class XFYASRSession extends org.java_websocket.client.WebSocketClient imp
                 blockingQueue.add(new StopSignal());
             }
         } catch (IOException e) {
-            throw new RuntimeException(e);
+            e.printStackTrace();
+            logger.info(e.getMessage());
         }
     }
 
@@ -91,13 +92,13 @@ public class XFYASRSession extends org.java_websocket.client.WebSocketClient imp
     public void onClose(int code, String reason, boolean remote) {
         status = SessionStatus.FINISHED;
         logger.warning("onClose");
-        blockingQueue.add(new StopSignal());
     }
 
     @Override
     public void onError(Exception ex) {
         logger.warning("OnError:" + ex.getMessage());
         ex.printStackTrace();
+        blockingQueue.add(new StopSignal());
         close();
         status = SessionStatus.FINISHED;
     }
@@ -116,6 +117,8 @@ public class XFYASRSession extends org.java_websocket.client.WebSocketClient imp
         try {
             return om.writeValueAsString(builder.build());
         } catch (JsonProcessingException e) {
+            e.printStackTrace();
+            logger.warning(e.getMessage());
             throw new RuntimeException(e);
         }
     }
@@ -128,6 +131,8 @@ public class XFYASRSession extends org.java_websocket.client.WebSocketClient imp
         try {
             return om.writeValueAsString(builder.build());
         } catch (JsonProcessingException e) {
+            e.printStackTrace();
+            logger.warning(e.getMessage());
             throw new RuntimeException(e);
         }
     }
