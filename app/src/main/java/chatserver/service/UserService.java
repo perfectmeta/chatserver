@@ -36,6 +36,11 @@ public class UserService {  // 不抽象成接口，直接用，因为这里不�
         return users.findByUserId(userId);
     }
 
+    @Cacheable("userByUserId")
+    public List<User> findByUserId(List<Long> userIds) {
+        return users.findByUserIdIn(userIds);
+    }
+
     @Cacheable("userByPhone")
     public User findByPhone(String phone) {
         return users.findByPhone(phone);

@@ -1,7 +1,5 @@
 package chatserver.logic.voice;
 
-import chatserver.third.tts.Pwrdtts;
-import chatserver.third.tts.XFYtts;
 import chatserver.util.Digest;
 import com.google.common.base.Strings;
 
@@ -33,16 +31,16 @@ public class VoiceTransfer {
     private StringBuilder tempFragment;
     private Status status;
     private Consumer<String> finishCallback;
-    private final boolean isUsePwrdtts;
+    private final Speaker speaker;
 
-    public VoiceTransfer(BiConsumer<byte[], Boolean> callBack, String resourcePath, boolean isUsePwrdtts) {
+    public VoiceTransfer(BiConsumer<byte[], Boolean> callBack, String resourcePath, Speaker speaker) {
         this.callBack = callBack;
         this.taskQueue = new LinkedBlockingDeque<>();
         this.rawTexts = new ArrayList<>();
         this.status = Status.READY;
         this.tempFragment = new StringBuilder();
         this.resourcePath = resourcePath;
-        this.isUsePwrdtts = isUsePwrdtts;
+        this.speaker = speaker;
     }
 
     public void update(String newMessage) {
@@ -73,18 +71,9 @@ public class VoiceTransfer {
                     }
 
                     var finished = status == Status.FINISHED && taskQueue.isEmpty();
-                    if (isUsePwrdtts) {
-                        byte[] audio = Pwrdtts.tts(content);
-                        if (audio != null) {
-                            callBack.accept(audio, finished);
-                        }
-
-                    } else {
-                        try (var audioStream = XFYtts.makeSession(content)) {
-                            callBack.accept(audioStream.readAllBytes(), finished);
-                        } catch (IOException e) {
-                            throw new RuntimeException(e);
-                        }
+                    byte[] audio = speaker.getAudio(content);
+                    if (audio != null) {
+                        callBack.accept(audio, finished);
                     }
                     logger.info("finishe ars task for content: " + content);
                     if (finished) {
@@ -93,18 +82,7 @@ public class VoiceTransfer {
                 }
 
                 var fullContent = String.join("", rawTexts);
-                byte[] audio;
-                if (isUsePwrdtts) {
-                    audio = Pwrdtts.tts(fullContent);
-                } else {
-                    try (var audioStream = XFYtts.makeSession(fullContent)) {
-                        audio = audioStream.readAllBytes();
-                    } catch (IOException e) {
-                        logger.warning(e.getMessage());
-                        e.printStackTrace();
-                        throw new RuntimeException(e);
-                    }
-                }
+                byte[] audio = speaker.getAudio(fullContent);
 
                 var fileName = "failed";
                 if (audio != null) {

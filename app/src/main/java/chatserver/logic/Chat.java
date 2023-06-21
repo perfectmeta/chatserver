@@ -1,16 +1,18 @@
 package chatserver.logic;
 
+import chatserver.config.Config;
+import chatserver.config.Prompt;
+import chatserver.config.robot.Robot;
 import chatserver.entity.*;
 import chatserver.gen.ChatRequest;
 import chatserver.gen.ChatResponseStream;
 import chatserver.logic.internal.SummaryMemory;
+import chatserver.logic.voice.PwrdSpeaker;
 import chatserver.logic.voice.VoiceTransfer;
 import chatserver.service.ContactService;
 import chatserver.service.RoomService;
-import chatserver.service.UserCategoryService;
+import chatserver.service.UserService;
 import chatserver.util.TokenLimitor;
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.base.Strings;
 import com.google.protobuf.ByteString;
 import com.theokanning.openai.completion.chat.ChatCompletionChoice;
@@ -19,7 +21,6 @@ import com.theokanning.openai.completion.chat.ChatMessage;
 import com.theokanning.openai.completion.chat.ChatMessageRole;
 import com.theokanning.openai.service.OpenAiService;
 import io.grpc.stub.StreamObserver;
-import lombok.Data;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -34,19 +35,20 @@ public class Chat {
     private static final int MEMORY_INTERVAL = 2;
     private static final Logger logger = Logger.getLogger(Chat.class.getName());
     private final RoomService roomService;
-    private final UserCategoryService userCategoryService;
+    private final UserService userService;
     private final ContactService contactService;
     private final SummaryMemory summaryMemory;
+    private final OpenAiService service = makeOpenAiService();
     static final String resourcePath = !Strings.isNullOrEmpty(System.getenv("static_dir")) ?
             System.getenv("static_dir") : ".";
 
     @Autowired
     public Chat(RoomService roomService,
-                UserCategoryService userCategoryService,
+                UserService userService,
                 ContactService contactService,
                 SummaryMemory summaryMemory) {
         this.roomService = roomService;
-        this.userCategoryService = userCategoryService;
+        this.userService = userService;
         this.contactService = contactService;
         this.summaryMemory = summaryMemory;
     }
@@ -60,9 +62,20 @@ public class Chat {
             return;
         }
         logger.info("AI UserId is " + room.getAiUserId());
-        UserCategory userCategory = userCategoryService.findUserCategoryByUserId(room.getAiUserId());
-        var prompt = userCategory.getPrompt();
-        OpenAiService service = makeOpenAiService();
+        User aiUser = userService.findByUserId(room.getAiUserId());
+        if (aiUser == null) {
+            logger.warning("Can't find robot By Id: " + room.getAiUserId());
+            responseObserver.onError(new IllegalStateException("Can't find robot By Id: " + room.getAiUserId()));
+            return;
+        }
+
+        Robot robot = Config.getInstance().getRobotByName(aiUser.getBotId());
+        if (robot == null) {
+            logger.warning("Can't find robot config : " + aiUser.getBotId());
+            responseObserver.onError(new IllegalStateException("Can't find robot config : " + aiUser.getBotId()));
+            return;
+        }
+
         List<Message> messageHistory = roomService.getMessageHistory(request.getRoomId());
         Collections.reverse(messageHistory);
 
@@ -74,7 +87,7 @@ public class Chat {
                     .setAudio(ByteString.copyFrom(data))
                     .build();
             responseObserver.onNext(audioResponse);
-        }, resourcePath, true);
+        }, resourcePath, new PwrdSpeaker(robot.speaker()));
 
         chatserver.gen.Message.Builder rr = chatserver.gen.Message.newBuilder()
                 .setMessageId(newUserMsg.getMessageId())
@@ -86,6 +99,10 @@ public class Chat {
 
         final List<ChatMessage> messages = new ArrayList<>();
         Memory memory = contactService.getNewestMemory(room.getAiUserId(), user.getUserId());
+        var tempVariables = new HashMap<String, String>();
+        tempVariables.put("botname", robot.configName());
+        tempVariables.putAll(AuthTokenInterceptor.VARIABLES.get());
+        var prompt = robot.prompt().getMessage(tempVariables);
         preparePromptMessage(messages, prompt);
         if (memory != null) {
             String memoryPrompt = "以下是你和将要和你对话的用户的一些对话摘要:" + memory.getMemo();
@@ -115,9 +132,10 @@ public class Chat {
         var tokenCnt = TokenLimitor.limit(messages, 4097, 10);
         logger.info("Chat use token " + tokenCnt);
 
+        // debugPrintPrompt(messages);
         ChatCompletionRequest chatCompletionRequest = ChatCompletionRequest
                 .builder()
-                .model("gpt-3.5-turbo")
+                .model(robot.model())
                 .messages(messages)
                 .build();
 
@@ -156,7 +174,7 @@ public class Chat {
 
         Message gptMsg = saveDBMessage(request.getRoomId(),
                 room.getAiUserId(),
-                userCategory.getUserCategoryName(),
+                robot.configName(),
                 gptReturn.toString());
 
         var responseMessage = chatserver.gen.Message.newBuilder()
@@ -227,51 +245,18 @@ public class Chat {
         }
     }
 
-    @Data
-    public static class PromptItem {
-        enum RoleType {
-            SYSTEM("system"),
-            ASSISTANT("assistant"),
-            USER("user");
-
-            private final String strValue;
-
-            RoleType(String value) {
-                this.strValue = value;
-            }
-
-            public String getStrValue() {
-                return strValue;
-            }
+    private void preparePromptMessage(List<ChatMessage> messages, List<Prompt.PromptMessage> promptMessages) {
+        for (Prompt.PromptMessage(Prompt.PromptRole role, String content) : promptMessages) {
+            messages.add(new ChatMessage(parseRole(role).value(), content));
         }
-
-        private String role;
-        private String content;
     }
 
-    private void preparePromptMessage(List<ChatMessage> messages, String prompt) {
-        var prompts = prompt.split("\n");
-        var mapper = new ObjectMapper();
-        for (var p : prompts) {
-            if (Strings.isNullOrEmpty(p)) {
-                continue;
-            }
-
-            try {
-                var pJson = mapper.readValue(p, PromptItem.class);
-                if (PromptItem.RoleType.SYSTEM.getStrValue().equals(pJson.role)) {
-                    messages.add(new ChatMessage(ChatMessageRole.SYSTEM.value(), pJson.content));
-                } else if (PromptItem.RoleType.ASSISTANT.getStrValue().equals(pJson.role)) {
-                    messages.add(new ChatMessage(ChatMessageRole.ASSISTANT.value(), pJson.content));
-                } else if (PromptItem.RoleType.USER.getStrValue().equals(pJson.role)) {
-                    messages.add(new ChatMessage(ChatMessageRole.USER.value(), pJson.content));
-                } else {
-                    throw new IllegalArgumentException("Unknown role %s ".formatted(pJson.role));
-                }
-            } catch (JsonProcessingException e) {
-                throw new RuntimeException(e);
-            }
-        }
+    private static ChatMessageRole parseRole(Prompt.PromptRole promptRole) {
+        return switch (promptRole) {
+            case Assistant -> ChatMessageRole.ASSISTANT;
+            case User -> ChatMessageRole.USER;
+            case System -> ChatMessageRole.SYSTEM;
+        };
     }
 
     @SuppressWarnings("unused")

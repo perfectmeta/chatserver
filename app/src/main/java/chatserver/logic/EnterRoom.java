@@ -5,6 +5,7 @@ import chatserver.entity.User;
 import chatserver.gen.EnterRoomRequest;
 import chatserver.gen.MessageList;
 import chatserver.service.RoomService;
+import chatserver.userjob.Variables;
 import io.grpc.stub.StreamObserver;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -41,6 +42,9 @@ public class EnterRoom {
         responseObserver.onNext(messageListBuilder.build());
         responseObserver.onCompleted();
 
+        Variables variables = AuthTokenInterceptor.VARIABLES.get();
+        variables.put("cur_room", room.getRoomName());
+        variables.put("cur_room_id", String.valueOf(room.getRoomId()));
         // FIXME 进入房间后，最新的消息应该更新到最新了, 当前阶段，先注释掉这个，让每次都能获取完整的消息列表吧
         // room.setLastMessageId(roomService.getRoomMaxMessageId(room.getRoomId()));
         // roomService.upsertRoom(room);

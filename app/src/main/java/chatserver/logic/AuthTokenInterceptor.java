@@ -3,6 +3,7 @@ package chatserver.logic;
 import chatserver.service.UserService;
 import chatserver.entity.User;
 import chatserver.userjob.UserBlackboard;
+import chatserver.userjob.Variables;
 import io.grpc.*;
 import io.grpc.Metadata.Key;
 import io.grpc.ServerCall.Listener;
@@ -18,6 +19,7 @@ public class AuthTokenInterceptor implements ServerInterceptor {
     private final UserService users;
 
     public static final Context.Key<User> USER = Context.key("user");
+    public static final Context.Key<Variables> VARIABLES = Context.key("variables");
     public static final Context.Key<UserBlackboard> BLACKBOARD = Context.key("blackboard");
 
     @Autowired
@@ -53,7 +55,13 @@ public class AuthTokenInterceptor implements ServerInterceptor {
         }
         logger.info("validation success when access " + methodName);
 
-        Context context = Context.current().withValue(USER, user).withValue(BLACKBOARD, new UserBlackboard());
+        var variables = new Variables();
+        variables.put("username", user.getNickName());
+
+        Context context = Context.current()
+                .withValue(USER, user)
+                .withValue(BLACKBOARD, new UserBlackboard())
+                .withValue(VARIABLES, variables);
 
         ServerCall<ReqT, RespT> wrappedCall = new ForwardingServerCall.SimpleForwardingServerCall<ReqT, RespT>(serverCall) {
             @Override

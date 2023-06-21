@@ -31,7 +31,7 @@ public class RemoteTest {
         var channel = Grpc.newChannelBuilder("localhost:7080", InsecureChannelCredentials.create()).build();
         stub = ChatServiceGrpc.newStub(channel);
         Metadata metadata = new Metadata();
-        metadata.put(Metadata.Key.of("auth_token", Metadata.ASCII_STRING_MARSHALLER), "2");
+        metadata.put(Metadata.Key.of("auth_token", Metadata.ASCII_STRING_MARSHALLER), "1");
         stub = stub.withInterceptors(MetadataUtils.newAttachHeadersInterceptor(metadata));
     }
 
@@ -45,10 +45,12 @@ public class RemoteTest {
         RegisterInfo ri = RegisterInfo.newBuilder().setEmail("earneet@gmail.com")
                 .setPhone("+8618585858585").setNickname("earneet").build();
         List<RegisterFeedback> results = new ArrayList<>();
+        CountDownLatch latch = new CountDownLatch(1);
         stub.signup(ri, new StreamObserver<>() {
             @Override
             public void onNext(RegisterFeedback value) {
                 results.add(value);
+                latch.countDown();
             }
 
             @Override
@@ -63,7 +65,7 @@ public class RemoteTest {
             }
         });
 
-        Thread.sleep(3000);
+        latch.await();
         Assertions.assertEquals(1, results.size());
         // 兼容错误码6是以为了远程测试的时候无法真的删除之前添加的账号，咱们就认为数据库冲突也是对的吧
         Assertions.assertTrue(results.get(0).getStatusCode() == 0 || results.get(0).getStatusCode() == 6);
@@ -145,7 +147,7 @@ public class RemoteTest {
     @Test
     void sendMessageTest() throws InterruptedException {
         ChatRequest request = ChatRequest.newBuilder()
-                .setRoomId(1)
+                .setRoomId(2)
                 .setText("Hey, 你是AI吗?你有名字吗?")
                 .setSeq("aabb")
                 .setMsgType(MsgType.TEXT)
