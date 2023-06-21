@@ -4,7 +4,6 @@ import chatserver.entity.EUserType;
 import chatserver.entity.User;
 import chatserver.gen.CreateMineNPCsRequest;
 import chatserver.gen.CreateMineNPCsResponse;
-import chatserver.service.UserCategoryService;
 import chatserver.service.UserService;
 import chatserver.util.RandomGenerator;
 import io.grpc.stub.StreamObserver;

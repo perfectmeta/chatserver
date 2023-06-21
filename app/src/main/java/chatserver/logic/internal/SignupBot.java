@@ -3,8 +3,6 @@ package chatserver.logic.internal;
 import chatserver.config.robot.Robot;
 import chatserver.entity.EUserType;
 import chatserver.entity.User;
-import chatserver.entity.UserCategory;
-import chatserver.service.UserCategoryService;
 import chatserver.service.UserService;
 import chatserver.util.RandomGenerator;
 import org.springframework.stereotype.Component;

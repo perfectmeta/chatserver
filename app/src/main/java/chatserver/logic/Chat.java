@@ -200,14 +200,14 @@ public class Chat {
 
     private void summaryMemory(User user,
                                Memory memory,
-                               UserCategory userCategory,
+                               String robotName,
                                List<Message> messageHistory,
                                Message message,
                                List<ChatMessage> messages,
                                Room room) {
         var role2Name = new HashMap<String, String>();
         role2Name.put(ChatMessageRole.USER.value(), user.getNickName());
-        role2Name.put(ChatMessageRole.ASSISTANT.value(), userCategory.getUserCategoryName());
+        role2Name.put(ChatMessageRole.ASSISTANT.value(), robotName);
         if (memory == null) {
             if (messageHistory.size() >= MEMORY_INTERVAL) {
                 String newSummary = summaryMemory.run(parseMessageList(messages, role2Name), "",
