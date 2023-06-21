@@ -9,24 +9,30 @@ import java.io.IOException;
 import java.nio.file.*;
 import java.nio.file.attribute.BasicFileAttributes;
 import java.util.*;
+import java.util.logging.Logger;
 
 public class Config {
+    private static final Logger logger = Logger.getLogger(Config.class.getName());
 
     private static class ConfigHolder {
         public static final Config INSTANCE = new Config();
     }
 
-    private Map<String, Robot> robots;
-    private Map<String, Skill> skills;
+    private final Map<String, Robot> robots;
+    private final Map<String, Skill> skills;
 
     private final Map<String, List<String>> skillDependencies;
+    public Path currentReloadPath;
 
     public static Config getInstance() {
         return ConfigHolder.INSTANCE;
     }
 
-    public Path currentReloadPath;
-    private static final Set<String> LEVEL_1_DIRS = new HashSet<>(Arrays.asList("bots", "skills"));
+    public List<Robot> getRobots() {
+        return new ArrayList<>(robots.values());
+    }
+
+    // private static final Set<String> LEVEL_1_DIRS = new HashSet<>(Arrays.asList("bots", "skills"));
 
     private Config() {
         robots = new HashMap<>();
@@ -47,6 +53,7 @@ public class Config {
     }
 
     synchronized public void reload(Path root, Path configPath, WatchEvent.Kind<Path> kind) {
+        logger.info("reload file " + configPath);
         var diff = calculateDiff(root, configPath);
         if (diff.isEmpty()) {
             return;

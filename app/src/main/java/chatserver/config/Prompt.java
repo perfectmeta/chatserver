@@ -1,26 +1,34 @@
 package chatserver.config;
 
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-import java.util.Objects;
+import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class Prompt {
     public enum PromptRole {
-        System,
-        Assistant,
-        User
+        System("S:"),
+        Assistant("A:"),
+        User("U:");
+
+        private final String prefix;
+        PromptRole(String v) {
+            prefix = v;
+        }
+        public String prefix() {
+            return prefix;
+        }
     }
 
-    public static class PromptBuilder {
-        private List<PromptMessage> messages = new ArrayList<>();
+    public class PromptBuilder {
         public void addMessage(PromptRole role, String content) {
-            messages.add(new PromptMessage(role, content));
+            Prompt.this.messageList.add(new PromptMessage(role, content));
         }
 
         public Prompt build() {
-            return new Prompt(messages);
+            return Prompt.this;
         }
     }
 
@@ -28,29 +36,29 @@ public class Prompt {
 
     private final List<PromptMessage> messageList;
 
-    private Prompt(List<PromptMessage> messages) {
-        messageList = Objects.requireNonNull(messages);
+    private Prompt() {
+        messageList = new ArrayList<>();
     }
 
     public List<PromptMessage> getMessage(Map<String, String> variables) {
-        var regex = "\\{\\{.+\\}\\}";
+        @SuppressWarnings("all")
+        var regex = "\\{\\{(\\w+)\\}\\}";
         var pattern = Pattern.compile(regex);
-        var result = new ArrayList<>();
-        for (var msg : messageList) {
-            var matcher = pattern.matcher(msg.content);
-            if (matcher.matches()) {
-
-            } else {
-                result.add(new PromptMessage(msg.role, msg.content));
+        var result = new ArrayList<PromptMessage>();
+        for (PromptMessage(PromptRole role, String content) : messageList) {
+            Matcher matcher = pattern.matcher(content);
+            var _content = content;
+            // fixme improve performance using string builder
+            while (matcher.find()) {
+                String variableName = matcher.group(1);
+                _content = _content.replaceAll("\\{\\{"+ variableName + "\\}\\}", variables.get(variableName));
             }
+            result.add(new PromptMessage(role, _content));
         }
-    }
-
-    private String fillVariable(String template, Map<String, String> variables) {
-
+        return result;
     }
 
     public static PromptBuilder newBuilder() {
-        return new PromptBuilder();
+        return (new Prompt()).new PromptBuilder();
     }
 }

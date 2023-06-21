@@ -101,6 +101,8 @@ public class DirectoryWatcher {
 
             @Override
             public FileVisitResult visitFile(Path file, BasicFileAttributes attrs) {
+                if (!Files.isDirectory(file))
+                    return FileVisitResult.CONTINUE;
                 try {
                     file.register(watchService,
                             StandardWatchEventKinds.ENTRY_CREATE,

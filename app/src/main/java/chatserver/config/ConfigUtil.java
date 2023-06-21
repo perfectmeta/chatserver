@@ -21,5 +21,7 @@ public class ConfigUtil {
         } catch (IOException e) {
             return null;
         }
+
+        return null;
     }
 }
