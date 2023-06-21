@@ -1,6 +1,7 @@
 package chatserver;
 
 import chatserver.config.Config;
+import chatserver.util.DirectoryWatcher;
 import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;
 import org.springframework.stereotype.Component;
@@ -33,5 +34,11 @@ public class AfterBootRunner implements ApplicationRunner {
         var configDir = System.getenv("chatserver_config_dir");
         config.reload(Paths.get(configDir));
         logger.info("reload config from %s finished".formatted(configDir));
+
+        DirectoryWatcher wacher = new DirectoryWatcher(configDir);
+        wacher.watch((path, kind)->{
+            logger.info("find file change " + path.toAbsolutePath());
+            config.reload(Paths.get(configDir), path, kind);
+        });
     }
 }

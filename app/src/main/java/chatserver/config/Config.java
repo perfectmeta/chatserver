@@ -57,7 +57,7 @@ public class Config {
     }
 
     synchronized public void reload(Path root, Path configPath, WatchEvent.Kind<Path> kind) {
-        logger.info("reload file " + configPath);
+        logger.info("reload file " + configPath.toAbsolutePath());
         var diff = calculateDiff(root, configPath);
         if (diff.isEmpty()) {
             return;
@@ -156,6 +156,7 @@ public class Config {
     }
 
     private List<String> calculateDiff(Path root, Path current) {
+        current = current.toAbsolutePath();
         var diff = root.relativize(current);
         var result = new ArrayList<String>();
         for (int i = 0; i < diff.getNameCount(); i++) {
