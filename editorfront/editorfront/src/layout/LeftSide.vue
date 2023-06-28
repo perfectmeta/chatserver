@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { ref, useAttrs, onMounted } from 'vue'
-import { ElMenu, ElMenuItem, ElSubmenu } from 'element3';
+// import { ElMenu, ElMenuItem, ElSubmenu } from 'element3';
 
 const attrs = useAttrs()
 const emit = defineEmits(['robotChange', 'skillChange'])

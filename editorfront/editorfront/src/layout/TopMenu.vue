@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { ref } from 'vue'
-import { ElMenu, ElMenuItem } from 'element3';
+// import { ElMenu, ElMenuItem } from 'element3';
 
 function handleSelect(event: any) {
     console.log(event.target)
@@ -21,7 +21,6 @@ let activeIndex = ref<string>('1');
             <el-menu-item index="3">First Menu Item 3</el-menu-item>
         </el-menu>
     </header>
-
 </template>
 
 <style>

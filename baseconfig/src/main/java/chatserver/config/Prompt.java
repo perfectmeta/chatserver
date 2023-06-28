@@ -51,7 +51,9 @@ public class Prompt {
             // fixme improve performance using string builder
             while (matcher.find()) {
                 String variableName = matcher.group(1);
-                _content = _content.replaceAll("\\{\\{"+ variableName + "\\}\\}", variables.get(variableName));
+                if (variables.containsKey(variableName)) {
+                    _content = _content.replaceAll("\\{\\{%s\\}\\}".formatted(variableName), variables.get(variableName));
+                }
             }
             result.add(new PromptMessage(role, _content));
         }

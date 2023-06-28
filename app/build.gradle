@@ -27,6 +27,8 @@ dependencies {
     // Use JUnit Jupiter for testing.
     testImplementation 'org.junit.jupiter:junit-jupiter:5.9.1'
 
+    implementation project(':baseconfig')
+
     implementation 'org.java-websocket:Java-WebSocket:1.5.3'
     implementation 'com.fasterxml.jackson.core:jackson-databind:2.12.7.1'
     implementation 'com.squareup.retrofit2:retrofit:2.9.0'

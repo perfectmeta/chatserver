@@ -3,10 +3,12 @@ package chatserver.config.robot;
 import chatserver.config.Config;
 import chatserver.config.Prompt;
 import chatserver.config.UpdateKind;
-import chatserver.util.IniFileReader;
+import chatserver.config.util.IniFileReader;
 import com.google.common.base.Strings;
 
-import java.io.*;
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 

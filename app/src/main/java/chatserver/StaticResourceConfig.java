@@ -1,4 +1,4 @@
-package chatserver.controller;
+package chatserver;
 
 import com.google.common.base.Strings;
 import org.jetbrains.annotations.NotNull;

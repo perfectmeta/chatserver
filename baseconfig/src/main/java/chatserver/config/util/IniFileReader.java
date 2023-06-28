@@ -1,4 +1,4 @@
-package chatserver.util;
+package chatserver.config.util;
 
 import java.io.FileInputStream;
 import java.io.IOException;

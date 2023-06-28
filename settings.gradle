@@ -15,7 +15,9 @@ plugins {
 }
 
 rootProject.name = 'chatserver'
+include('baseconfig')
 include('app')
 include('toolkit')
 include('prompteditor')
+include 'semantic_kernal'
 

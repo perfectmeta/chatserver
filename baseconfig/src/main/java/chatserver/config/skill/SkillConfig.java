@@ -1,6 +1,5 @@
 package chatserver.config.skill;
 
-import chatserver.config.Config;
 import chatserver.config.UpdateKind;
 
 import java.util.List;
