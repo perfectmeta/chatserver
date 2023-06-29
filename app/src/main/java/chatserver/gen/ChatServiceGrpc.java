@@ -77,6 +77,37 @@ public final class ChatServiceGrpc {
     return getGetSelfInfoMethod;
   }
 
+  private static volatile io.grpc.MethodDescriptor<chatserver.gen.Contact,
+      chatserver.gen.UpdateSelfInfoResponse> getUpdateSelfInfoMethod;
+
+  @io.grpc.stub.annotations.RpcMethod(
+      fullMethodName = SERVICE_NAME + '/' + "UpdateSelfInfo",
+      requestType = chatserver.gen.Contact.class,
+      responseType = chatserver.gen.UpdateSelfInfoResponse.class,
+      methodType = io.grpc.MethodDescriptor.MethodType.UNARY)
+  public static io.grpc.MethodDescriptor<chatserver.gen.Contact,
+      chatserver.gen.UpdateSelfInfoResponse> getUpdateSelfInfoMethod() {
+    io.grpc.MethodDescriptor<chatserver.gen.Contact, chatserver.gen.UpdateSelfInfoResponse> getUpdateSelfInfoMethod;
+    if ((getUpdateSelfInfoMethod = ChatServiceGrpc.getUpdateSelfInfoMethod) == null) {
+      synchronized (ChatServiceGrpc.class) {
+        if ((getUpdateSelfInfoMethod = ChatServiceGrpc.getUpdateSelfInfoMethod) == null) {
+          ChatServiceGrpc.getUpdateSelfInfoMethod = getUpdateSelfInfoMethod =
+              io.grpc.MethodDescriptor.<chatserver.gen.Contact, chatserver.gen.UpdateSelfInfoResponse>newBuilder()
+              .setType(io.grpc.MethodDescriptor.MethodType.UNARY)
+              .setFullMethodName(generateFullMethodName(SERVICE_NAME, "UpdateSelfInfo"))
+              .setSampledToLocalTracing(true)
+              .setRequestMarshaller(io.grpc.protobuf.ProtoUtils.marshaller(
+                  chatserver.gen.Contact.getDefaultInstance()))
+              .setResponseMarshaller(io.grpc.protobuf.ProtoUtils.marshaller(
+                  chatserver.gen.UpdateSelfInfoResponse.getDefaultInstance()))
+              .setSchemaDescriptor(new ChatServiceMethodDescriptorSupplier("UpdateSelfInfo"))
+              .build();
+        }
+      }
+    }
+    return getUpdateSelfInfoMethod;
+  }
+
   private static volatile io.grpc.MethodDescriptor<chatserver.gen.Hello,
       chatserver.gen.RoomInfo> getGetRoomStreamMethod;
 
@@ -396,6 +427,16 @@ public final class ChatServiceGrpc {
 
     /**
      * <pre>
+     * 更新个人页的信息
+     * </pre>
+     */
+    default void updateSelfInfo(chatserver.gen.Contact request,
+        io.grpc.stub.StreamObserver<chatserver.gen.UpdateSelfInfoResponse> responseObserver) {
+      io.grpc.stub.ServerCalls.asyncUnimplementedUnaryCall(getUpdateSelfInfoMethod(), responseObserver);
+    }
+
+    /**
+     * <pre>
      * 登录游戏后立马就发送Hello，取room list，contact list, new message stream，这3个可能就是在连接期间一直会发。
      * </pre>
      */
@@ -522,6 +563,17 @@ public final class ChatServiceGrpc {
 
     /**
      * <pre>
+     * 更新个人页的信息
+     * </pre>
+     */
+    public void updateSelfInfo(chatserver.gen.Contact request,
+        io.grpc.stub.StreamObserver<chatserver.gen.UpdateSelfInfoResponse> responseObserver) {
+      io.grpc.stub.ClientCalls.asyncUnaryCall(
+          getChannel().newCall(getUpdateSelfInfoMethod(), getCallOptions()), request, responseObserver);
+    }
+
+    /**
+     * <pre>
      * 登录游戏后立马就发送Hello，取room list，contact list, new message stream，这3个可能就是在连接期间一直会发。
      * </pre>
      */
@@ -643,6 +695,16 @@ public final class ChatServiceGrpc {
 
     /**
      * <pre>
+     * 更新个人页的信息
+     * </pre>
+     */
+    public chatserver.gen.UpdateSelfInfoResponse updateSelfInfo(chatserver.gen.Contact request) {
+      return io.grpc.stub.ClientCalls.blockingUnaryCall(
+          getChannel(), getUpdateSelfInfoMethod(), getCallOptions(), request);
+    }
+
+    /**
+     * <pre>
      * 登录游戏后立马就发送Hello，取room list，contact list, new message stream，这3个可能就是在连接期间一直会发。
      * </pre>
      */
@@ -752,6 +814,17 @@ public final class ChatServiceGrpc {
 
     /**
      * <pre>
+     * 更新个人页的信息
+     * </pre>
+     */
+    public com.google.common.util.concurrent.ListenableFuture<chatserver.gen.UpdateSelfInfoResponse> updateSelfInfo(
+        chatserver.gen.Contact request) {
+      return io.grpc.stub.ClientCalls.futureUnaryCall(
+          getChannel().newCall(getUpdateSelfInfoMethod(), getCallOptions()), request);
+    }
+
+    /**
+     * <pre>
      * 进入房间，发lastMessageId后，服务器同步给客户端这之后的消息
      * TODO: 好像不该有这个协议，本来就应该一登录就推送lastMessageId之后的消息
      * </pre>
@@ -784,14 +857,15 @@ public final class ChatServiceGrpc {
 
   private static final int METHODID_SIGNUP = 0;
   private static final int METHODID_GET_SELF_INFO = 1;
-  private static final int METHODID_GET_ROOM_STREAM = 2;
-  private static final int METHODID_GET_CONTACT_STREAM = 3;
-  private static final int METHODID_GET_NEW_MESSAGE_STREAM = 4;
-  private static final int METHODID_ENTER_ROOM = 5;
-  private static final int METHODID_CHAT = 6;
-  private static final int METHODID_GET_MEMORY = 7;
-  private static final int METHODID_DELETE_MEMORY = 8;
-  private static final int METHODID_SPEECH_RECOGNIZE = 9;
+  private static final int METHODID_UPDATE_SELF_INFO = 2;
+  private static final int METHODID_GET_ROOM_STREAM = 3;
+  private static final int METHODID_GET_CONTACT_STREAM = 4;
+  private static final int METHODID_GET_NEW_MESSAGE_STREAM = 5;
+  private static final int METHODID_ENTER_ROOM = 6;
+  private static final int METHODID_CHAT = 7;
+  private static final int METHODID_GET_MEMORY = 8;
+  private static final int METHODID_DELETE_MEMORY = 9;
+  private static final int METHODID_SPEECH_RECOGNIZE = 10;
 
   private static final class MethodHandlers<Req, Resp> implements
       io.grpc.stub.ServerCalls.UnaryMethod<Req, Resp>,
@@ -817,6 +891,10 @@ public final class ChatServiceGrpc {
         case METHODID_GET_SELF_INFO:
           serviceImpl.getSelfInfo((chatserver.gen.Hello) request,
               (io.grpc.stub.StreamObserver<chatserver.gen.Contact>) responseObserver);
+          break;
+        case METHODID_UPDATE_SELF_INFO:
+          serviceImpl.updateSelfInfo((chatserver.gen.Contact) request,
+              (io.grpc.stub.StreamObserver<chatserver.gen.UpdateSelfInfoResponse>) responseObserver);
           break;
         case METHODID_GET_ROOM_STREAM:
           serviceImpl.getRoomStream((chatserver.gen.Hello) request,
@@ -881,6 +959,13 @@ public final class ChatServiceGrpc {
               chatserver.gen.Hello,
               chatserver.gen.Contact>(
                 service, METHODID_GET_SELF_INFO)))
+        .addMethod(
+          getUpdateSelfInfoMethod(),
+          io.grpc.stub.ServerCalls.asyncUnaryCall(
+            new MethodHandlers<
+              chatserver.gen.Contact,
+              chatserver.gen.UpdateSelfInfoResponse>(
+                service, METHODID_UPDATE_SELF_INFO)))
         .addMethod(
           getGetRoomStreamMethod(),
           io.grpc.stub.ServerCalls.asyncServerStreamingCall(
@@ -987,6 +1072,7 @@ public final class ChatServiceGrpc {
               .setSchemaDescriptor(new ChatServiceFileDescriptorSupplier())
               .addMethod(getSignupMethod())
               .addMethod(getGetSelfInfoMethod())
+              .addMethod(getUpdateSelfInfoMethod())
               .addMethod(getGetRoomStreamMethod())
               .addMethod(getGetContactStreamMethod())
               .addMethod(getGetNewMessageStreamMethod())

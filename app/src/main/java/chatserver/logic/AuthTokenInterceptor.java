@@ -63,7 +63,7 @@ public class AuthTokenInterceptor implements ServerInterceptor {
                 .withValue(BLACKBOARD, new UserBlackboard())
                 .withValue(VARIABLES, variables);
 
-        ServerCall<ReqT, RespT> wrappedCall = new ForwardingServerCall.SimpleForwardingServerCall<ReqT, RespT>(serverCall) {
+        ServerCall<ReqT, RespT> wrappedCall = new ForwardingServerCall.SimpleForwardingServerCall<>(serverCall) {
             @Override
             public void close(Status status, Metadata metadata) {
                 // todo: clean userjob

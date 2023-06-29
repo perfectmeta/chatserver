@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 public class ChatService extends ChatServiceGrpc.ChatServiceImplBase {
 
     private final GetSelfInfo getSelfInfo;
+    private final UpdateSelfInfo updateSelfInfo;
     private final Signup signup;
     private final GetRoomStream getRoomList;
     private final GetContactStream getContactList;
@@ -20,7 +21,9 @@ public class ChatService extends ChatServiceGrpc.ChatServiceImplBase {
     private final DeleteMemory deleteMemory;
 
     @Autowired
-    public ChatService(GetSelfInfo getSelfInfo, GetRoomStream getRoomList,
+    public ChatService(GetSelfInfo getSelfInfo,
+                       UpdateSelfInfo updateSelfInfo,
+                       GetRoomStream getRoomList,
                        GetContactStream getContactList,
                        GetNewMessageStream getNewMessageStream,
                        EnterRoom enterRoom,
@@ -30,6 +33,7 @@ public class ChatService extends ChatServiceGrpc.ChatServiceImplBase {
                        GetMemory getMemory,
                        DeleteMemory deleteMemory) {
         this.getSelfInfo = getSelfInfo;
+        this.updateSelfInfo = updateSelfInfo;
         this.getRoomList = getRoomList;
         this.getContactList = getContactList;
         this.getNewMessageStream = getNewMessageStream;
@@ -49,6 +53,11 @@ public class ChatService extends ChatServiceGrpc.ChatServiceImplBase {
     @Override
     public void getSelfInfo(Hello request, StreamObserver<Contact> responseObserver) {
         getSelfInfo.run(request, responseObserver);
+    }
+
+    @Override
+    public void updateSelfInfo(Contact contact, StreamObserver<UpdateSelfInfoResponse> responseObserver) {
+        updateSelfInfo.run(contact, responseObserver);
     }
 
     @Override

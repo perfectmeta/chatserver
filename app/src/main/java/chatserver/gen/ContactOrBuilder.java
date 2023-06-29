@@ -86,4 +86,112 @@ public interface ContactOrBuilder extends
    */
   com.google.protobuf.ByteString
       getHeadIconUrlBytes();
+
+  /**
+   * <code>string englishName = 8;</code>
+   * @return The englishName.
+   */
+  java.lang.String getEnglishName();
+  /**
+   * <code>string englishName = 8;</code>
+   * @return The bytes for englishName.
+   */
+  com.google.protobuf.ByteString
+      getEnglishNameBytes();
+
+  /**
+   * <code>string location = 9;</code>
+   * @return The location.
+   */
+  java.lang.String getLocation();
+  /**
+   * <code>string location = 9;</code>
+   * @return The bytes for location.
+   */
+  com.google.protobuf.ByteString
+      getLocationBytes();
+
+  /**
+   * <code>string personalizedSignature = 10;</code>
+   * @return The personalizedSignature.
+   */
+  java.lang.String getPersonalizedSignature();
+  /**
+   * <code>string personalizedSignature = 10;</code>
+   * @return The bytes for personalizedSignature.
+   */
+  com.google.protobuf.ByteString
+      getPersonalizedSignatureBytes();
+
+  /**
+   * <code>string birthDay = 11;</code>
+   * @return The birthDay.
+   */
+  java.lang.String getBirthDay();
+  /**
+   * <code>string birthDay = 11;</code>
+   * @return The bytes for birthDay.
+   */
+  com.google.protobuf.ByteString
+      getBirthDayBytes();
+
+  /**
+   * <code>string interest = 12;</code>
+   * @return The interest.
+   */
+  java.lang.String getInterest();
+  /**
+   * <code>string interest = 12;</code>
+   * @return The bytes for interest.
+   */
+  com.google.protobuf.ByteString
+      getInterestBytes();
+
+  /**
+   * <code>string character = 13;</code>
+   * @return The character.
+   */
+  java.lang.String getCharacter();
+  /**
+   * <code>string character = 13;</code>
+   * @return The bytes for character.
+   */
+  com.google.protobuf.ByteString
+      getCharacterBytes();
+
+  /**
+   * <code>string favoriteFoods = 14;</code>
+   * @return The favoriteFoods.
+   */
+  java.lang.String getFavoriteFoods();
+  /**
+   * <code>string favoriteFoods = 14;</code>
+   * @return The bytes for favoriteFoods.
+   */
+  com.google.protobuf.ByteString
+      getFavoriteFoodsBytes();
+
+  /**
+   * <code>string unInterest = 15;</code>
+   * @return The unInterest.
+   */
+  java.lang.String getUnInterest();
+  /**
+   * <code>string unInterest = 15;</code>
+   * @return The bytes for unInterest.
+   */
+  com.google.protobuf.ByteString
+      getUnInterestBytes();
+
+  /**
+   * <code>string lifeGoal = 16;</code>
+   * @return The lifeGoal.
+   */
+  java.lang.String getLifeGoal();
+  /**
+   * <code>string lifeGoal = 16;</code>
+   * @return The bytes for lifeGoal.
+   */
+  com.google.protobuf.ByteString
+      getLifeGoalBytes();
 }

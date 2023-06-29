@@ -21,6 +21,15 @@ private static final long serialVersionUID = 0L;
     tags_ = "";
     description_ = "";
     headIconUrl_ = "";
+    englishName_ = "";
+    location_ = "";
+    personalizedSignature_ = "";
+    birthDay_ = "";
+    interest_ = "";
+    character_ = "";
+    favoriteFoods_ = "";
+    unInterest_ = "";
+    lifeGoal_ = "";
   }
 
   @java.lang.Override
@@ -91,6 +100,60 @@ private static final long serialVersionUID = 0L;
             java.lang.String s = input.readStringRequireUtf8();
 
             headIconUrl_ = s;
+            break;
+          }
+          case 66: {
+            java.lang.String s = input.readStringRequireUtf8();
+
+            englishName_ = s;
+            break;
+          }
+          case 74: {
+            java.lang.String s = input.readStringRequireUtf8();
+
+            location_ = s;
+            break;
+          }
+          case 82: {
+            java.lang.String s = input.readStringRequireUtf8();
+
+            personalizedSignature_ = s;
+            break;
+          }
+          case 90: {
+            java.lang.String s = input.readStringRequireUtf8();
+
+            birthDay_ = s;
+            break;
+          }
+          case 98: {
+            java.lang.String s = input.readStringRequireUtf8();
+
+            interest_ = s;
+            break;
+          }
+          case 106: {
+            java.lang.String s = input.readStringRequireUtf8();
+
+            character_ = s;
+            break;
+          }
+          case 114: {
+            java.lang.String s = input.readStringRequireUtf8();
+
+            favoriteFoods_ = s;
+            break;
+          }
+          case 122: {
+            java.lang.String s = input.readStringRequireUtf8();
+
+            unInterest_ = s;
+            break;
+          }
+          case 130: {
+            java.lang.String s = input.readStringRequireUtf8();
+
+            lifeGoal_ = s;
             break;
           }
           default: {
@@ -345,6 +408,348 @@ private static final long serialVersionUID = 0L;
     }
   }
 
+  public static final int ENGLISHNAME_FIELD_NUMBER = 8;
+  private volatile java.lang.Object englishName_;
+  /**
+   * <code>string englishName = 8;</code>
+   * @return The englishName.
+   */
+  @java.lang.Override
+  public java.lang.String getEnglishName() {
+    java.lang.Object ref = englishName_;
+    if (ref instanceof java.lang.String) {
+      return (java.lang.String) ref;
+    } else {
+      com.google.protobuf.ByteString bs = 
+          (com.google.protobuf.ByteString) ref;
+      java.lang.String s = bs.toStringUtf8();
+      englishName_ = s;
+      return s;
+    }
+  }
+  /**
+   * <code>string englishName = 8;</code>
+   * @return The bytes for englishName.
+   */
+  @java.lang.Override
+  public com.google.protobuf.ByteString
+      getEnglishNameBytes() {
+    java.lang.Object ref = englishName_;
+    if (ref instanceof java.lang.String) {
+      com.google.protobuf.ByteString b = 
+          com.google.protobuf.ByteString.copyFromUtf8(
+              (java.lang.String) ref);
+      englishName_ = b;
+      return b;
+    } else {
+      return (com.google.protobuf.ByteString) ref;
+    }
+  }
+
+  public static final int LOCATION_FIELD_NUMBER = 9;
+  private volatile java.lang.Object location_;
+  /**
+   * <code>string location = 9;</code>
+   * @return The location.
+   */
+  @java.lang.Override
+  public java.lang.String getLocation() {
+    java.lang.Object ref = location_;
+    if (ref instanceof java.lang.String) {
+      return (java.lang.String) ref;
+    } else {
+      com.google.protobuf.ByteString bs = 
+          (com.google.protobuf.ByteString) ref;
+      java.lang.String s = bs.toStringUtf8();
+      location_ = s;
+      return s;
+    }
+  }
+  /**
+   * <code>string location = 9;</code>
+   * @return The bytes for location.
+   */
+  @java.lang.Override
+  public com.google.protobuf.ByteString
+      getLocationBytes() {
+    java.lang.Object ref = location_;
+    if (ref instanceof java.lang.String) {
+      com.google.protobuf.ByteString b = 
+          com.google.protobuf.ByteString.copyFromUtf8(
+              (java.lang.String) ref);
+      location_ = b;
+      return b;
+    } else {
+      return (com.google.protobuf.ByteString) ref;
+    }
+  }
+
+  public static final int PERSONALIZEDSIGNATURE_FIELD_NUMBER = 10;
+  private volatile java.lang.Object personalizedSignature_;
+  /**
+   * <code>string personalizedSignature = 10;</code>
+   * @return The personalizedSignature.
+   */
+  @java.lang.Override
+  public java.lang.String getPersonalizedSignature() {
+    java.lang.Object ref = personalizedSignature_;
+    if (ref instanceof java.lang.String) {
+      return (java.lang.String) ref;
+    } else {
+      com.google.protobuf.ByteString bs = 
+          (com.google.protobuf.ByteString) ref;
+      java.lang.String s = bs.toStringUtf8();
+      personalizedSignature_ = s;
+      return s;
+    }
+  }
+  /**
+   * <code>string personalizedSignature = 10;</code>
+   * @return The bytes for personalizedSignature.
+   */
+  @java.lang.Override
+  public com.google.protobuf.ByteString
+      getPersonalizedSignatureBytes() {
+    java.lang.Object ref = personalizedSignature_;
+    if (ref instanceof java.lang.String) {
+      com.google.protobuf.ByteString b = 
+          com.google.protobuf.ByteString.copyFromUtf8(
+              (java.lang.String) ref);
+      personalizedSignature_ = b;
+      return b;
+    } else {
+      return (com.google.protobuf.ByteString) ref;
+    }
+  }
+
+  public static final int BIRTHDAY_FIELD_NUMBER = 11;
+  private volatile java.lang.Object birthDay_;
+  /**
+   * <code>string birthDay = 11;</code>
+   * @return The birthDay.
+   */
+  @java.lang.Override
+  public java.lang.String getBirthDay() {
+    java.lang.Object ref = birthDay_;
+    if (ref instanceof java.lang.String) {
+      return (java.lang.String) ref;
+    } else {
+      com.google.protobuf.ByteString bs = 
+          (com.google.protobuf.ByteString) ref;
+      java.lang.String s = bs.toStringUtf8();
+      birthDay_ = s;
+      return s;
+    }
+  }
+  /**
+   * <code>string birthDay = 11;</code>
+   * @return The bytes for birthDay.
+   */
+  @java.lang.Override
+  public com.google.protobuf.ByteString
+      getBirthDayBytes() {
+    java.lang.Object ref = birthDay_;
+    if (ref instanceof java.lang.String) {
+      com.google.protobuf.ByteString b = 
+          com.google.protobuf.ByteString.copyFromUtf8(
+              (java.lang.String) ref);
+      birthDay_ = b;
+      return b;
+    } else {
+      return (com.google.protobuf.ByteString) ref;
+    }
+  }
+
+  public static final int INTEREST_FIELD_NUMBER = 12;
+  private volatile java.lang.Object interest_;
+  /**
+   * <code>string interest = 12;</code>
+   * @return The interest.
+   */
+  @java.lang.Override
+  public java.lang.String getInterest() {
+    java.lang.Object ref = interest_;
+    if (ref instanceof java.lang.String) {
+      return (java.lang.String) ref;
+    } else {
+      com.google.protobuf.ByteString bs = 
+          (com.google.protobuf.ByteString) ref;
+      java.lang.String s = bs.toStringUtf8();
+      interest_ = s;
+      return s;
+    }
+  }
+  /**
+   * <code>string interest = 12;</code>
+   * @return The bytes for interest.
+   */
+  @java.lang.Override
+  public com.google.protobuf.ByteString
+      getInterestBytes() {
+    java.lang.Object ref = interest_;
+    if (ref instanceof java.lang.String) {
+      com.google.protobuf.ByteString b = 
+          com.google.protobuf.ByteString.copyFromUtf8(
+              (java.lang.String) ref);
+      interest_ = b;
+      return b;
+    } else {
+      return (com.google.protobuf.ByteString) ref;
+    }
+  }
+
+  public static final int CHARACTER_FIELD_NUMBER = 13;
+  private volatile java.lang.Object character_;
+  /**
+   * <code>string character = 13;</code>
+   * @return The character.
+   */
+  @java.lang.Override
+  public java.lang.String getCharacter() {
+    java.lang.Object ref = character_;
+    if (ref instanceof java.lang.String) {
+      return (java.lang.String) ref;
+    } else {
+      com.google.protobuf.ByteString bs = 
+          (com.google.protobuf.ByteString) ref;
+      java.lang.String s = bs.toStringUtf8();
+      character_ = s;
+      return s;
+    }
+  }
+  /**
+   * <code>string character = 13;</code>
+   * @return The bytes for character.
+   */
+  @java.lang.Override
+  public com.google.protobuf.ByteString
+      getCharacterBytes() {
+    java.lang.Object ref = character_;
+    if (ref instanceof java.lang.String) {
+      com.google.protobuf.ByteString b = 
+          com.google.protobuf.ByteString.copyFromUtf8(
+              (java.lang.String) ref);
+      character_ = b;
+      return b;
+    } else {
+      return (com.google.protobuf.ByteString) ref;
+    }
+  }
+
+  public static final int FAVORITEFOODS_FIELD_NUMBER = 14;
+  private volatile java.lang.Object favoriteFoods_;
+  /**
+   * <code>string favoriteFoods = 14;</code>
+   * @return The favoriteFoods.
+   */
+  @java.lang.Override
+  public java.lang.String getFavoriteFoods() {
+    java.lang.Object ref = favoriteFoods_;
+    if (ref instanceof java.lang.String) {
+      return (java.lang.String) ref;
+    } else {
+      com.google.protobuf.ByteString bs = 
+          (com.google.protobuf.ByteString) ref;
+      java.lang.String s = bs.toStringUtf8();
+      favoriteFoods_ = s;
+      return s;
+    }
+  }
+  /**
+   * <code>string favoriteFoods = 14;</code>
+   * @return The bytes for favoriteFoods.
+   */
+  @java.lang.Override
+  public com.google.protobuf.ByteString
+      getFavoriteFoodsBytes() {
+    java.lang.Object ref = favoriteFoods_;
+    if (ref instanceof java.lang.String) {
+      com.google.protobuf.ByteString b = 
+          com.google.protobuf.ByteString.copyFromUtf8(
+              (java.lang.String) ref);
+      favoriteFoods_ = b;
+      return b;
+    } else {
+      return (com.google.protobuf.ByteString) ref;
+    }
+  }
+
+  public static final int UNINTEREST_FIELD_NUMBER = 15;
+  private volatile java.lang.Object unInterest_;
+  /**
+   * <code>string unInterest = 15;</code>
+   * @return The unInterest.
+   */
+  @java.lang.Override
+  public java.lang.String getUnInterest() {
+    java.lang.Object ref = unInterest_;
+    if (ref instanceof java.lang.String) {
+      return (java.lang.String) ref;
+    } else {
+      com.google.protobuf.ByteString bs = 
+          (com.google.protobuf.ByteString) ref;
+      java.lang.String s = bs.toStringUtf8();
+      unInterest_ = s;
+      return s;
+    }
+  }
+  /**
+   * <code>string unInterest = 15;</code>
+   * @return The bytes for unInterest.
+   */
+  @java.lang.Override
+  public com.google.protobuf.ByteString
+      getUnInterestBytes() {
+    java.lang.Object ref = unInterest_;
+    if (ref instanceof java.lang.String) {
+      com.google.protobuf.ByteString b = 
+          com.google.protobuf.ByteString.copyFromUtf8(
+              (java.lang.String) ref);
+      unInterest_ = b;
+      return b;
+    } else {
+      return (com.google.protobuf.ByteString) ref;
+    }
+  }
+
+  public static final int LIFEGOAL_FIELD_NUMBER = 16;
+  private volatile java.lang.Object lifeGoal_;
+  /**
+   * <code>string lifeGoal = 16;</code>
+   * @return The lifeGoal.
+   */
+  @java.lang.Override
+  public java.lang.String getLifeGoal() {
+    java.lang.Object ref = lifeGoal_;
+    if (ref instanceof java.lang.String) {
+      return (java.lang.String) ref;
+    } else {
+      com.google.protobuf.ByteString bs = 
+          (com.google.protobuf.ByteString) ref;
+      java.lang.String s = bs.toStringUtf8();
+      lifeGoal_ = s;
+      return s;
+    }
+  }
+  /**
+   * <code>string lifeGoal = 16;</code>
+   * @return The bytes for lifeGoal.
+   */
+  @java.lang.Override
+  public com.google.protobuf.ByteString
+      getLifeGoalBytes() {
+    java.lang.Object ref = lifeGoal_;
+    if (ref instanceof java.lang.String) {
+      com.google.protobuf.ByteString b = 
+          com.google.protobuf.ByteString.copyFromUtf8(
+              (java.lang.String) ref);
+      lifeGoal_ = b;
+      return b;
+    } else {
+      return (com.google.protobuf.ByteString) ref;
+    }
+  }
+
   private byte memoizedIsInitialized = -1;
   @java.lang.Override
   public final boolean isInitialized() {
@@ -380,6 +785,33 @@ private static final long serialVersionUID = 0L;
     if (!getHeadIconUrlBytes().isEmpty()) {
       com.google.protobuf.GeneratedMessageV3.writeString(output, 7, headIconUrl_);
     }
+    if (!getEnglishNameBytes().isEmpty()) {
+      com.google.protobuf.GeneratedMessageV3.writeString(output, 8, englishName_);
+    }
+    if (!getLocationBytes().isEmpty()) {
+      com.google.protobuf.GeneratedMessageV3.writeString(output, 9, location_);
+    }
+    if (!getPersonalizedSignatureBytes().isEmpty()) {
+      com.google.protobuf.GeneratedMessageV3.writeString(output, 10, personalizedSignature_);
+    }
+    if (!getBirthDayBytes().isEmpty()) {
+      com.google.protobuf.GeneratedMessageV3.writeString(output, 11, birthDay_);
+    }
+    if (!getInterestBytes().isEmpty()) {
+      com.google.protobuf.GeneratedMessageV3.writeString(output, 12, interest_);
+    }
+    if (!getCharacterBytes().isEmpty()) {
+      com.google.protobuf.GeneratedMessageV3.writeString(output, 13, character_);
+    }
+    if (!getFavoriteFoodsBytes().isEmpty()) {
+      com.google.protobuf.GeneratedMessageV3.writeString(output, 14, favoriteFoods_);
+    }
+    if (!getUnInterestBytes().isEmpty()) {
+      com.google.protobuf.GeneratedMessageV3.writeString(output, 15, unInterest_);
+    }
+    if (!getLifeGoalBytes().isEmpty()) {
+      com.google.protobuf.GeneratedMessageV3.writeString(output, 16, lifeGoal_);
+    }
     unknownFields.writeTo(output);
   }
 
@@ -412,6 +844,33 @@ private static final long serialVersionUID = 0L;
     if (!getHeadIconUrlBytes().isEmpty()) {
       size += com.google.protobuf.GeneratedMessageV3.computeStringSize(7, headIconUrl_);
     }
+    if (!getEnglishNameBytes().isEmpty()) {
+      size += com.google.protobuf.GeneratedMessageV3.computeStringSize(8, englishName_);
+    }
+    if (!getLocationBytes().isEmpty()) {
+      size += com.google.protobuf.GeneratedMessageV3.computeStringSize(9, location_);
+    }
+    if (!getPersonalizedSignatureBytes().isEmpty()) {
+      size += com.google.protobuf.GeneratedMessageV3.computeStringSize(10, personalizedSignature_);
+    }
+    if (!getBirthDayBytes().isEmpty()) {
+      size += com.google.protobuf.GeneratedMessageV3.computeStringSize(11, birthDay_);
+    }
+    if (!getInterestBytes().isEmpty()) {
+      size += com.google.protobuf.GeneratedMessageV3.computeStringSize(12, interest_);
+    }
+    if (!getCharacterBytes().isEmpty()) {
+      size += com.google.protobuf.GeneratedMessageV3.computeStringSize(13, character_);
+    }
+    if (!getFavoriteFoodsBytes().isEmpty()) {
+      size += com.google.protobuf.GeneratedMessageV3.computeStringSize(14, favoriteFoods_);
+    }
+    if (!getUnInterestBytes().isEmpty()) {
+      size += com.google.protobuf.GeneratedMessageV3.computeStringSize(15, unInterest_);
+    }
+    if (!getLifeGoalBytes().isEmpty()) {
+      size += com.google.protobuf.GeneratedMessageV3.computeStringSize(16, lifeGoal_);
+    }
     size += unknownFields.getSerializedSize();
     memoizedSize = size;
     return size;
@@ -441,6 +900,24 @@ private static final long serialVersionUID = 0L;
         .equals(other.getDescription())) return false;
     if (!getHeadIconUrl()
         .equals(other.getHeadIconUrl())) return false;
+    if (!getEnglishName()
+        .equals(other.getEnglishName())) return false;
+    if (!getLocation()
+        .equals(other.getLocation())) return false;
+    if (!getPersonalizedSignature()
+        .equals(other.getPersonalizedSignature())) return false;
+    if (!getBirthDay()
+        .equals(other.getBirthDay())) return false;
+    if (!getInterest()
+        .equals(other.getInterest())) return false;
+    if (!getCharacter()
+        .equals(other.getCharacter())) return false;
+    if (!getFavoriteFoods()
+        .equals(other.getFavoriteFoods())) return false;
+    if (!getUnInterest()
+        .equals(other.getUnInterest())) return false;
+    if (!getLifeGoal()
+        .equals(other.getLifeGoal())) return false;
     if (!unknownFields.equals(other.unknownFields)) return false;
     return true;
   }
@@ -466,6 +943,24 @@ private static final long serialVersionUID = 0L;
     hash = (53 * hash) + getDescription().hashCode();
     hash = (37 * hash) + HEADICONURL_FIELD_NUMBER;
     hash = (53 * hash) + getHeadIconUrl().hashCode();
+    hash = (37 * hash) + ENGLISHNAME_FIELD_NUMBER;
+    hash = (53 * hash) + getEnglishName().hashCode();
+    hash = (37 * hash) + LOCATION_FIELD_NUMBER;
+    hash = (53 * hash) + getLocation().hashCode();
+    hash = (37 * hash) + PERSONALIZEDSIGNATURE_FIELD_NUMBER;
+    hash = (53 * hash) + getPersonalizedSignature().hashCode();
+    hash = (37 * hash) + BIRTHDAY_FIELD_NUMBER;
+    hash = (53 * hash) + getBirthDay().hashCode();
+    hash = (37 * hash) + INTEREST_FIELD_NUMBER;
+    hash = (53 * hash) + getInterest().hashCode();
+    hash = (37 * hash) + CHARACTER_FIELD_NUMBER;
+    hash = (53 * hash) + getCharacter().hashCode();
+    hash = (37 * hash) + FAVORITEFOODS_FIELD_NUMBER;
+    hash = (53 * hash) + getFavoriteFoods().hashCode();
+    hash = (37 * hash) + UNINTEREST_FIELD_NUMBER;
+    hash = (53 * hash) + getUnInterest().hashCode();
+    hash = (37 * hash) + LIFEGOAL_FIELD_NUMBER;
+    hash = (53 * hash) + getLifeGoal().hashCode();
     hash = (29 * hash) + unknownFields.hashCode();
     memoizedHashCode = hash;
     return hash;
@@ -613,6 +1108,24 @@ private static final long serialVersionUID = 0L;
 
       headIconUrl_ = "";
 
+      englishName_ = "";
+
+      location_ = "";
+
+      personalizedSignature_ = "";
+
+      birthDay_ = "";
+
+      interest_ = "";
+
+      character_ = "";
+
+      favoriteFoods_ = "";
+
+      unInterest_ = "";
+
+      lifeGoal_ = "";
+
       return this;
     }
 
@@ -646,6 +1159,15 @@ private static final long serialVersionUID = 0L;
       result.tags_ = tags_;
       result.description_ = description_;
       result.headIconUrl_ = headIconUrl_;
+      result.englishName_ = englishName_;
+      result.location_ = location_;
+      result.personalizedSignature_ = personalizedSignature_;
+      result.birthDay_ = birthDay_;
+      result.interest_ = interest_;
+      result.character_ = character_;
+      result.favoriteFoods_ = favoriteFoods_;
+      result.unInterest_ = unInterest_;
+      result.lifeGoal_ = lifeGoal_;
       onBuilt();
       return result;
     }
@@ -718,6 +1240,42 @@ private static final long serialVersionUID = 0L;
       }
       if (!other.getHeadIconUrl().isEmpty()) {
         headIconUrl_ = other.headIconUrl_;
+        onChanged();
+      }
+      if (!other.getEnglishName().isEmpty()) {
+        englishName_ = other.englishName_;
+        onChanged();
+      }
+      if (!other.getLocation().isEmpty()) {
+        location_ = other.location_;
+        onChanged();
+      }
+      if (!other.getPersonalizedSignature().isEmpty()) {
+        personalizedSignature_ = other.personalizedSignature_;
+        onChanged();
+      }
+      if (!other.getBirthDay().isEmpty()) {
+        birthDay_ = other.birthDay_;
+        onChanged();
+      }
+      if (!other.getInterest().isEmpty()) {
+        interest_ = other.interest_;
+        onChanged();
+      }
+      if (!other.getCharacter().isEmpty()) {
+        character_ = other.character_;
+        onChanged();
+      }
+      if (!other.getFavoriteFoods().isEmpty()) {
+        favoriteFoods_ = other.favoriteFoods_;
+        onChanged();
+      }
+      if (!other.getUnInterest().isEmpty()) {
+        unInterest_ = other.unInterest_;
+        onChanged();
+      }
+      if (!other.getLifeGoal().isEmpty()) {
+        lifeGoal_ = other.lifeGoal_;
         onChanged();
       }
       this.mergeUnknownFields(other.unknownFields);
@@ -1211,6 +1769,690 @@ private static final long serialVersionUID = 0L;
   checkByteStringIsUtf8(value);
       
       headIconUrl_ = value;
+      onChanged();
+      return this;
+    }
+
+    private java.lang.Object englishName_ = "";
+    /**
+     * <code>string englishName = 8;</code>
+     * @return The englishName.
+     */
+    public java.lang.String getEnglishName() {
+      java.lang.Object ref = englishName_;
+      if (!(ref instanceof java.lang.String)) {
+        com.google.protobuf.ByteString bs =
+            (com.google.protobuf.ByteString) ref;
+        java.lang.String s = bs.toStringUtf8();
+        englishName_ = s;
+        return s;
+      } else {
+        return (java.lang.String) ref;
+      }
+    }
+    /**
+     * <code>string englishName = 8;</code>
+     * @return The bytes for englishName.
+     */
+    public com.google.protobuf.ByteString
+        getEnglishNameBytes() {
+      java.lang.Object ref = englishName_;
+      if (ref instanceof String) {
+        com.google.protobuf.ByteString b = 
+            com.google.protobuf.ByteString.copyFromUtf8(
+                (java.lang.String) ref);
+        englishName_ = b;
+        return b;
+      } else {
+        return (com.google.protobuf.ByteString) ref;
+      }
+    }
+    /**
+     * <code>string englishName = 8;</code>
+     * @param value The englishName to set.
+     * @return This builder for chaining.
+     */
+    public Builder setEnglishName(
+        java.lang.String value) {
+      if (value == null) {
+    throw new NullPointerException();
+  }
+  
+      englishName_ = value;
+      onChanged();
+      return this;
+    }
+    /**
+     * <code>string englishName = 8;</code>
+     * @return This builder for chaining.
+     */
+    public Builder clearEnglishName() {
+      
+      englishName_ = getDefaultInstance().getEnglishName();
+      onChanged();
+      return this;
+    }
+    /**
+     * <code>string englishName = 8;</code>
+     * @param value The bytes for englishName to set.
+     * @return This builder for chaining.
+     */
+    public Builder setEnglishNameBytes(
+        com.google.protobuf.ByteString value) {
+      if (value == null) {
+    throw new NullPointerException();
+  }
+  checkByteStringIsUtf8(value);
+      
+      englishName_ = value;
+      onChanged();
+      return this;
+    }
+
+    private java.lang.Object location_ = "";
+    /**
+     * <code>string location = 9;</code>
+     * @return The location.
+     */
+    public java.lang.String getLocation() {
+      java.lang.Object ref = location_;
+      if (!(ref instanceof java.lang.String)) {
+        com.google.protobuf.ByteString bs =
+            (com.google.protobuf.ByteString) ref;
+        java.lang.String s = bs.toStringUtf8();
+        location_ = s;
+        return s;
+      } else {
+        return (java.lang.String) ref;
+      }
+    }
+    /**
+     * <code>string location = 9;</code>
+     * @return The bytes for location.
+     */
+    public com.google.protobuf.ByteString
+        getLocationBytes() {
+      java.lang.Object ref = location_;
+      if (ref instanceof String) {
+        com.google.protobuf.ByteString b = 
+            com.google.protobuf.ByteString.copyFromUtf8(
+                (java.lang.String) ref);
+        location_ = b;
+        return b;
+      } else {
+        return (com.google.protobuf.ByteString) ref;
+      }
+    }
+    /**
+     * <code>string location = 9;</code>
+     * @param value The location to set.
+     * @return This builder for chaining.
+     */
+    public Builder setLocation(
+        java.lang.String value) {
+      if (value == null) {
+    throw new NullPointerException();
+  }
+  
+      location_ = value;
+      onChanged();
+      return this;
+    }
+    /**
+     * <code>string location = 9;</code>
+     * @return This builder for chaining.
+     */
+    public Builder clearLocation() {
+      
+      location_ = getDefaultInstance().getLocation();
+      onChanged();
+      return this;
+    }
+    /**
+     * <code>string location = 9;</code>
+     * @param value The bytes for location to set.
+     * @return This builder for chaining.
+     */
+    public Builder setLocationBytes(
+        com.google.protobuf.ByteString value) {
+      if (value == null) {
+    throw new NullPointerException();
+  }
+  checkByteStringIsUtf8(value);
+      
+      location_ = value;
+      onChanged();
+      return this;
+    }
+
+    private java.lang.Object personalizedSignature_ = "";
+    /**
+     * <code>string personalizedSignature = 10;</code>
+     * @return The personalizedSignature.
+     */
+    public java.lang.String getPersonalizedSignature() {
+      java.lang.Object ref = personalizedSignature_;
+      if (!(ref instanceof java.lang.String)) {
+        com.google.protobuf.ByteString bs =
+            (com.google.protobuf.ByteString) ref;
+        java.lang.String s = bs.toStringUtf8();
+        personalizedSignature_ = s;
+        return s;
+      } else {
+        return (java.lang.String) ref;
+      }
+    }
+    /**
+     * <code>string personalizedSignature = 10;</code>
+     * @return The bytes for personalizedSignature.
+     */
+    public com.google.protobuf.ByteString
+        getPersonalizedSignatureBytes() {
+      java.lang.Object ref = personalizedSignature_;
+      if (ref instanceof String) {
+        com.google.protobuf.ByteString b = 
+            com.google.protobuf.ByteString.copyFromUtf8(
+                (java.lang.String) ref);
+        personalizedSignature_ = b;
+        return b;
+      } else {
+        return (com.google.protobuf.ByteString) ref;
+      }
+    }
+    /**
+     * <code>string personalizedSignature = 10;</code>
+     * @param value The personalizedSignature to set.
+     * @return This builder for chaining.
+     */
+    public Builder setPersonalizedSignature(
+        java.lang.String value) {
+      if (value == null) {
+    throw new NullPointerException();
+  }
+  
+      personalizedSignature_ = value;
+      onChanged();
+      return this;
+    }
+    /**
+     * <code>string personalizedSignature = 10;</code>
+     * @return This builder for chaining.
+     */
+    public Builder clearPersonalizedSignature() {
+      
+      personalizedSignature_ = getDefaultInstance().getPersonalizedSignature();
+      onChanged();
+      return this;
+    }
+    /**
+     * <code>string personalizedSignature = 10;</code>
+     * @param value The bytes for personalizedSignature to set.
+     * @return This builder for chaining.
+     */
+    public Builder setPersonalizedSignatureBytes(
+        com.google.protobuf.ByteString value) {
+      if (value == null) {
+    throw new NullPointerException();
+  }
+  checkByteStringIsUtf8(value);
+      
+      personalizedSignature_ = value;
+      onChanged();
+      return this;
+    }
+
+    private java.lang.Object birthDay_ = "";
+    /**
+     * <code>string birthDay = 11;</code>
+     * @return The birthDay.
+     */
+    public java.lang.String getBirthDay() {
+      java.lang.Object ref = birthDay_;
+      if (!(ref instanceof java.lang.String)) {
+        com.google.protobuf.ByteString bs =
+            (com.google.protobuf.ByteString) ref;
+        java.lang.String s = bs.toStringUtf8();
+        birthDay_ = s;
+        return s;
+      } else {
+        return (java.lang.String) ref;
+      }
+    }
+    /**
+     * <code>string birthDay = 11;</code>
+     * @return The bytes for birthDay.
+     */
+    public com.google.protobuf.ByteString
+        getBirthDayBytes() {
+      java.lang.Object ref = birthDay_;
+      if (ref instanceof String) {
+        com.google.protobuf.ByteString b = 
+            com.google.protobuf.ByteString.copyFromUtf8(
+                (java.lang.String) ref);
+        birthDay_ = b;
+        return b;
+      } else {
+        return (com.google.protobuf.ByteString) ref;
+      }
+    }
+    /**
+     * <code>string birthDay = 11;</code>
+     * @param value The birthDay to set.
+     * @return This builder for chaining.
+     */
+    public Builder setBirthDay(
+        java.lang.String value) {
+      if (value == null) {
+    throw new NullPointerException();
+  }
+  
+      birthDay_ = value;
+      onChanged();
+      return this;
+    }
+    /**
+     * <code>string birthDay = 11;</code>
+     * @return This builder for chaining.
+     */
+    public Builder clearBirthDay() {
+      
+      birthDay_ = getDefaultInstance().getBirthDay();
+      onChanged();
+      return this;
+    }
+    /**
+     * <code>string birthDay = 11;</code>
+     * @param value The bytes for birthDay to set.
+     * @return This builder for chaining.
+     */
+    public Builder setBirthDayBytes(
+        com.google.protobuf.ByteString value) {
+      if (value == null) {
+    throw new NullPointerException();
+  }
+  checkByteStringIsUtf8(value);
+      
+      birthDay_ = value;
+      onChanged();
+      return this;
+    }
+
+    private java.lang.Object interest_ = "";
+    /**
+     * <code>string interest = 12;</code>
+     * @return The interest.
+     */
+    public java.lang.String getInterest() {
+      java.lang.Object ref = interest_;
+      if (!(ref instanceof java.lang.String)) {
+        com.google.protobuf.ByteString bs =
+            (com.google.protobuf.ByteString) ref;
+        java.lang.String s = bs.toStringUtf8();
+        interest_ = s;
+        return s;
+      } else {
+        return (java.lang.String) ref;
+      }
+    }
+    /**
+     * <code>string interest = 12;</code>
+     * @return The bytes for interest.
+     */
+    public com.google.protobuf.ByteString
+        getInterestBytes() {
+      java.lang.Object ref = interest_;
+      if (ref instanceof String) {
+        com.google.protobuf.ByteString b = 
+            com.google.protobuf.ByteString.copyFromUtf8(
+                (java.lang.String) ref);
+        interest_ = b;
+        return b;
+      } else {
+        return (com.google.protobuf.ByteString) ref;
+      }
+    }
+    /**
+     * <code>string interest = 12;</code>
+     * @param value The interest to set.
+     * @return This builder for chaining.
+     */
+    public Builder setInterest(
+        java.lang.String value) {
+      if (value == null) {
+    throw new NullPointerException();
+  }
+  
+      interest_ = value;
+      onChanged();
+      return this;
+    }
+    /**
+     * <code>string interest = 12;</code>
+     * @return This builder for chaining.
+     */
+    public Builder clearInterest() {
+      
+      interest_ = getDefaultInstance().getInterest();
+      onChanged();
+      return this;
+    }
+    /**
+     * <code>string interest = 12;</code>
+     * @param value The bytes for interest to set.
+     * @return This builder for chaining.
+     */
+    public Builder setInterestBytes(
+        com.google.protobuf.ByteString value) {
+      if (value == null) {
+    throw new NullPointerException();
+  }
+  checkByteStringIsUtf8(value);
+      
+      interest_ = value;
+      onChanged();
+      return this;
+    }
+
+    private java.lang.Object character_ = "";
+    /**
+     * <code>string character = 13;</code>
+     * @return The character.
+     */
+    public java.lang.String getCharacter() {
+      java.lang.Object ref = character_;
+      if (!(ref instanceof java.lang.String)) {
+        com.google.protobuf.ByteString bs =
+            (com.google.protobuf.ByteString) ref;
+        java.lang.String s = bs.toStringUtf8();
+        character_ = s;
+        return s;
+      } else {
+        return (java.lang.String) ref;
+      }
+    }
+    /**
+     * <code>string character = 13;</code>
+     * @return The bytes for character.
+     */
+    public com.google.protobuf.ByteString
+        getCharacterBytes() {
+      java.lang.Object ref = character_;
+      if (ref instanceof String) {
+        com.google.protobuf.ByteString b = 
+            com.google.protobuf.ByteString.copyFromUtf8(
+                (java.lang.String) ref);
+        character_ = b;
+        return b;
+      } else {
+        return (com.google.protobuf.ByteString) ref;
+      }
+    }
+    /**
+     * <code>string character = 13;</code>
+     * @param value The character to set.
+     * @return This builder for chaining.
+     */
+    public Builder setCharacter(
+        java.lang.String value) {
+      if (value == null) {
+    throw new NullPointerException();
+  }
+  
+      character_ = value;
+      onChanged();
+      return this;
+    }
+    /**
+     * <code>string character = 13;</code>
+     * @return This builder for chaining.
+     */
+    public Builder clearCharacter() {
+      
+      character_ = getDefaultInstance().getCharacter();
+      onChanged();
+      return this;
+    }
+    /**
+     * <code>string character = 13;</code>
+     * @param value The bytes for character to set.
+     * @return This builder for chaining.
+     */
+    public Builder setCharacterBytes(
+        com.google.protobuf.ByteString value) {
+      if (value == null) {
+    throw new NullPointerException();
+  }
+  checkByteStringIsUtf8(value);
+      
+      character_ = value;
+      onChanged();
+      return this;
+    }
+
+    private java.lang.Object favoriteFoods_ = "";
+    /**
+     * <code>string favoriteFoods = 14;</code>
+     * @return The favoriteFoods.
+     */
+    public java.lang.String getFavoriteFoods() {
+      java.lang.Object ref = favoriteFoods_;
+      if (!(ref instanceof java.lang.String)) {
+        com.google.protobuf.ByteString bs =
+            (com.google.protobuf.ByteString) ref;
+        java.lang.String s = bs.toStringUtf8();
+        favoriteFoods_ = s;
+        return s;
+      } else {
+        return (java.lang.String) ref;
+      }
+    }
+    /**
+     * <code>string favoriteFoods = 14;</code>
+     * @return The bytes for favoriteFoods.
+     */
+    public com.google.protobuf.ByteString
+        getFavoriteFoodsBytes() {
+      java.lang.Object ref = favoriteFoods_;
+      if (ref instanceof String) {
+        com.google.protobuf.ByteString b = 
+            com.google.protobuf.ByteString.copyFromUtf8(
+                (java.lang.String) ref);
+        favoriteFoods_ = b;
+        return b;
+      } else {
+        return (com.google.protobuf.ByteString) ref;
+      }
+    }
+    /**
+     * <code>string favoriteFoods = 14;</code>
+     * @param value The favoriteFoods to set.
+     * @return This builder for chaining.
+     */
+    public Builder setFavoriteFoods(
+        java.lang.String value) {
+      if (value == null) {
+    throw new NullPointerException();
+  }
+  
+      favoriteFoods_ = value;
+      onChanged();
+      return this;
+    }
+    /**
+     * <code>string favoriteFoods = 14;</code>
+     * @return This builder for chaining.
+     */
+    public Builder clearFavoriteFoods() {
+      
+      favoriteFoods_ = getDefaultInstance().getFavoriteFoods();
+      onChanged();
+      return this;
+    }
+    /**
+     * <code>string favoriteFoods = 14;</code>
+     * @param value The bytes for favoriteFoods to set.
+     * @return This builder for chaining.
+     */
+    public Builder setFavoriteFoodsBytes(
+        com.google.protobuf.ByteString value) {
+      if (value == null) {
+    throw new NullPointerException();
+  }
+  checkByteStringIsUtf8(value);
+      
+      favoriteFoods_ = value;
+      onChanged();
+      return this;
+    }
+
+    private java.lang.Object unInterest_ = "";
+    /**
+     * <code>string unInterest = 15;</code>
+     * @return The unInterest.
+     */
+    public java.lang.String getUnInterest() {
+      java.lang.Object ref = unInterest_;
+      if (!(ref instanceof java.lang.String)) {
+        com.google.protobuf.ByteString bs =
+            (com.google.protobuf.ByteString) ref;
+        java.lang.String s = bs.toStringUtf8();
+        unInterest_ = s;
+        return s;
+      } else {
+        return (java.lang.String) ref;
+      }
+    }
+    /**
+     * <code>string unInterest = 15;</code>
+     * @return The bytes for unInterest.
+     */
+    public com.google.protobuf.ByteString
+        getUnInterestBytes() {
+      java.lang.Object ref = unInterest_;
+      if (ref instanceof String) {
+        com.google.protobuf.ByteString b = 
+            com.google.protobuf.ByteString.copyFromUtf8(
+                (java.lang.String) ref);
+        unInterest_ = b;
+        return b;
+      } else {
+        return (com.google.protobuf.ByteString) ref;
+      }
+    }
+    /**
+     * <code>string unInterest = 15;</code>
+     * @param value The unInterest to set.
+     * @return This builder for chaining.
+     */
+    public Builder setUnInterest(
+        java.lang.String value) {
+      if (value == null) {
+    throw new NullPointerException();
+  }
+  
+      unInterest_ = value;
+      onChanged();
+      return this;
+    }
+    /**
+     * <code>string unInterest = 15;</code>
+     * @return This builder for chaining.
+     */
+    public Builder clearUnInterest() {
+      
+      unInterest_ = getDefaultInstance().getUnInterest();
+      onChanged();
+      return this;
+    }
+    /**
+     * <code>string unInterest = 15;</code>
+     * @param value The bytes for unInterest to set.
+     * @return This builder for chaining.
+     */
+    public Builder setUnInterestBytes(
+        com.google.protobuf.ByteString value) {
+      if (value == null) {
+    throw new NullPointerException();
+  }
+  checkByteStringIsUtf8(value);
+      
+      unInterest_ = value;
+      onChanged();
+      return this;
+    }
+
+    private java.lang.Object lifeGoal_ = "";
+    /**
+     * <code>string lifeGoal = 16;</code>
+     * @return The lifeGoal.
+     */
+    public java.lang.String getLifeGoal() {
+      java.lang.Object ref = lifeGoal_;
+      if (!(ref instanceof java.lang.String)) {
+        com.google.protobuf.ByteString bs =
+            (com.google.protobuf.ByteString) ref;
+        java.lang.String s = bs.toStringUtf8();
+        lifeGoal_ = s;
+        return s;
+      } else {
+        return (java.lang.String) ref;
+      }
+    }
+    /**
+     * <code>string lifeGoal = 16;</code>
+     * @return The bytes for lifeGoal.
+     */
+    public com.google.protobuf.ByteString
+        getLifeGoalBytes() {
+      java.lang.Object ref = lifeGoal_;
+      if (ref instanceof String) {
+        com.google.protobuf.ByteString b = 
+            com.google.protobuf.ByteString.copyFromUtf8(
+                (java.lang.String) ref);
+        lifeGoal_ = b;
+        return b;
+      } else {
+        return (com.google.protobuf.ByteString) ref;
+      }
+    }
+    /**
+     * <code>string lifeGoal = 16;</code>
+     * @param value The lifeGoal to set.
+     * @return This builder for chaining.
+     */
+    public Builder setLifeGoal(
+        java.lang.String value) {
+      if (value == null) {
+    throw new NullPointerException();
+  }
+  
+      lifeGoal_ = value;
+      onChanged();
+      return this;
+    }
+    /**
+     * <code>string lifeGoal = 16;</code>
+     * @return This builder for chaining.
+     */
+    public Builder clearLifeGoal() {
+      
+      lifeGoal_ = getDefaultInstance().getLifeGoal();
+      onChanged();
+      return this;
+    }
+    /**
+     * <code>string lifeGoal = 16;</code>
+     * @param value The bytes for lifeGoal to set.
+     * @return This builder for chaining.
+     */
+    public Builder setLifeGoalBytes(
+        com.google.protobuf.ByteString value) {
+      if (value == null) {
+    throw new NullPointerException();
+  }
+  checkByteStringIsUtf8(value);
+      
+      lifeGoal_ = value;
       onChanged();
       return this;
     }

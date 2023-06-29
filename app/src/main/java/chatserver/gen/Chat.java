@@ -139,6 +139,11 @@ public final class Chat {
   static final 
     com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
       internal_static_MemoryList_fieldAccessorTable;
+  static final com.google.protobuf.Descriptors.Descriptor
+    internal_static_UpdateSelfInfoResponse_descriptor;
+  static final 
+    com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
+      internal_static_UpdateSelfInfoResponse_fieldAccessorTable;
 
   public static com.google.protobuf.Descriptors.FileDescriptor
       getDescriptor() {
@@ -186,35 +191,43 @@ public final class Chat {
       "\022\023\n\013otherUserId\030\005 \001(\003\"L\n\023DeleteMemoryReq" +
       "uest\022\016\n\006userId\030\001 \001(\003\022\023\n\013otherUserId\030\002 \001(" +
       "\003\022\020\n\010memoryId\030\003 \001(\003\")\n\024DeleteMemoryRespo" +
-      "nse\022\021\n\terrorCode\030\001 \001(\005\"\213\001\n\007Contact\022\020\n\010us" +
+      "nse\022\021\n\terrorCode\030\001 \001(\005\"\305\002\n\007Contact\022\020\n\010us" +
       "erType\030\001 \001(\005\022\020\n\010nickName\030\002 \001(\t\022\024\n\014catego" +
       "ryName\030\003 \001(\t\022\016\n\006gender\030\004 \001(\005\022\014\n\004tags\030\005 \001" +
       "(\t\022\023\n\013description\030\006 \001(\t\022\023\n\013headIconUrl\030\007" +
-      " \001(\t\")\n\025CreateMineNPCsRequest\022\020\n\010categor" +
-      "y\030\001 \001(\003\"(\n\026CreateMineNPCsResponse\022\016\n\006use" +
-      "rId\030\001 \001(\003\"-\n\033EstablishContactWithRequest" +
-      "\022\016\n\006userId\030\001 \001(\003\"1\n\034EstablishContactWith" +
-      "Response\022\021\n\tcontactId\030\001 \001(\003\"&\n\024DeleteCon" +
-      "tactRequest\022\016\n\006userId\030\001 \001(\003\"(\n\025DeleteCon" +
-      "tactResponse\022\017\n\007errCode\030\001 \001(\003\",\n\013Message" +
-      "List\022\035\n\013messageList\030\001 \003(\0132\010.Message\")\n\nM" +
-      "emoryList\022\033\n\nmemoryList\030\001 \003(\0132\007.Memory*\036" +
-      "\n\010UserType\022\t\n\005HUMAN\020\000\022\007\n\003BOT\020\001*S\n\007MsgTyp" +
-      "e\022\023\n\017AUDIO_WITH_TEXT\020\000\022\023\n\017TEXT_WITH_AUDI" +
-      "O\020\001\022\010\n\004TEXT\020\002\022\t\n\005IMAGE\020\003\022\t\n\005VIDEO\020\0042\312\003\n\013" +
-      "ChatService\022*\n\006Signup\022\r.RegisterInfo\032\021.R" +
-      "egisterFeedback\022\037\n\013GetSelfInfo\022\006.Hello\032\010" +
-      ".Contact\022$\n\rGetRoomStream\022\006.Hello\032\t.Room" +
-      "Info0\001\022&\n\020GetContactStream\022\006.Hello\032\010.Con" +
-      "tact0\001\022)\n\023GetNewMessageStream\022\006.Hello\032\010." +
-      "Message0\001\022,\n\tEnterRoom\022\021.EnterRoomReques" +
-      "t\032\014.MessageList\0220\n\017SpeechRecognize\022\014.Aud" +
-      "ioStream\032\013.TextStream(\0010\001\022+\n\004Chat\022\014.Chat" +
-      "Request\032\023.ChatResponseStream0\001\022+\n\tGetMem" +
-      "ory\022\021.GetMemoryRequest\032\013.MemoryList\022;\n\014D" +
-      "eleteMemory\022\024.DeleteMemoryRequest\032\025.Dele" +
-      "teMemoryResponseB\035\n\016chatserver.genP\001\252\002\010C" +
-      "hat.Genb\006proto3"
+      " \001(\t\022\023\n\013englishName\030\010 \001(\t\022\020\n\010location\030\t " +
+      "\001(\t\022\035\n\025personalizedSignature\030\n \001(\t\022\020\n\010bi" +
+      "rthDay\030\013 \001(\t\022\020\n\010interest\030\014 \001(\t\022\021\n\tcharac" +
+      "ter\030\r \001(\t\022\025\n\rfavoriteFoods\030\016 \001(\t\022\022\n\nunIn" +
+      "terest\030\017 \001(\t\022\020\n\010lifeGoal\030\020 \001(\t\")\n\025Create" +
+      "MineNPCsRequest\022\020\n\010category\030\001 \001(\003\"(\n\026Cre" +
+      "ateMineNPCsResponse\022\016\n\006userId\030\001 \001(\003\"-\n\033E" +
+      "stablishContactWithRequest\022\016\n\006userId\030\001 \001" +
+      "(\003\"1\n\034EstablishContactWithResponse\022\021\n\tco" +
+      "ntactId\030\001 \001(\003\"&\n\024DeleteContactRequest\022\016\n" +
+      "\006userId\030\001 \001(\003\"(\n\025DeleteContactResponse\022\017" +
+      "\n\007errCode\030\001 \001(\003\",\n\013MessageList\022\035\n\013messag" +
+      "eList\030\001 \003(\0132\010.Message\")\n\nMemoryList\022\033\n\nm" +
+      "emoryList\030\001 \003(\0132\007.Memory\"C\n\026UpdateSelfIn" +
+      "foResponse\022\016\n\006result\030\001 \001(\005\022\031\n\007contact\030\002 " +
+      "\001(\0132\010.Contact*\036\n\010UserType\022\t\n\005HUMAN\020\000\022\007\n\003" +
+      "BOT\020\001*S\n\007MsgType\022\023\n\017AUDIO_WITH_TEXT\020\000\022\023\n" +
+      "\017TEXT_WITH_AUDIO\020\001\022\010\n\004TEXT\020\002\022\t\n\005IMAGE\020\003\022" +
+      "\t\n\005VIDEO\020\0042\377\003\n\013ChatService\022*\n\006Signup\022\r.R" +
+      "egisterInfo\032\021.RegisterFeedback\022\037\n\013GetSel" +
+      "fInfo\022\006.Hello\032\010.Contact\0223\n\016UpdateSelfInf" +
+      "o\022\010.Contact\032\027.UpdateSelfInfoResponse\022$\n\r" +
+      "GetRoomStream\022\006.Hello\032\t.RoomInfo0\001\022&\n\020Ge" +
+      "tContactStream\022\006.Hello\032\010.Contact0\001\022)\n\023Ge" +
+      "tNewMessageStream\022\006.Hello\032\010.Message0\001\022,\n" +
+      "\tEnterRoom\022\021.EnterRoomRequest\032\014.MessageL" +
+      "ist\0220\n\017SpeechRecognize\022\014.AudioStream\032\013.T" +
+      "extStream(\0010\001\022+\n\004Chat\022\014.ChatRequest\032\023.Ch" +
+      "atResponseStream0\001\022+\n\tGetMemory\022\021.GetMem" +
+      "oryRequest\032\013.MemoryList\022;\n\014DeleteMemory\022" +
+      "\024.DeleteMemoryRequest\032\025.DeleteMemoryResp" +
+      "onseB\035\n\016chatserver.genP\001\252\002\010Chat.Genb\006pro" +
+      "to3"
     };
     descriptor = com.google.protobuf.Descriptors.FileDescriptor
       .internalBuildGeneratedFileFrom(descriptorData,
@@ -321,7 +334,7 @@ public final class Chat {
     internal_static_Contact_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_Contact_descriptor,
-        new java.lang.String[] { "UserType", "NickName", "CategoryName", "Gender", "Tags", "Description", "HeadIconUrl", });
+        new java.lang.String[] { "UserType", "NickName", "CategoryName", "Gender", "Tags", "Description", "HeadIconUrl", "EnglishName", "Location", "PersonalizedSignature", "BirthDay", "Interest", "Character", "FavoriteFoods", "UnInterest", "LifeGoal", });
     internal_static_CreateMineNPCsRequest_descriptor =
       getDescriptor().getMessageTypes().get(17);
     internal_static_CreateMineNPCsRequest_fieldAccessorTable = new
@@ -370,6 +383,12 @@ public final class Chat {
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_MemoryList_descriptor,
         new java.lang.String[] { "MemoryList", });
+    internal_static_UpdateSelfInfoResponse_descriptor =
+      getDescriptor().getMessageTypes().get(25);
+    internal_static_UpdateSelfInfoResponse_fieldAccessorTable = new
+      com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
+        internal_static_UpdateSelfInfoResponse_descriptor,
+        new java.lang.String[] { "Result", "Contact", });
   }
 
   // @@protoc_insertion_point(outer_class_scope)

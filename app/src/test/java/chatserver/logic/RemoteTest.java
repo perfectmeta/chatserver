@@ -18,6 +18,7 @@ import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.atomic.AtomicReference;
 import java.util.logging.Logger;
 
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
@@ -306,5 +307,101 @@ public class RemoteTest {
             }
         });
         Thread.sleep(10000);
+    }
+
+    @Test
+    public void getSelfInfoAndUpdateSelfInfoTest() {
+        var selfInfo = getSelfInfo();
+        updateSelfInfo(selfInfo);
+    }
+
+    private Contact getSelfInfo() {
+        var latch = new CountDownLatch(1);
+        var contactReference = new AtomicReference<Contact>();
+        var errorReference = new AtomicReference<Throwable>();
+        stub.getSelfInfo(Hello.newBuilder().build(), new StreamObserver<>(){
+
+            @Override
+            public void onNext(Contact value) {
+                contactReference.set(value);
+            }
+
+            @Override
+            public void onError(Throwable t) {
+                errorReference.set(t);
+                latch.countDown();
+            }
+
+            @Override
+            public void onCompleted() {
+                latch.countDown();
+            }
+        });
+        try {
+            latch.await();
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
+        }
+        Assertions.assertNull(errorReference.get());
+        var contact = contactReference.get();
+        Assertions.assertNotNull(contact);
+        Assertions.assertNull(errorReference.get());
+        // Assertions.assertEquals("", contact.getBirthDay()) ;
+        return contact;
+    }
+
+    private void updateSelfInfo(Contact contact) {
+        var latch = new CountDownLatch(1);
+        var updateContactInfo = Contact.newBuilder();
+        updateContactInfo.setBirthDay("Test Birth Day");
+        updateContactInfo.setPersonalizedSignature("Test personalized Signature");
+        updateContactInfo.setLifeGoal("Test Life Goal");
+        updateContactInfo.setUnInterest("Test UnInterest");
+        updateContactInfo.setFavoriteFoods("Test FavoriteFoods");
+        updateContactInfo.setInterest("Test Interest");
+        updateContactInfo.setLocation("Test Location");
+        updateContactInfo.setEnglishName("Test EnglishName");
+        updateContactInfo.setCharacter("Test Character");
+        var newContact = updateContactInfo.build();
+        var resultReference = new AtomicReference<UpdateSelfInfoResponse>();
+        var errorReference = new AtomicReference<Throwable>();
+        stub.updateSelfInfo(newContact, new StreamObserver<>() {
+            @Override
+            public void onNext(UpdateSelfInfoResponse value) {
+                resultReference.set(value);
+            }
+
+            @Override
+            public void onError(Throwable t) {
+                errorReference.set(t);
+                logger.warning(t.getMessage());
+                t.printStackTrace();
+                latch.countDown();
+            }
+
+            @Override
+            public void onCompleted() {
+                latch.countDown();
+            }
+        });
+
+        try {
+            latch.await();
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
+        }
+        Assertions.assertNull(errorReference.get());
+        var result = resultReference.get();
+        Assertions.assertNotNull(result);
+        Assertions.assertEquals(0, result.getResult());
+        var updatedContact = result.getContact();
+        Assertions.assertEquals("Test personalized Signature", updatedContact.getPersonalizedSignature());
+        Assertions.assertEquals("Test Life Goal", updatedContact.getLifeGoal());
+        Assertions.assertEquals("Test UnInterest", updatedContact.getUnInterest());
+        Assertions.assertEquals("Test FavoriteFoods", updatedContact.getFavoriteFoods());
+        Assertions.assertEquals("Test Interest", updatedContact.getInterest());
+        Assertions.assertEquals("Test Location", updatedContact.getLocation());
+        Assertions.assertEquals("Test EnglishName", updatedContact.getEnglishName());
+        Assertions.assertEquals("Test Character", updatedContact.getCharacter());
     }
 }

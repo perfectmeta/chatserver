@@ -23,4 +23,14 @@ public class User {
     private String nickName;
     private int gender;
     private String headIconUrl;
+
+    private String englishName;
+    private String location;
+    private String personalizedSignature;
+    private String birthDay;
+    private String interest;
+    private String disposition;
+    private String favoriteFoods;
+    private String unInterest;
+    private String lifeGoal;
 }

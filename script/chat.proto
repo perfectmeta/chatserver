@@ -161,6 +161,16 @@ message Contact {
   string tags = 5;
   string description = 6;
   string headIconUrl = 7;
+
+  string englishName = 8;
+  string location = 9;
+  string personalizedSignature = 10;
+  string birthDay = 11;
+  string interest = 12;
+  string character = 13;
+  string favoriteFoods = 14;
+  string unInterest = 15;
+  string lifeGoal = 16;
 }
 
 message CreateMineNPCsRequest {
@@ -195,6 +205,11 @@ message MemoryList {
   repeated Memory memoryList = 1;
 }
 
+message UpdateSelfInfoResponse {
+  int32 result = 1;
+  Contact contact = 2;
+}
+
 //////////////////////////////////////
 
 service ChatService {
@@ -204,6 +219,9 @@ service ChatService {
 
   // 取自己信息
   rpc GetSelfInfo(Hello) returns (Contact);
+  // 更新个人页的信息
+  rpc UpdateSelfInfo(Contact) returns (UpdateSelfInfoResponse);
+
   // 登录游戏后立马就发送Hello，取room list，contact list, new message stream，这3个可能就是在连接期间一直会发。
   rpc GetRoomStream(Hello) returns (stream RoomInfo);
   rpc GetContactStream(Hello) returns (stream Contact);
