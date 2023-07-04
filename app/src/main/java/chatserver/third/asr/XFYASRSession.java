@@ -57,6 +57,7 @@ public class XFYASRSession extends org.java_websocket.client.WebSocketClient imp
                     var requestContent = makeRequest(buffer, first);
                     first = false;
                     send(requestContent);
+                    // Thread.sleep(40);   //fixme 后面想个办法给去掉这个限制
                 }
             } catch (IOException e) { // | InterruptedException e) {
                 logger.warning(e.getMessage());
