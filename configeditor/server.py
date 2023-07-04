@@ -1,3 +1,4 @@
+import datetime
 from enum import Enum
 from pathlib import Path
 import json
@@ -100,6 +101,7 @@ class BotModel(BaseModel):
 
 class BotConfigEditor:
     def __init__(self, config: Path):
+        self.config_dir = config
         self.bots_dir = config / 'bots'
         if 'bots' not in st.session_state:
             st.session_state.bots = {}
@@ -160,17 +162,23 @@ class BotConfigEditor:
             bot = sp.pydantic_form(key=cur.id, model=cur, submit_label=intent)
             if bot:
                 # st.json(bot.to_profile_json())
-                self.save_bot(bot)
+                self.save_bot(bot, is_update)
                 if not is_update:
                     st.experimental_rerun()
 
-    def save_bot(self, bot: BotModel):
+    def save_bot(self, bot: BotModel, is_update: bool):
         bot.save_bot(self.bots_dir)
         st.session_state.bots[bot.id] = bot
+        self.log('update' if is_update else 'create', bot.id)
 
     def delete_bot(self, delete_bot_id: str):
         BotModel.delete_bot(self.bots_dir / delete_bot_id)
         del st.session_state.bots[delete_bot_id]
+        self.log('delete', delete_bot_id)
+
+    def log(self, action: str, bot_id: str):
+        with (self.config_dir / 'changelist.txt').open(mode='a') as fp:
+            fp.write(f"{datetime.datetime.now()} {action} {bot_id}\n")
 
 
 if __name__ == '__main__':
