@@ -5,9 +5,7 @@ import chatserver.config.robot.RobotConfig;
 import chatserver.config.skill.Skill;
 import chatserver.config.skill.SkillConfig;
 
-import java.io.IOException;
 import java.nio.file.*;
-import java.nio.file.attribute.BasicFileAttributes;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -23,8 +21,6 @@ public class Config {
 
     private final Map<String, Robot> robots;
     private final Map<String, Skill> skills;
-
-    private final Map<String, List<String>> skillDependencies;
     public Path currentReloadPath;
 
     public static Config getInstance() {
@@ -40,7 +36,6 @@ public class Config {
     private Config() {
         robots = new HashMap<>();
         skills = new HashMap<>();
-        skillDependencies = new HashMap<>();
     }
 
     public Robot getRobotByName(String robotName) {
@@ -59,47 +54,16 @@ public class Config {
         }
     }
 
-    synchronized public void reload(Path root, Path configPath, WatchEvent.Kind<Path> kind) {
-        logger.info("reload file " + configPath.toAbsolutePath());
-        var diff = calculateDiff(root, configPath);
-        if (diff.isEmpty()) {
-            return;
-        }
-        currentReloadPath = configPath;
-        var topLevel = diff.get(0);
-        switch (topLevel) {
-            case "bots" -> updateRobot(diff.subList(1, diff.size()), parseUpdateKind(kind));
-            case "skills" -> updateSkill(diff.subList(1, diff.size()), parseUpdateKind(kind));
-        }
-        currentReloadPath = null;
+    private void updateRobot(Path configPath) {
+        var robotName = configPath.getName(configPath.getNameCount()-1).toString();
+        var robotConfig = (RobotConfig)makesureRobot(robotName);
+        robotConfig.getModifier().update(configPath);
     }
 
-    private void updateRobot(List<String> configPath, UpdateKind updateKind) {
-        if (configPath.isEmpty()) {
-            return;
-        }
-
-        var robotName = configPath.get(0);
-        if (configPath.size() == 1 && updateKind == UpdateKind.DELETE) {
-            removeRobot(robotName);
-            return;
-        }
-
-        var robotConfig = makesureRobot(robotName);
-        robotConfig.update(configPath.subList(1, configPath.size()), updateKind);
-    }
-
-    private void updateSkill(List<String> configPath, UpdateKind updateKind) {
-        if (configPath.isEmpty()) {
-            return;
-        }
-        var skillName = configPath.get(0);
-        if (configPath.size() == 1 && updateKind == UpdateKind.DELETE) {
-            removeSkill(skillName);
-            return;
-        }
+    private void updateSkill(Path configPath) {
+        var skillName = configPath.getName(configPath.getNameCount()-1).toString();
         var skillConfig = makesureSkill(skillName);
-        skillConfig.update(configPath.subList(1, configPath.size()), updateKind);
+        skillConfig.update(configPath);
     }
 
     synchronized public void reload(Path root) {
@@ -109,12 +73,18 @@ public class Config {
                 throw new RuntimeException("config dir %s don't exist or not a directory".formatted(root));
             }
 
-            Files.walkFileTree(root, new SimpleFileVisitor<>() {
-                @Override
-                public FileVisitResult visitFile(Path file, BasicFileAttributes attrs)
-                        throws IOException {
-                    reload(root, file, StandardWatchEventKinds.ENTRY_CREATE);
-                    return FileVisitResult.CONTINUE;
+            Files.walk(root.resolve("bots"), 1).forEach(path->{
+                if (path.equals(root.resolve("bots"))) {
+                    return;
+                }
+                if (Files.isDirectory(path.toAbsolutePath())) {
+                    updateRobot(path);
+                }
+            });
+
+            Files.walk(root.resolve("skills"), 1).forEach(path->{
+                if (Files.isDirectory(path.toAbsolutePath())) {
+                    updateSkill(path);
                 }
             });
         } catch (Exception e) {
@@ -151,7 +121,6 @@ public class Config {
     private Skill createSkill(String name) {
         var skill = new SkillConfig(name);
         skills.put(name, skill);
-        skillDependencies.put(name, new ArrayList<>());
         return skill;
     }
 

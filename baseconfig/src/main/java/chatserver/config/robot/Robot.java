@@ -12,6 +12,5 @@ public interface Robot {
     String speaker();
     String model();
     boolean isValid();
-    void update(List<String> strings, UpdateKind kind);
     int getGender();
 }

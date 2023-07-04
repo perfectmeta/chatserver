@@ -3,12 +3,13 @@ package chatserver.config.robot;
 import chatserver.config.Config;
 import chatserver.config.Prompt;
 import chatserver.config.UpdateKind;
-import chatserver.config.util.IniFileReader;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.base.Strings;
 
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
+import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -26,68 +27,35 @@ public class RobotConfig implements Robot {
         modifier = this.new RobotConfigModifier();
     }
 
-    class RobotConfigModifier {
-        public void update(List<String> configPath, UpdateKind kind) {
-            if (configPath.isEmpty()) {
-                return;
-            }
+    public RobotConfigModifier getModifier() {
+        return modifier;
+    }
 
-            var top = configPath.get(0);
-            switch (top) {
-                case "prompt.txt" -> updatePrompt(kind);
-                case "availableskills.txt" -> updateAvailableSkills(kind);
-                case "base.ini" -> updateBaseInfo(kind);
-            }
+    public class RobotConfigModifier {
+        public void update(Path robotPath) {
+            updatePrompt(robotPath.resolve("prompt.txt"));
+            updateBaseInfo(robotPath.resolve("profile.json"));
         }
 
-        private void updateBaseInfo(UpdateKind kind) {
-            if (kind == UpdateKind.DELETE) {
-                return;
-            }
-
-            var iniReader = IniFileReader.fromFile(Config.getInstance().currentReloadPath);
-            String newModel = iniReader.get("model");
-            updateModel(newModel);
-
-            String newGreetings = iniReader.get("greeting");
-            if (!Strings.isNullOrEmpty(newGreetings)) {
-                RobotConfig.this.greetings = newGreetings;
-            }
-
-            String newSpeaker = iniReader.get("speaker");
-            if (!Strings.isNullOrEmpty(newSpeaker)) {
-                RobotConfig.this.speaker = newSpeaker;
-            }
-        }
-
-        private void updateGreetings(UpdateKind kind) {
-            var filePath = Config.getInstance().currentReloadPath;
-            if (kind == UpdateKind.DELETE) {
-                RobotConfig.this.greetings = "";
-                return;
-            }
-
-            try (var reader = new BufferedReader(new FileReader(filePath.toAbsolutePath().toFile()))) {
-                var greetings = new StringBuilder();
-                var line = "";
-                while ((line = reader.readLine()) != null) {
-                    line = line.trim();
-                    if (!Strings.isNullOrEmpty(line)) {
-                        greetings.append(line);
-                    }
-                }
-                RobotConfig.this.greetings = greetings.toString();
+        private void updateBaseInfo(Path path) {
+            ObjectMapper objectMapper = new ObjectMapper();
+            RobotBaseJO robotJo;
+            try {
+                robotJo = objectMapper.readValue(path.toAbsolutePath().toFile(), RobotBaseJO.class);
             } catch (IOException e) {
                 throw new RuntimeException(e);
             }
+            updateModel();
+            RobotConfig.this.greetings = robotJo.greeting;
+            RobotConfig.this.speaker = robotJo.speaker;
         }
 
-        private void updateModel(String newModel) {
+        private void updateModel() {
             RobotConfig.this.model.clear();
-            if (Strings.isNullOrEmpty(newModel)) {
+            if (Strings.isNullOrEmpty("\"gpt-3.5-turbo\"")) {
                 return;
             }
-            var models = newModel.split(",");
+            var models = "\"gpt-3.5-turbo\"".split(",");
             for (var m : models) {
                 m = m.trim();
                 if (!Strings.isNullOrEmpty(m)) {
@@ -96,14 +64,9 @@ public class RobotConfig implements Robot {
             }
         }
 
-        private void updatePrompt(UpdateKind kind) {
-            if (kind == UpdateKind.DELETE) {
-                RobotConfig.this.prompt = null;
-                return;
-            }
-
+        private void updatePrompt(Path path) {
             var promptBuilder = Prompt.newBuilder();
-            try (var reader = new BufferedReader(new FileReader(Config.getInstance().currentReloadPath.toAbsolutePath().toFile()))) {
+            try (var reader = new BufferedReader(new FileReader(path.toAbsolutePath().toFile()))) {
                 var line = "";
                 while ((line = reader.readLine()) != null) {
                     line = line.trim();
@@ -179,11 +142,6 @@ public class RobotConfig implements Robot {
     @Override
     public boolean isValid() {
         return !Strings.isNullOrEmpty(greetings) && prompt != null;
-    }
-
-    @Override
-    public void update(List<String> configPath, UpdateKind kind) {
-        modifier.update(configPath, kind);
     }
 
     @Override

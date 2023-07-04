@@ -2,6 +2,7 @@ package chatserver.config.skill;
 
 import chatserver.config.UpdateKind;
 
+import java.nio.file.Path;
 import java.util.List;
 
 public class SkillConfig implements Skill{
@@ -9,7 +10,7 @@ public class SkillConfig implements Skill{
     }
 
     @Override
-    public void update(List<String> strings, UpdateKind updateKind) {
+    public void update(Path path) {
 
     }
 }
