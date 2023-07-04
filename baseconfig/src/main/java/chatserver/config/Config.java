@@ -122,6 +122,11 @@ public class Config {
         }
     }
 
+    synchronized void cleanup() {
+        robots.clear();
+        skills.clear();
+    }
+
     private Robot makesureRobot(String name) {
         if (robots.containsKey(name)) {
             return robots.get(name);

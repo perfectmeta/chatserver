@@ -13,10 +13,12 @@ public class DirectoryWatcher {
     // private final String watchPath;
     private final Path watchPath;
     private Thread workerThread;
+    private String flagFileName;
 
     private BiConsumer<Path, WatchEvent.Kind<Path>> handler;
-    public DirectoryWatcher(String path) {
+    public DirectoryWatcher(String path, String flagFileName) {
         this.watchPath = Paths.get(path);
+        this.flagFileName = flagFileName;
     }
 
     public void watch(BiConsumer<Path, WatchEvent.Kind<Path>> handler) {
@@ -26,9 +28,7 @@ public class DirectoryWatcher {
             watchService = FileSystems.getDefault().newWatchService();
             registerRecursive(watchPath, watchService);
             watchPath.register(watchService,
-                    StandardWatchEventKinds.ENTRY_CREATE,
-                    StandardWatchEventKinds.ENTRY_MODIFY,
-                    StandardWatchEventKinds.ENTRY_DELETE);
+                    StandardWatchEventKinds.ENTRY_MODIFY);
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
@@ -38,35 +38,28 @@ public class DirectoryWatcher {
                 WatchKey key = null;
                 try {
                     key = watchService.take();
+                    Objects.requireNonNull(key);
+                    for (var event : key.pollEvents()) {
+                        //noinspection unchecked
+                        WatchEvent<Path> pathEvent = (WatchEvent<Path>) event;
+                        var context = pathEvent.context();
+                        var filePath = watchPath.resolve(context);
+                        var fileName = filePath.getFileName().toString();
+                        logger.info(filePath.toAbsolutePath() + " event " + event.kind().name());
+
+                        if (fileName.equals(flagFileName)) {
+                            this.handler.accept(pathEvent.context(), pathEvent.kind());
+                        }
+                    }
                 } catch (InterruptedException e) {
                     if (Thread.interrupted()) {
                         break;
                     }
-                }
-
-                Objects.requireNonNull(key);
-                for (var event : key.pollEvents()) {
-                    if (event.kind() == StandardWatchEventKinds.OVERFLOW) {
-                        logger.warning("Overflow event occurred");
-                        continue;
+                } finally {
+                    if (key != null) {
+                        key.reset();
                     }
-
-                    //noinspection unchecked
-                    WatchEvent<Path> pathEvent = (WatchEvent<Path>) event;
-                    var context = pathEvent.context();
-                    var filePath = watchPath.resolve(context);
-                    logger.info(filePath.toAbsolutePath() + " event " + event.kind().name());
-
-                    if (event.kind() == StandardWatchEventKinds.ENTRY_CREATE && Files.isDirectory(context)) {
-                        try {
-                            registerRecursive(context, watchService);
-                        } catch (IOException e) {
-                            throw new RuntimeException(e);
-                        }
-                    }
-                    this.handler.accept(pathEvent.context(), pathEvent.kind());
                 }
-                key.reset();
             }
         });
     }
