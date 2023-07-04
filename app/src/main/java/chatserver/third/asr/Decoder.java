@@ -7,13 +7,13 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.Queue;
+import java.util.logging.Logger;
 
 // 这个类，先简单实现下，以后再优化性能 !!!
 public class Decoder {
     private final List<Text> resultList;
     private final Queue<Object> textStreams;
-
-//    private StringBuilder content; // 已经发送到客户端的内容
+    private static final Logger logger = Logger.getLogger(Decoder.class.getName());
 
     public Decoder(Queue<Object> textStreams) {
         this.textStreams = textStreams;
@@ -24,6 +24,7 @@ public class Decoder {
         var text = toString(result);
         int removeNum = 0;
         if (Objects.equals(result.pgs(), "rpl")) {
+            logger.info("Decoder rpl " + result.pgs());
             var start = result.rg().get(0);
             var end = result.rg().get(1);
             for (int i = start; i <= end; i++) {
@@ -38,11 +39,10 @@ public class Decoder {
                 textStreams.add(TextStream.newBuilder().setDelete(removeNum).build());
             }
             resultList.add(new Text(text));
-//            content.append(text);
             textStreams.add(TextStream.newBuilder().setText(text).build());
         } else {
+            logger.info("Decoder no rpl " + result.pgs());
             resultList.add(new Text(text));
-//            content.append(text); //
             textStreams.add(TextStream.newBuilder().setText(text).build());
         }
     }

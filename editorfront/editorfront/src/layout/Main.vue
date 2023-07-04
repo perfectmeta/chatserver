@@ -21,22 +21,22 @@
 <script setup lang="ts">
 
 // import { ElContainer, ElHeader, ElAside, ElMain } from 'element3';
-import { Ref } from 'vue'
+import { Ref, ref } from 'vue'
 import LeftSide from './LeftSide.vue'
 import ContentView from './ContentView.vue'
-import { store } from '../store/store.js'
+// import { store } from '../store/store.js'
 
-let curRobot: Ref<any> = store.curRobot
-let curSkill: Ref<string> = store.curSkill
+let curRobot: Ref<any> = ref('') //store.curRobot
+let curSkill: Ref<string> = ref('') // store.curSkill
 
 
 function onRobotChange(robot: string) {
-  store.setCurRobot(robot)
+  // store.setCurRobot(robot)
   console.log(robot)
 }
 
 function onSkillChange(skill: string) {
-  store.setCurSkill(skill)
+  // store.setCurSkill(skill)
   console.log(skill)
 }
 
@@ -73,4 +73,4 @@ function onSkillChange(skill: string) {
     height: 100vh;
   }
 
-</style>
+</style>../store/index.js

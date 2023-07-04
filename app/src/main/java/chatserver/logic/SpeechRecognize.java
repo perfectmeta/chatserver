@@ -11,6 +11,7 @@ import org.springframework.stereotype.Component;
 
 import java.io.*;
 import java.nio.ByteBuffer;
+import java.nio.file.FileAlreadyExistsException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.concurrent.BlockingQueue;
@@ -44,8 +45,8 @@ public class SpeechRecognize {
                 }
             } catch (IOException e) {
                 if (!(e instanceof FileNotFoundException)) {
-                    e.printStackTrace();
-                    logger.warning(e.getMessage());
+                    // e.printStackTrace();
+                    logger.warning("save audio " + e.getMessage());
                 }
             }
             return fileName;
@@ -75,7 +76,7 @@ public class SpeechRecognize {
                         break;
                     }
                     TextStream textStream = (TextStream) o;
-                    logger.info("Get ASR Res " + textStream.getText());
+                    logger.info("Get ASR Res " + textStream.getText() + " del " + textStream.getDelete());
                     responseObserver.onNext(textStream);
                 }
                 var filePath = audioBuffer.save();
@@ -89,8 +90,6 @@ public class SpeechRecognize {
             }
         });
         return new StreamObserver<>() {
-            private final ByteBuffer audioContent = ByteBuffer.allocate(1024 * 1024 * 8);
-
             @Override
             public void onNext(AudioStream value) {
                 var audioData = value.getAudio().toByteArray();
@@ -98,7 +97,6 @@ public class SpeechRecognize {
                 try {
                     out.write(audioData);
                     audioBuffer.write(audioData);
-                    audioContent.put(audioData);
                 } catch (IOException e) {
                     logger.warning("OnNext exception: " + e.getMessage());
                     e.printStackTrace();
