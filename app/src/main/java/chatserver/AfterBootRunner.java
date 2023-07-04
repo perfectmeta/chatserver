@@ -35,10 +35,10 @@ public class AfterBootRunner implements ApplicationRunner {
         config.reload(Paths.get(configDir));
         logger.info("reload config from %s finished".formatted(configDir));
 
-        DirectoryWatcher wacher = new DirectoryWatcher(configDir);
+        DirectoryWatcher wacher = new DirectoryWatcher(configDir, "changelist.txt");
         wacher.watch((path, kind)->{
             logger.info("find file change " + path.toAbsolutePath());
-            config.reload(Paths.get(configDir), path, kind);
+            config.reload(Paths.get(configDir));
         });
     }
 }
