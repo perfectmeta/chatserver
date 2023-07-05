@@ -1,5 +1,6 @@
 package com.perfectword.semantic_kernal;
 
+import com.perfectword.semantic_kernal.abstractions.Verify;
 import com.perfectword.semantic_kernal.memory.ISemanticTextMemory;
 import com.perfectword.semantic_kernal.orchestration.ContextVariables;
 import com.perfectword.semantic_kernal.orchestration.SKContext;
@@ -7,6 +8,7 @@ import com.perfectword.semantic_kernal.semantic_functions.SemanticFunctionConfig
 import com.perfectword.semantic_kernal.skill_define.IReadOnlySkillCollection;
 import com.perfectword.semantic_kernal.skill_define.ISKFunction;
 import com.perfectword.semantic_kernal.skill_define.ISkillCollection;
+import com.perfectword.semantic_kernal.skill_define.SkillCollection;
 import com.perfectword.semantic_kernal.template_engine.IPromptTemplateEngine;
 
 import java.util.Map;
@@ -42,11 +44,14 @@ public class Kernel implements IKernel{
 
     @Override
     public ISKFunction registerSemanticFunction(String functionName, SemanticFunctionConfig functionConfig) {
-        return null;
+        return registerSemanticFunction(SkillCollection.GLOBAL_SKILL, functionName, functionConfig);
     }
 
     @Override
     public ISKFunction registerSemanticFunction(String skillName, String functionName, SemanticFunctionConfig functionConfig) {
+        Verify.validSkillName(skillName);
+        Verify.ValidFunctionName(functionName);
+        ISKFunction function = createSemanticFunction(skillName, functionName, functionConfig);
         return null;
     }
 
@@ -94,4 +99,11 @@ public class Kernel implements IKernel{
     public <T> T getService(String name, Class<T> clazz) {
         return null;
     }
+
+//    private ISKFunction createSemanticFunction(String skillName, String functionName, SemanticFunctionConfig functionConfig) {
+//        // todo implement
+//        if (functionConfig.getPromptTemplateConfig().getType().equalsIgnoreCase("completion")) {
+//
+//        }
+//    }
 }

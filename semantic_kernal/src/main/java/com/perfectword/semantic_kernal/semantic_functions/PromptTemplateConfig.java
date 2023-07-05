@@ -23,6 +23,69 @@ public class PromptTemplateConfig {
         public List<InputParameter> parameters = new ArrayList<>();
     }
 
-    public int schema = 1;
-    public String type = "completion";
+    private int schema;
+    private String type = "completion";
+    private String description;
+    private CompletionConfig completion = new CompletionConfig();
+    private List<String> defaultServices = new ArrayList<String>();
+    private InputConfig input = new InputConfig();
+
+    public PromptTemplateConfig compact() {
+        if (completion.stopSequences.size() != 0) {
+            this.completion.stopSequences = null;
+        }
+
+        if (defaultServices.size() == 0) {
+            this.defaultServices = null;
+        }
+        return this;
+    }
+
+    public int getSchema() {
+        return schema;
+    }
+
+    public void setSchema(int schema) {
+        this.schema = schema;
+    }
+
+    public String getType() {
+        return type;
+    }
+
+    public void setType(String type) {
+        this.type = type;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public CompletionConfig getCompletion() {
+        return completion;
+    }
+
+    public void setCompletion(CompletionConfig completion) {
+        this.completion = completion;
+    }
+
+    public List<String> getDefaultServices() {
+        return defaultServices;
+    }
+
+    public void setDefaultServices(List<String> defaultServices) {
+        this.defaultServices = defaultServices;
+    }
+
+    public InputConfig getInput() {
+        return input;
+    }
+
+    public void setInput(InputConfig input) {
+        this.input = input;
+    }
 }

@@ -17,4 +17,12 @@ public class Verify {
     public static void notNullOrWhiteSpace(String name) {
         // todo implement function
     }
+
+    public static void validSkillName(String skillName) {
+        // todo implement function
+    }
+
+    public static void ValidFunctionName(String functionName) {
+        // todo implement function
+    }
 }
