@@ -4,6 +4,7 @@ import chatserver.config.ConfigManager;
 import chatserver.config.PromptConfig;
 import chatserver.config.RobotConfig;
 import chatserver.entity.*;
+import chatserver.gen.CandidateRecommend;
 import chatserver.gen.ChatRequest;
 import chatserver.gen.ChatResponseStream;
 import chatserver.logic.internal.SummaryMemory;
@@ -193,6 +194,17 @@ public class Chat {
                     .setResponseMessage(chatserver.gen.Message.newBuilder().setAudioUrl(fileName).build())
                     .build();
             responseObserver.onNext(text);
+
+            // fixme 后续正规去实现一下提示技能，然后采用并行执行，归纳回复来加速吧
+            ChatResponseStream recommendLast = ChatResponseStream.newBuilder()
+                    .setCandidates(CandidateRecommend.newBuilder()
+                            .setMessageId(gptMsg.getMessageId())
+                            .addRecommend("今天天气不错吧?")
+                            .addRecommend("你今天心情好吗？")
+                            .addRecommend("要不要一起出去Happy一下？")
+                    )
+                    .build();
+            responseObserver.onNext(recommendLast);
             responseObserver.onCompleted();
         });
 

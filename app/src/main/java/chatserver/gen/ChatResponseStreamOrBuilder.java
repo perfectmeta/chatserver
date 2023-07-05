@@ -97,5 +97,32 @@ public interface ChatResponseStreamOrBuilder extends
    */
   chatserver.gen.MessageOrBuilder getResponseMessageOrBuilder();
 
+  /**
+   * <pre>
+   * 发完正文后，可选可能会有这个字段，提示玩家后续可能发什么，也可能没有
+   * </pre>
+   *
+   * <code>.CandidateRecommend candidates = 5;</code>
+   * @return Whether the candidates field is set.
+   */
+  boolean hasCandidates();
+  /**
+   * <pre>
+   * 发完正文后，可选可能会有这个字段，提示玩家后续可能发什么，也可能没有
+   * </pre>
+   *
+   * <code>.CandidateRecommend candidates = 5;</code>
+   * @return The candidates.
+   */
+  chatserver.gen.CandidateRecommend getCandidates();
+  /**
+   * <pre>
+   * 发完正文后，可选可能会有这个字段，提示玩家后续可能发什么，也可能没有
+   * </pre>
+   *
+   * <code>.CandidateRecommend candidates = 5;</code>
+   */
+  chatserver.gen.CandidateRecommendOrBuilder getCandidatesOrBuilder();
+
   public chatserver.gen.ChatResponseStream.ResponseCase getResponseCase();
 }

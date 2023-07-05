@@ -87,6 +87,20 @@ private static final long serialVersionUID = 0L;
             responseCase_ = 4;
             break;
           }
+          case 42: {
+            chatserver.gen.CandidateRecommend.Builder subBuilder = null;
+            if (responseCase_ == 5) {
+              subBuilder = ((chatserver.gen.CandidateRecommend) response_).toBuilder();
+            }
+            response_ =
+                input.readMessage(chatserver.gen.CandidateRecommend.parser(), extensionRegistry);
+            if (subBuilder != null) {
+              subBuilder.mergeFrom((chatserver.gen.CandidateRecommend) response_);
+              response_ = subBuilder.buildPartial();
+            }
+            responseCase_ = 5;
+            break;
+          }
           default: {
             if (!parseUnknownField(
                 input, unknownFields, extensionRegistry, tag)) {
@@ -128,6 +142,7 @@ private static final long serialVersionUID = 0L;
     TEXT(2),
     AUDIO(3),
     RESPONSEMESSAGE(4),
+    CANDIDATES(5),
     RESPONSE_NOT_SET(0);
     private final int value;
     private ResponseCase(int value) {
@@ -149,6 +164,7 @@ private static final long serialVersionUID = 0L;
         case 2: return TEXT;
         case 3: return AUDIO;
         case 4: return RESPONSEMESSAGE;
+        case 5: return CANDIDATES;
         case 0: return RESPONSE_NOT_SET;
         default: return null;
       }
@@ -326,6 +342,49 @@ private static final long serialVersionUID = 0L;
     return chatserver.gen.Message.getDefaultInstance();
   }
 
+  public static final int CANDIDATES_FIELD_NUMBER = 5;
+  /**
+   * <pre>
+   * 发完正文后，可选可能会有这个字段，提示玩家后续可能发什么，也可能没有
+   * </pre>
+   *
+   * <code>.CandidateRecommend candidates = 5;</code>
+   * @return Whether the candidates field is set.
+   */
+  @java.lang.Override
+  public boolean hasCandidates() {
+    return responseCase_ == 5;
+  }
+  /**
+   * <pre>
+   * 发完正文后，可选可能会有这个字段，提示玩家后续可能发什么，也可能没有
+   * </pre>
+   *
+   * <code>.CandidateRecommend candidates = 5;</code>
+   * @return The candidates.
+   */
+  @java.lang.Override
+  public chatserver.gen.CandidateRecommend getCandidates() {
+    if (responseCase_ == 5) {
+       return (chatserver.gen.CandidateRecommend) response_;
+    }
+    return chatserver.gen.CandidateRecommend.getDefaultInstance();
+  }
+  /**
+   * <pre>
+   * 发完正文后，可选可能会有这个字段，提示玩家后续可能发什么，也可能没有
+   * </pre>
+   *
+   * <code>.CandidateRecommend candidates = 5;</code>
+   */
+  @java.lang.Override
+  public chatserver.gen.CandidateRecommendOrBuilder getCandidatesOrBuilder() {
+    if (responseCase_ == 5) {
+       return (chatserver.gen.CandidateRecommend) response_;
+    }
+    return chatserver.gen.CandidateRecommend.getDefaultInstance();
+  }
+
   private byte memoizedIsInitialized = -1;
   @java.lang.Override
   public final boolean isInitialized() {
@@ -353,6 +412,9 @@ private static final long serialVersionUID = 0L;
     if (responseCase_ == 4) {
       output.writeMessage(4, (chatserver.gen.Message) response_);
     }
+    if (responseCase_ == 5) {
+      output.writeMessage(5, (chatserver.gen.CandidateRecommend) response_);
+    }
     unknownFields.writeTo(output);
   }
 
@@ -377,6 +439,10 @@ private static final long serialVersionUID = 0L;
     if (responseCase_ == 4) {
       size += com.google.protobuf.CodedOutputStream
         .computeMessageSize(4, (chatserver.gen.Message) response_);
+    }
+    if (responseCase_ == 5) {
+      size += com.google.protobuf.CodedOutputStream
+        .computeMessageSize(5, (chatserver.gen.CandidateRecommend) response_);
     }
     size += unknownFields.getSerializedSize();
     memoizedSize = size;
@@ -411,6 +477,10 @@ private static final long serialVersionUID = 0L;
         if (!getResponseMessage()
             .equals(other.getResponseMessage())) return false;
         break;
+      case 5:
+        if (!getCandidates()
+            .equals(other.getCandidates())) return false;
+        break;
       case 0:
       default:
     }
@@ -441,6 +511,10 @@ private static final long serialVersionUID = 0L;
       case 4:
         hash = (37 * hash) + RESPONSEMESSAGE_FIELD_NUMBER;
         hash = (53 * hash) + getResponseMessage().hashCode();
+        break;
+      case 5:
+        hash = (37 * hash) + CANDIDATES_FIELD_NUMBER;
+        hash = (53 * hash) + getCandidates().hashCode();
         break;
       case 0:
       default:
@@ -626,6 +700,13 @@ private static final long serialVersionUID = 0L;
           result.response_ = responseMessageBuilder_.build();
         }
       }
+      if (responseCase_ == 5) {
+        if (candidatesBuilder_ == null) {
+          result.response_ = response_;
+        } else {
+          result.response_ = candidatesBuilder_.build();
+        }
+      }
       result.responseCase_ = responseCase_;
       onBuilt();
       return result;
@@ -692,6 +773,10 @@ private static final long serialVersionUID = 0L;
         }
         case RESPONSEMESSAGE: {
           mergeResponseMessage(other.getResponseMessage());
+          break;
+        }
+        case CANDIDATES: {
+          mergeCandidates(other.getCandidates());
           break;
         }
         case RESPONSE_NOT_SET: {
@@ -1270,6 +1355,183 @@ private static final long serialVersionUID = 0L;
       responseCase_ = 4;
       onChanged();;
       return responseMessageBuilder_;
+    }
+
+    private com.google.protobuf.SingleFieldBuilderV3<
+        chatserver.gen.CandidateRecommend, chatserver.gen.CandidateRecommend.Builder, chatserver.gen.CandidateRecommendOrBuilder> candidatesBuilder_;
+    /**
+     * <pre>
+     * 发完正文后，可选可能会有这个字段，提示玩家后续可能发什么，也可能没有
+     * </pre>
+     *
+     * <code>.CandidateRecommend candidates = 5;</code>
+     * @return Whether the candidates field is set.
+     */
+    @java.lang.Override
+    public boolean hasCandidates() {
+      return responseCase_ == 5;
+    }
+    /**
+     * <pre>
+     * 发完正文后，可选可能会有这个字段，提示玩家后续可能发什么，也可能没有
+     * </pre>
+     *
+     * <code>.CandidateRecommend candidates = 5;</code>
+     * @return The candidates.
+     */
+    @java.lang.Override
+    public chatserver.gen.CandidateRecommend getCandidates() {
+      if (candidatesBuilder_ == null) {
+        if (responseCase_ == 5) {
+          return (chatserver.gen.CandidateRecommend) response_;
+        }
+        return chatserver.gen.CandidateRecommend.getDefaultInstance();
+      } else {
+        if (responseCase_ == 5) {
+          return candidatesBuilder_.getMessage();
+        }
+        return chatserver.gen.CandidateRecommend.getDefaultInstance();
+      }
+    }
+    /**
+     * <pre>
+     * 发完正文后，可选可能会有这个字段，提示玩家后续可能发什么，也可能没有
+     * </pre>
+     *
+     * <code>.CandidateRecommend candidates = 5;</code>
+     */
+    public Builder setCandidates(chatserver.gen.CandidateRecommend value) {
+      if (candidatesBuilder_ == null) {
+        if (value == null) {
+          throw new NullPointerException();
+        }
+        response_ = value;
+        onChanged();
+      } else {
+        candidatesBuilder_.setMessage(value);
+      }
+      responseCase_ = 5;
+      return this;
+    }
+    /**
+     * <pre>
+     * 发完正文后，可选可能会有这个字段，提示玩家后续可能发什么，也可能没有
+     * </pre>
+     *
+     * <code>.CandidateRecommend candidates = 5;</code>
+     */
+    public Builder setCandidates(
+        chatserver.gen.CandidateRecommend.Builder builderForValue) {
+      if (candidatesBuilder_ == null) {
+        response_ = builderForValue.build();
+        onChanged();
+      } else {
+        candidatesBuilder_.setMessage(builderForValue.build());
+      }
+      responseCase_ = 5;
+      return this;
+    }
+    /**
+     * <pre>
+     * 发完正文后，可选可能会有这个字段，提示玩家后续可能发什么，也可能没有
+     * </pre>
+     *
+     * <code>.CandidateRecommend candidates = 5;</code>
+     */
+    public Builder mergeCandidates(chatserver.gen.CandidateRecommend value) {
+      if (candidatesBuilder_ == null) {
+        if (responseCase_ == 5 &&
+            response_ != chatserver.gen.CandidateRecommend.getDefaultInstance()) {
+          response_ = chatserver.gen.CandidateRecommend.newBuilder((chatserver.gen.CandidateRecommend) response_)
+              .mergeFrom(value).buildPartial();
+        } else {
+          response_ = value;
+        }
+        onChanged();
+      } else {
+        if (responseCase_ == 5) {
+          candidatesBuilder_.mergeFrom(value);
+        }
+        candidatesBuilder_.setMessage(value);
+      }
+      responseCase_ = 5;
+      return this;
+    }
+    /**
+     * <pre>
+     * 发完正文后，可选可能会有这个字段，提示玩家后续可能发什么，也可能没有
+     * </pre>
+     *
+     * <code>.CandidateRecommend candidates = 5;</code>
+     */
+    public Builder clearCandidates() {
+      if (candidatesBuilder_ == null) {
+        if (responseCase_ == 5) {
+          responseCase_ = 0;
+          response_ = null;
+          onChanged();
+        }
+      } else {
+        if (responseCase_ == 5) {
+          responseCase_ = 0;
+          response_ = null;
+        }
+        candidatesBuilder_.clear();
+      }
+      return this;
+    }
+    /**
+     * <pre>
+     * 发完正文后，可选可能会有这个字段，提示玩家后续可能发什么，也可能没有
+     * </pre>
+     *
+     * <code>.CandidateRecommend candidates = 5;</code>
+     */
+    public chatserver.gen.CandidateRecommend.Builder getCandidatesBuilder() {
+      return getCandidatesFieldBuilder().getBuilder();
+    }
+    /**
+     * <pre>
+     * 发完正文后，可选可能会有这个字段，提示玩家后续可能发什么，也可能没有
+     * </pre>
+     *
+     * <code>.CandidateRecommend candidates = 5;</code>
+     */
+    @java.lang.Override
+    public chatserver.gen.CandidateRecommendOrBuilder getCandidatesOrBuilder() {
+      if ((responseCase_ == 5) && (candidatesBuilder_ != null)) {
+        return candidatesBuilder_.getMessageOrBuilder();
+      } else {
+        if (responseCase_ == 5) {
+          return (chatserver.gen.CandidateRecommend) response_;
+        }
+        return chatserver.gen.CandidateRecommend.getDefaultInstance();
+      }
+    }
+    /**
+     * <pre>
+     * 发完正文后，可选可能会有这个字段，提示玩家后续可能发什么，也可能没有
+     * </pre>
+     *
+     * <code>.CandidateRecommend candidates = 5;</code>
+     */
+    private com.google.protobuf.SingleFieldBuilderV3<
+        chatserver.gen.CandidateRecommend, chatserver.gen.CandidateRecommend.Builder, chatserver.gen.CandidateRecommendOrBuilder> 
+        getCandidatesFieldBuilder() {
+      if (candidatesBuilder_ == null) {
+        if (!(responseCase_ == 5)) {
+          response_ = chatserver.gen.CandidateRecommend.getDefaultInstance();
+        }
+        candidatesBuilder_ = new com.google.protobuf.SingleFieldBuilderV3<
+            chatserver.gen.CandidateRecommend, chatserver.gen.CandidateRecommend.Builder, chatserver.gen.CandidateRecommendOrBuilder>(
+                (chatserver.gen.CandidateRecommend) response_,
+                getParentForChildren(),
+                isClean());
+        response_ = null;
+      }
+      responseCase_ = 5;
+      onChanged();;
+      return candidatesBuilder_;
     }
     @java.lang.Override
     public final Builder setUnknownFields(
