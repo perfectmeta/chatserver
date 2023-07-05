@@ -1,11 +1,12 @@
 package chatserver;
 
-import chatserver.config.Config;
-import chatserver.util.DirectoryWatcher;
+import chatserver.config.ConfigManager;
+import chatserver.util.FileWatcher;
 import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;
 import org.springframework.stereotype.Component;
 
+import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.logging.Logger;
 
@@ -16,29 +17,20 @@ public class AfterBootRunner implements ApplicationRunner {
 
     @Override
     public void run(ApplicationArguments args) throws Exception {
-        logger.info("Now start running initial jobs ... ");
-        checkAndRegisterUserCategory();
-        checkAndRegisterUser();
         loadConfigDir();
-        logger.info("initial jobs finished ... ");
-    }
-
-    private void checkAndRegisterUserCategory() {
-    }
-
-    private void checkAndRegisterUser() {
     }
 
     private void loadConfigDir() {
-        Config config = Config.getInstance();
-        var configDir = System.getenv("chatserver_config_dir");
-        config.reload(Paths.get(configDir));
-        logger.info("reload config from %s finished".formatted(configDir));
+        String configDir = System.getenv("chatserver_config_dir");
+        Path path = Paths.get(configDir);
 
-        DirectoryWatcher wacher = new DirectoryWatcher(configDir, "changelist.txt");
-        wacher.watch((path, kind)->{
-            logger.info("find file change " + path.toAbsolutePath());
-            config.reload(Paths.get(configDir));
+        ConfigManager.reload(path);
+        logger.info("load config finish: %s".formatted(configDir));
+
+        FileWatcher configChangeWatcher = new FileWatcher(path.resolve("changelist.txt"));
+        configChangeWatcher.watch(() -> {
+            ConfigManager.reload(path);
+            logger.info("reload config finish: %s".formatted(configDir));
         });
     }
 }

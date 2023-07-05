@@ -1,6 +1,6 @@
 package chatserver.logic.internal;
 
-import chatserver.config.robot.Robot;
+import chatserver.config.RobotConfig;
 import chatserver.entity.EUserType;
 import chatserver.entity.User;
 import chatserver.service.UserService;
@@ -19,13 +19,13 @@ public class SignupBot {
         this.userService = userService;
     }
 
-    public User signupFor(Robot robot) {
+    public User signupFor(RobotConfig robot) {
         Objects.requireNonNull(robot);
         User user = new User();
         user.setUserType(EUserType.BOT);
-        user.setBotId(robot.configName());
+        user.setBotId(robot.getId());
         user.setGender(robot.getGender());
-        user.setNickName(robot.configName());
+        user.setNickName(robot.getId());
         user.setPhone(RandomGenerator.randomPhoneNumber());
         user.setEmail(RandomGenerator.randomEmailAddress());
         user = userService.addUser(user);

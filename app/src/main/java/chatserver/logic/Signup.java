@@ -1,7 +1,7 @@
 package chatserver.logic;
 
-import chatserver.config.Config;
-import chatserver.config.robot.Robot;
+import chatserver.config.ConfigManager;
+import chatserver.config.RobotConfig;
 import chatserver.entity.*;
 import chatserver.gen.RegisterFeedback;
 import chatserver.gen.RegisterInfo;
@@ -76,7 +76,7 @@ public class Signup {
     }
 
     private void signupBotAndMakeContact(User user) {
-        var robots = Config.getInstance().getRobots();
+        var robots = ConfigManager.getInstance().getRobots().values();
         for (var robot : robots) {
             User botUser = signupBotServer.signupFor(robot);
             contactService.addContact(botUser.getUserId(), user.getUserId());
@@ -90,15 +90,15 @@ public class Signup {
         return contactService.findBySubjectUserId(userId);
     }
 
-    private Room makeRoom(Robot robot, User user, User aiUser) {
+    private Room makeRoom(RobotConfig robot, User user, User aiUser) {
         Room newRoom = new Room();
-        newRoom.setRoomName(robot.configName() + "'s room");
+        newRoom.setRoomName(robot.getId() + "'s room");
         newRoom.setUserType(EUserType.HUMAN);
         newRoom.setUserId(user.getUserId());
         newRoom.setUserShowName(user.getNickName());
         newRoom.setAiType(EUserType.BOT);
         newRoom.setAiUserId(aiUser.getUserId());
-        newRoom.setAiShowName(robot.configName());
+        newRoom.setAiShowName(robot.getId());
         newRoom.setCreatedTime(System.currentTimeMillis());
         newRoom.setFirstMessageId(-1);
         newRoom.setLastMessageId(-1);
@@ -106,18 +106,18 @@ public class Signup {
     }
 
 
-    private void fillFirstMessage(long roomId, long userId, String userName, Robot robot) {
+    private void fillFirstMessage(long roomId, long userId, String userName, RobotConfig robot) {
         var tempVariables = new HashMap<String, String>();
-        tempVariables.put("botname", robot.configName());
+        tempVariables.put("botname", robot.getId());
         tempVariables.put("username", userName);
         Message message = new Message();
         message.setRoomId(roomId);
         message.setCreatedTime(System.currentTimeMillis());
         message.setMsgType(EMsgType.TEXT);
         message.setAuthorUserId(userId);
-        message.setAuthorShowName(robot.configName());
+        message.setAuthorShowName(robot.getId());
         message.setAuthorUserType(EUserType.BOT);
-        message.setText(StringUtil.fillVariable(robot.greeting(), tempVariables));
+        message.setText(StringUtil.fillVariable(robot.getGreeting(), tempVariables));
         roomService.addMessage(message);
     }
 }

@@ -1,8 +1,8 @@
 package chatserver.logic;
 
-import chatserver.config.Config;
-import chatserver.config.Prompt;
-import chatserver.config.robot.Robot;
+import chatserver.config.ConfigManager;
+import chatserver.config.PromptConfig;
+import chatserver.config.RobotConfig;
 import chatserver.entity.*;
 import chatserver.gen.ChatRequest;
 import chatserver.gen.ChatResponseStream;
@@ -69,7 +69,7 @@ public class Chat {
             return;
         }
 
-        Robot robot = Config.getInstance().getRobotByName(aiUser.getBotId());
+        RobotConfig robot = ConfigManager.getInstance().getRobotByName(aiUser.getBotId());
         if (robot == null) {
             logger.warning("Can't find robot config : " + aiUser.getBotId());
             responseObserver.onError(new IllegalStateException("Can't find robot config : " + aiUser.getBotId()));
@@ -87,7 +87,7 @@ public class Chat {
                     .setAudio(ByteString.copyFrom(data))
                     .build();
             responseObserver.onNext(audioResponse);
-        }, resourcePath, new PwrdSpeaker(robot.speaker()));
+        }, resourcePath, new PwrdSpeaker(robot.getSpeaker()));
 
         chatserver.gen.Message.Builder rr = chatserver.gen.Message.newBuilder()
                 .setMessageId(newUserMsg.getMessageId())
@@ -100,9 +100,9 @@ public class Chat {
         final List<ChatMessage> messages = new ArrayList<>();
         Memory memory = contactService.getNewestMemory(room.getAiUserId(), user.getUserId());
         var tempVariables = new HashMap<String, String>();
-        tempVariables.put("botname", robot.configName());
+        tempVariables.put("botname", robot.getId());
         tempVariables.putAll(AuthTokenInterceptor.VARIABLES.get());
-        var prompt = robot.prompt().getMessage(tempVariables);
+        var prompt = robot.getPrompt().getMessage(tempVariables);
         preparePromptMessage(messages, prompt);
         if (memory != null) {
             String memoryPrompt = "以下是你和将要和你对话的用户的一些对话摘要:" + memory.getMemo();
@@ -135,7 +135,7 @@ public class Chat {
         // debugPrintPrompt(messages);
         ChatCompletionRequest chatCompletionRequest = ChatCompletionRequest
                 .builder()
-                .model(robot.model())
+                .model("gpt-3.5-turbo")
                 .messages(messages)
                 .build();
 
@@ -174,7 +174,7 @@ public class Chat {
 
         Message gptMsg = saveDBMessage(request.getRoomId(),
                 room.getAiUserId(),
-                robot.configName(),
+                robot.getId(),
                 gptReturn.toString());
 
         var responseMessage = chatserver.gen.Message.newBuilder()
@@ -245,13 +245,13 @@ public class Chat {
         }
     }
 
-    private void preparePromptMessage(List<ChatMessage> messages, List<Prompt.PromptMessage> promptMessages) {
-        for (Prompt.PromptMessage(Prompt.PromptRole role, String content) : promptMessages) {
+    private void preparePromptMessage(List<ChatMessage> messages, List<PromptConfig.PromptMessage> promptMessages) {
+        for (PromptConfig.PromptMessage(PromptConfig.Role role, String content) : promptMessages) {
             messages.add(new ChatMessage(parseRole(role).value(), content));
         }
     }
 
-    private static ChatMessageRole parseRole(Prompt.PromptRole promptRole) {
+    private static ChatMessageRole parseRole(PromptConfig.Role promptRole) {
         return switch (promptRole) {
             case Assistant -> ChatMessageRole.ASSISTANT;
             case User -> ChatMessageRole.USER;
