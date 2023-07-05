@@ -44,7 +44,13 @@ message ChatResponseStream {
     string text = 2; // chatgpt生成
     bytes audio = 3; // tts生成
     Message responseMessage = 4;  // 最后chatgpt回应的消息，汇总到这，有messageId
+    CandidateRecommend candidates = 5;  // 发完正文后，可选可能会有这个字段，提示玩家后续可能发什么，也可能没有
   }
+}
+
+message CandidateRecommend {
+  int64 messageId = 1;
+  repeated string recommend = 2;
 }
 
 ///////// async message notification
