@@ -14,6 +14,4 @@ public interface ITextCompletion {
             String text,
             CompleteRequestSettings requestSettings
     );
-
-    Future<String> completeAsync(String text, CompleteRequestSettings requestSettings);
 }

@@ -1,7 +1,5 @@
 package com.perfectword.semantic_kernal.abstractions;
 
-import com.perfectword.semantic_kernal.semantic_functions.SemanticFunctionConfig;
-
 import java.util.Objects;
 
 public class Verify {
@@ -26,9 +24,5 @@ public class Verify {
 
     public static void ValidFunctionName(String functionName) {
         // todo implement function
-    }
-
-    public static void notNull(SemanticFunctionConfig functionConfig) {
-        Objects.requireNonNull(functionConfig);
     }
 }
