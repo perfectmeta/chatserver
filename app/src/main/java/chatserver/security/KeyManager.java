@@ -18,27 +18,15 @@ public class KeyManager {
     public static String OPENAI_KEY = "";
     public static String TEST_KEY = "";
 
-    public static String TEACHER_PROMPT = "";
-
     static {
-        loadKey();
+        load();
     }
 
-    public static void loadKey() {
-        reload();
-    }
 
-    public static void reload() {
-        reload(null);
-    }
-
-    public static void reload(String path) {
-        String configFile = path;
+    private static void load() {
+        String configFile = System.getenv("CHAT_KEY_FILE");
         if (Strings.isNullOrEmpty(configFile)) {
-            configFile = System.getenv("CHAT_KEY_FILE");
-            if (Strings.isNullOrEmpty(configFile)) {
-                configFile = "key.properties";
-            }
+            configFile = "key.properties";
         }
 
         var properties = new Properties();
@@ -54,8 +42,6 @@ public class KeyManager {
         ASR_KEY = properties.getProperty("asr.key");
         OPENAI_KEY = properties.getProperty("openai.key");
         TEST_KEY = properties.getProperty("test.key");
-        TEACHER_PROMPT = properties.getProperty("teacher.prompt");
-
     }
 
 }

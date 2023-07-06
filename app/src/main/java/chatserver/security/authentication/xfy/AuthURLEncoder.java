@@ -15,6 +15,7 @@ import java.util.logging.Logger;
 
 public class AuthURLEncoder {
     public static final Logger logger = Logger.getLogger(AuthURLEncoder.class.getName());
+
     public static String encodeXFYAuthorUrl(String hostUrl, String apiKey, String apiSecret, String method) {
         URI url;
         try {
@@ -27,7 +28,7 @@ public class AuthURLEncoder {
         String date = format.format(new Date());
         String builder = "host: " + url.getHost() + "\n" +
                 "date: " + date + "\n" +
-                method +  " " + url.getPath() + " HTTP/1.1";
+                method + " " + url.getPath() + " HTTP/1.1";
         var charset = StandardCharsets.UTF_8;
         String sha;
         try {
