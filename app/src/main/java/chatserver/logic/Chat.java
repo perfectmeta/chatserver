@@ -130,7 +130,7 @@ public class Chat {
         final ChatMessage ask = new ChatMessage(ChatMessageRole.USER.value(), requestText);
         messages.add(ask);
 
-        var tokenCnt = TokenLimitor.limit(messages, 4097, 10);
+        var tokenCnt = TokenLimitor.limit(messages, 16384, 10);
         logger.info("Chat use token " + tokenCnt);
 
         // debugPrintPrompt(messages);
