@@ -10,6 +10,7 @@ import chatserver.gen.ChatResponseStream;
 import chatserver.logic.internal.SummaryMemory;
 import chatserver.logic.voice.PwrdSpeaker;
 import chatserver.logic.voice.VoiceTransfer;
+import chatserver.logic.voice.XFYttsSpeaker;
 import chatserver.service.ContactService;
 import chatserver.service.RoomService;
 import chatserver.service.UserService;
@@ -88,7 +89,7 @@ public class Chat {
                     .setAudio(ByteString.copyFrom(data))
                     .build();
             responseObserver.onNext(audioResponse);
-        }, resourcePath, new PwrdSpeaker(robot.getSpeaker()));
+        }, resourcePath, new PwrdSpeaker(robot.getSpeaker()), new XFYttsSpeaker());
 
         chatserver.gen.Message.Builder rr = chatserver.gen.Message.newBuilder()
                 .setMessageId(newUserMsg.getMessageId())

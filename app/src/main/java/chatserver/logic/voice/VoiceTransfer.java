@@ -31,16 +31,16 @@ public class VoiceTransfer {
     private StringBuilder tempFragment;
     private Status status;
     private Consumer<String> finishCallback;
-    private final Speaker speaker;
+    private final Speaker[] speakers;
 
-    public VoiceTransfer(BiConsumer<byte[], Boolean> callBack, String resourcePath, Speaker speaker) {
+    public VoiceTransfer(BiConsumer<byte[], Boolean> callBack, String resourcePath, Speaker... speaker) {
         this.callBack = callBack;
         this.taskQueue = new LinkedBlockingDeque<>();
         this.rawTexts = new ArrayList<>();
         this.status = Status.READY;
         this.tempFragment = new StringBuilder();
         this.resourcePath = resourcePath;
-        this.speaker = speaker;
+        this.speakers = speaker;
     }
 
     public void update(String newMessage) {
@@ -71,7 +71,7 @@ public class VoiceTransfer {
                     }
 
                     var finished = status == Status.FINISHED && taskQueue.isEmpty();
-                    byte[] audio = speaker.getAudio(content);
+                    byte[] audio = getAudio(content);
                     if (audio != null) {
                         callBack.accept(audio, finished);
                     }
@@ -82,8 +82,7 @@ public class VoiceTransfer {
                 }
 
                 var fullContent = String.join("", rawTexts);
-                byte[] audio = speaker.getAudio(fullContent);
-
+                byte[] audio = getAudio(fullContent);
                 var fileName = "failed";
                 if (audio != null) {
                     logger.info("saving TTS");
@@ -96,6 +95,21 @@ public class VoiceTransfer {
                 }
             });
         }
+    }
+
+    private byte[] getAudio(String content) {
+        byte[] audio = null;
+        for (var speaker : speakers) {
+            try {
+                audio = speaker.getAudio(content);
+            } catch (Exception ex) {
+                ex.printStackTrace();
+                logger.warning("speaker %s failed".formatted(speaker.getClass().getName()));
+            }
+            if (audio != null)
+                break;
+        }
+        return audio;
     }
 
     private void addTask(String content) {

@@ -6,14 +6,12 @@ import java.util.Objects;
 
 public class PwrdSpeaker implements Speaker{
     private final String speakerName;
-    public PwrdSpeaker(String speakerName) {
-        this.speakerName = speakerName;
+    public PwrdSpeaker(String speaker) {
+        this.speakerName = speaker;
     }
 
     @Override
     public byte[] getAudio(String content) {
-        // todo refactor to use speaker
-        Objects.requireNonNull(speakerName);
-        return Pwrdtts.tts(content);
+        return Pwrdtts.tts(content, speakerName);
     }
 }
