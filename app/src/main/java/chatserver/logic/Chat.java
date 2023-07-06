@@ -109,7 +109,7 @@ public class Chat {
             String memoryPrompt = "以下是你和将要和你对话的用户的一些对话摘要:" + memory.getMemo();
             messages.add(new ChatMessage(ChatMessageRole.SYSTEM.value(), memoryPrompt));
         }
-        // debugPrintPrompt(messages);
+
         for (Message msg : messageHistory) {
             String role = ChatMessageRole.USER.value();
             if (msg.getAuthorUserType() != EUserType.HUMAN) {
@@ -136,7 +136,7 @@ public class Chat {
         // debugPrintPrompt(messages);
         ChatCompletionRequest chatCompletionRequest = ChatCompletionRequest
                 .builder()
-                .model("gpt-3.5-turbo")
+                .model("gpt-3.5-turbo-16k")
                 .messages(messages)
                 .build();
 
@@ -210,6 +210,7 @@ public class Chat {
 
     }
 
+    @SuppressWarnings("unused")
     private void summaryMemory(User user,
                                Memory memory,
                                String robotName,
@@ -269,12 +270,6 @@ public class Chat {
             case User -> ChatMessageRole.USER;
             case System -> ChatMessageRole.SYSTEM;
         };
-    }
-
-    @SuppressWarnings("unused")
-    private static void debugPrintPrompt(List<ChatMessage> messages) {
-        logger.info("Total prompt items is {%d}".formatted(messages.size()));
-        messages.forEach(m -> logger.info("[" + m.getRole() + "]:" + m.getContent()));
     }
 
     private Message saveDBMessage(long roomId, long userId, String categoryName, String text) {
