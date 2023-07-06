@@ -2,22 +2,20 @@ package chatserver.util;
 
 import java.io.IOException;
 import java.nio.file.*;
-import java.nio.file.attribute.BasicFileAttributes;
-import java.util.Objects;
-import java.util.function.BiConsumer;
 import java.util.logging.Logger;
 
 public class FileWatcher {
     private static final Logger logger = Logger.getLogger(FileWatcher.class.getName());
 
     private final Path watchPath;
+    private final Path watchFile;
     private volatile Runnable handler;
     private Thread workerThread;
 
 
     public FileWatcher(Path filePath) {
-        watchPath = filePath;
-
+        watchFile = filePath;
+        watchPath = filePath.getParent().toAbsolutePath();
     }
 
     public void watch(Runnable handler) {
@@ -41,10 +39,21 @@ public class FileWatcher {
         workerThread = Thread.startVirtualThread(() -> {
             while (true) {
                 try {
-                    watchService.take();
-                    Runnable handle = this.handler;
-                    if (handle != null) {
-                        handle.run();
+                    var key = watchService.take();
+                    try {
+                        for (var e : key.pollEvents()) {
+                            var p = (Path)e.context();
+                            logger.info("Change %s".formatted(p.toAbsolutePath().toString()));
+                            if (p.toAbsolutePath().equals(watchFile)) {
+                                Runnable handle = this.handler;
+                                if (handle != null) {
+                                    handle.run();
+                                }
+                                break;
+                            }
+                        }
+                    } finally {
+                        key.reset();
                     }
                 } catch (InterruptedException e) {
                     if (Thread.interrupted()) {
