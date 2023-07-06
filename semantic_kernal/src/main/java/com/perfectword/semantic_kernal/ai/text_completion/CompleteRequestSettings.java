@@ -38,6 +38,11 @@ public class CompleteRequestSettings {
         );
     }
 
+    public static CompleteRequestSettings fromCompletionConfig(PromptTemplateConfig.CompletionConfig completion) {
+        // todo implement this method
+        return null;
+    }
+
     public int getResultPerPrompt() {
         return resultPerPrompt;
     }
