@@ -188,9 +188,11 @@ class BotConfigEditor:
                 intent = f"更新{cur.id}" if is_update else f"创建{cur.id}"
                 st.header(intent)
                 input = sp.pydantic_input(key=cur.id, model=cur)
-                if os.path.exists(cur.head):
+                if os.path.exists(head_dir / cur.head):
                     image = Image.open(head_dir / cur.head)
                     image_compoment = st.image(image, caption="头像")
+                else:
+                    print(f"head image {head_dir / cur.head} don't exists")
                 if st.form_submit_button(label=intent):
                     self.save_bot(cur, True)
 
@@ -219,5 +221,6 @@ class BotConfigEditor:
 
 
 if __name__ == '__main__':
+    # fixme 部署环境和开发环境这个目录不同，注意修一下，后面做成环境变量得了, 现在先这样吧
     editor = BotConfigEditor(Path('../configdir'))
     editor.show()
