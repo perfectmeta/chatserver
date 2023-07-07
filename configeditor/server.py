@@ -1,20 +1,14 @@
-from cProfile import label
+import argparse
 import datetime
-from enum import Enum
-from gc import disable
-from pathlib import Path
-import os
 import json
+import sys
+from enum import Enum
+from pathlib import Path
 
 import streamlit as st
 import streamlit_pydantic as sp
-from pydantic import BaseModel, Field
 from PIL import Image
-
-head_dir_path = "."
-if os.environ.get("head_dir"):
-    head_dir_path = os.environ.get("head_dir")
-head_dir = Path(head_dir_path) 
+from pydantic import BaseModel, Field
 
 
 class Speaker(str, Enum):
@@ -79,9 +73,9 @@ class BotModel(BaseModel):
 
     head: str = Field(
         "default.png",
-        title = "自定义头像",
-        description = "显示文件名",
-        disabled = True
+        title="自定义头像",
+        description="显示文件名",
+        disabled=True
     )
 
     def to_profile_json(self):
@@ -127,9 +121,10 @@ class BotModel(BaseModel):
 
 
 class BotConfigEditor:
-    def __init__(self, config: Path):
-        self.config_dir = config
-        self.bots_dir = config / 'bots'
+    def __init__(self, config_dir: Path, head_dir: Path):
+        self.config_dir = config_dir
+        self.head_dir = head_dir
+        self.bots_dir = config_dir / 'bots'
         if 'bots' not in st.session_state:
             st.session_state.bots = {}
             for b in self.bots_dir.iterdir():
@@ -182,27 +177,35 @@ class BotConfigEditor:
                             st.experimental_rerun()
 
         if 'cur' in st.session_state:
-            with st.form(key="model_update"):
-                cur = st.session_state.cur
-                is_update = cur.id in st.session_state.bots
-                intent = f"更新{cur.id}" if is_update else f"创建{cur.id}"
-                st.header(intent)
-                input = sp.pydantic_input(key=cur.id, model=cur)
-                if os.path.exists(head_dir / cur.head):
-                    image = Image.open(head_dir / cur.head)
-                    image_compoment = st.image(image, caption="头像")
-                else:
-                    print(f"head image {head_dir / cur.head} don't exists")
-                if st.form_submit_button(label=intent):
-                    self.save_bot(cur, True)
+            cur = st.session_state.cur
+            is_update = cur.id in st.session_state.bots
+            intent = f"更新{cur.id}" if is_update else f"创建{cur.id}"
+            st.header(intent)
 
             file_upload = st.file_uploader(label="头像图片", type=['png', 'jpg'], key="head_icon")
-            if file_upload is not None:
-                print(head_dir/file_upload.name)
-                with open(head_dir/file_upload.name, 'wb') as f:
-                    f.write(file_upload.getvalue())
-                if cur.head != file_upload.name:
+            if file_upload:
+                # 第一次upload，file_upload会一直存在，id会保持跟上次相同，当再次上传时id会递增，所以这里用id来判断是否已经处理过了。
+                old_id = -1
+                if 'head_file_upload_id' in st.session_state:
+                    old_id = st.session_state.head_file_upload_id
+                if old_id != file_upload.id:
+                    st.session_state.head_file_upload_id = file_upload.id
+                    head_file = self.head_dir / file_upload.name
+                    # print(head_file)
+                    head_file.write_bytes(file_upload.getvalue())
                     cur.head = file_upload.name
+
+            head_file = self.head_dir / cur.head
+            if head_file.exists():
+                image = Image.open(head_file)
+                st.image(image, caption="头像")
+            else:
+                print(f"head image {head_file} don't exists")
+
+            bot = sp.pydantic_form(key=cur.id, model=cur, submit_label=intent)
+            if bot:
+                self.save_bot(bot, is_update)
+                if not is_update:
                     st.experimental_rerun()
 
     def save_bot(self, bot: BotModel, is_update: bool):
@@ -221,6 +224,9 @@ class BotConfigEditor:
 
 
 if __name__ == '__main__':
-    # fixme 部署环境和开发环境这个目录不同，注意修一下，后面做成环境变量得了, 现在先这样吧
-    editor = BotConfigEditor(Path('../configdir'))
+    parser = argparse.ArgumentParser()
+    parser.add_argument('--config_dir', type=Path, default=Path("../configdir"))
+    parser.add_argument('--head_dir', type=Path, default=Path("../configdir/head"))
+    args = parser.parse_args(sys.argv[1:])
+    editor = BotConfigEditor(args.config_dir, args.head_dir)
     editor.show()
