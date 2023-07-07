@@ -11,7 +11,7 @@ class PwrdttsTest {
 
     @Test
     public void testTts() throws IOException {
-        byte[] bytes = Pwrdtts.tts("由于照片捏脸预训练的分类器需要和 角色发型、妆容配置保持一致");
+        byte[] bytes = Pwrdtts.tts("由于照片捏脸预训练的分类器需要和 角色发型、妆容配置保持一致", "zhy");
         if (bytes != null){
             Path p = Paths.get("tts.mp3");
             if (!Files.exists(p)){

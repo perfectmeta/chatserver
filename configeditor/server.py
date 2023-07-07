@@ -13,6 +13,12 @@ class Speaker(str, Enum):
     zhy = "zhy"
 
 
+class LLMModel(str, Enum):
+    gpt3_5_turbo_16k = "gpt-3.5-turbo-16k"
+    gpt3_5_turbo = "gpt-3.5-turbo"
+    gpt4 = "gpt-4"
+
+
 class BotModel(BaseModel):
     id: str = Field(
         ...,
@@ -28,7 +34,12 @@ class BotModel(BaseModel):
     description: str = Field(
         "bot",
         title="描述",
-        description="可能展示给玩家"
+        description="展示给玩家的描述"
+    )
+    model: LLMModel = Field(
+        LLMModel.gpt4,
+        title="语言模型",
+        description="使用的大语言模型"
     )
     speaker: Speaker = Field(
         Speaker.zhy,

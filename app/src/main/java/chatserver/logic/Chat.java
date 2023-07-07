@@ -137,7 +137,7 @@ public class Chat {
         // debugPrintPrompt(messages);
         ChatCompletionRequest chatCompletionRequest = ChatCompletionRequest
                 .builder()
-                .model("gpt-3.5-turbo-16k")
+                .model(robot.getModel())
                 .messages(messages)
                 .build();
 

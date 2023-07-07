@@ -63,6 +63,7 @@ public class ConfigManager {
     private static class RobotProfile {
         public String name;
         public String description;
+        public String model;
         public String speaker;
         public String greeting;
     }
@@ -99,7 +100,7 @@ public class ConfigManager {
             }
         }
 
-        RobotConfig rc = new RobotConfig(id, profile.name, profile.description, profile.speaker, profile.greeting, promptStr);
+        RobotConfig rc = new RobotConfig(id, profile.name, profile.description, profile.model, profile.speaker, profile.greeting, promptStr);
         robots.put(rc.getId(), rc);
     }
 

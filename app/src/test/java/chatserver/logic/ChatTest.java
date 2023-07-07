@@ -83,7 +83,7 @@ class ChatTest {
 
         ChatCompletionRequest chatCompletionRequest = ChatCompletionRequest
                 .builder()
-                .model("gpt-3.5-turbo")
+                .model("gpt-4")
                 .temperature(0.7)
                 .topP(1d)
                 .frequencyPenalty(0d)

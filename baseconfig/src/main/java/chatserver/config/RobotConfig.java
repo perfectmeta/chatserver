@@ -4,15 +4,17 @@ public class RobotConfig {
     private final String id;
     private final String name;
     private final String description;
+    private final String model;
     private final String speaker;
     private final String greeting;
 
     private final PromptConfig promptConfig;
 
-    public RobotConfig(String id, String name, String description, String speaker, String greeting, String promptStr) {
+    public RobotConfig(String id, String name, String description, String model, String speaker, String greeting, String promptStr) {
         this.id = id;
         this.name = name;
         this.description = description;
+        this.model = model;
         this.speaker = speaker;
         this.greeting = greeting;
         this.promptConfig = PromptConfig.parse(promptStr);
@@ -33,6 +35,10 @@ public class RobotConfig {
 
     }
 
+    public String getModel() {
+        return model;
+    }
+
     public String getSpeaker() {
         return speaker;
     }
@@ -49,4 +55,6 @@ public class RobotConfig {
     public int getGender() {
         return 1; // female
     }
+
+
 }
