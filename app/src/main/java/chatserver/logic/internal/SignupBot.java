@@ -26,6 +26,7 @@ public class SignupBot {
         user.setBotId(robot.getId());
         user.setGender(robot.getGender());
         user.setNickName(robot.getId());
+        user.setHeadIconUrl(robot.getHeadIcon());
         user.setPhone(RandomGenerator.randomPhoneNumber());
         user.setEmail(RandomGenerator.randomEmailAddress());
         user = userService.addUser(user);

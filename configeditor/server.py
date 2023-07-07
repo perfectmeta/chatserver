@@ -1,11 +1,20 @@
+from cProfile import label
 import datetime
 from enum import Enum
+from gc import disable
 from pathlib import Path
+import os
 import json
 
 import streamlit as st
 import streamlit_pydantic as sp
 from pydantic import BaseModel, Field
+from PIL import Image
+
+head_dir_path = "."
+if os.environ.get("head_dir"):
+    head_dir_path = os.environ.get("head_dir")
+head_dir = Path(head_dir_path) 
 
 
 class Speaker(str, Enum):
@@ -66,6 +75,13 @@ class BotModel(BaseModel):
         title="策划注释",
         description="策划自用，随便填",
         format="multi-line"
+    )
+
+    head: str = Field(
+        "default.png",
+        title = "自定义头像",
+        description = "显示文件名",
+        disabled = True
     )
 
     def to_profile_json(self):
@@ -166,15 +182,25 @@ class BotConfigEditor:
                             st.experimental_rerun()
 
         if 'cur' in st.session_state:
-            cur = st.session_state.cur
-            is_update = cur.id in st.session_state.bots
-            intent = f"更新{cur.id}" if is_update else f"创建{cur.id}"
-            st.header(intent)
-            bot = sp.pydantic_form(key=cur.id, model=cur, submit_label=intent)
-            if bot:
-                # st.json(bot.to_profile_json())
-                self.save_bot(bot, is_update)
-                if not is_update:
+            with st.form(key="model_update"):
+                cur = st.session_state.cur
+                is_update = cur.id in st.session_state.bots
+                intent = f"更新{cur.id}" if is_update else f"创建{cur.id}"
+                st.header(intent)
+                input = sp.pydantic_input(key=cur.id, model=cur)
+                if os.path.exists(cur.head):
+                    image = Image.open(head_dir / cur.head)
+                    image_compoment = st.image(image, caption="头像")
+                if st.form_submit_button(label=intent):
+                    self.save_bot(cur, True)
+
+            file_upload = st.file_uploader(label="头像图片", type=['png', 'jpg'], key="head_icon")
+            if file_upload is not None:
+                print(head_dir/file_upload.name)
+                with open(head_dir/file_upload.name, 'wb') as f:
+                    f.write(file_upload.getvalue())
+                if cur.head != file_upload.name:
+                    cur.head = file_upload.name
                     st.experimental_rerun()
 
     def save_bot(self, bot: BotModel, is_update: bool):
