@@ -1,10 +1,9 @@
 package com.perfectword.semantic_kernal.memory;
 
-import java.util.concurrent.Flow;
-import java.util.concurrent.Future;
+import java.util.List;
 
 public interface ISemanticTextMemory {
-    Future<String> saveInformationAsync(
+    void saveInformation(
             String collection,
             String text,
             String id,
@@ -12,27 +11,19 @@ public interface ISemanticTextMemory {
             String additionalMetadata
     );
 
-    Future<String> saveReferenceAsync(
-            String collection,
-            String text,
-            String externalId,
-            String externalSourceName,
-            String description,
-            String additionalMetadata
-    );
 
-    Future<MemoryQueryResult> getAsync(
+    MemoryQueryResult get(
             String collection,
             String key,
             boolean withEmbedding
     );
 
-    Future<Void> removeAsync(
+    void remove(
             String collection,
             String key
     );
 
-    Flow.Publisher<MemoryQueryResult> searchAsync(
+    List<MemoryQueryResult> search(
             String collection,
             String query,
             int limit,
@@ -40,10 +31,10 @@ public interface ISemanticTextMemory {
             boolean withEmbeddings
     );
 
-    default Flow.Publisher<MemoryQueryResult> searchAsync(
+    default List<MemoryQueryResult> search(
             String collection,
             String query
     ) {
-        return searchAsync(collection, query, 1, 0.7, false);
+        return search(collection, query, 1, 0.7, false);
     }
 }

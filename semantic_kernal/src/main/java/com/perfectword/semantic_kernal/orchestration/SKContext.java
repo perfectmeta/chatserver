@@ -1,9 +1,13 @@
 package com.perfectword.semantic_kernal.orchestration;
 
 import com.perfectword.semantic_kernal.memory.ISemanticTextMemory;
-import com.perfectword.semantic_kernal.skill_define.ReadOnlySkillCollection;
+import com.perfectword.semantic_kernal.skill_define.SkillCollection;
 
 public class SKContext {
+    private ContextVariables variables;
+    private ISemanticTextMemory memory;
+    private SkillCollection skills;
+
     public ContextVariables getVariables() {
         return variables;
     }
@@ -12,11 +16,7 @@ public class SKContext {
         return memory;
     }
 
-    public ReadOnlySkillCollection getSkills() {
+    public SkillCollection getSkills() {
         return skills;
     }
-
-    private ContextVariables variables;
-    private ISemanticTextMemory memory;
-    private ReadOnlySkillCollection skills;
 }

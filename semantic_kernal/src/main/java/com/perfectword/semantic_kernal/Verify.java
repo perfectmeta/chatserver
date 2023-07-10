@@ -1,4 +1,4 @@
-package com.perfectword.semantic_kernal.abstractions;
+package com.perfectword.semantic_kernal;
 
 import java.util.Objects;
 

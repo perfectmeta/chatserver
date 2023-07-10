@@ -1,15 +1,17 @@
 package com.perfectword.semantic_kernal.orchestration;
 
-import com.perfectword.semantic_kernal.abstractions.Verify;
+import com.perfectword.semantic_kernal.Verify;
 
-import java.util.Iterator;
+import java.util.HashMap;
 import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
-import java.util.function.Consumer;
 
-public class ContextVariables implements Cloneable, Iterable<Map.Entry<String, String>>{
+public class ContextVariables {
     final String MAIN_KEY = "INPUT";
-    private final Map<String, String> _variables = new ConcurrentHashMap<>();
+    private final Map<String, String> _variables = new HashMap<>();
+
+    private ContextVariables(ContextVariables src) {
+        update(src);
+    }
 
     public ContextVariables(String content) {
         _variables.put(MAIN_KEY, content == null ? "" : content);
@@ -19,23 +21,23 @@ public class ContextVariables implements Cloneable, Iterable<Map.Entry<String, S
         return this._variables.get(MAIN_KEY);
     }
 
-    public ContextVariables update(String content) {
+    public void setInput(String content) {
         _variables.put(MAIN_KEY, content == null ? "" : content);
-        return this;
     }
 
-
-    public ContextVariables update(ContextVariables newData) {
-        return update(newData, true);
-    }
-
-    public ContextVariables update(ContextVariables newData, boolean merge) {
+    public void replace(ContextVariables newData) {
         if (newData == this)
-            return this;
-        if (!merge)
-            _variables.clear();
-        newData.forEach(e-> _variables.put(e.getKey(), e.getValue()));
-        return this;
+            return;
+
+        _variables.clear();
+        _variables.putAll(newData._variables);
+    }
+
+
+    public void update(ContextVariables newData) {
+        if (newData == this)
+            return;
+        _variables.putAll(newData._variables);
     }
 
     public void set(String name, String value) {
@@ -55,25 +57,13 @@ public class ContextVariables implements Cloneable, Iterable<Map.Entry<String, S
         return _variables.getOrDefault(name, null);
     }
 
+    public ContextVariables copy() {
+        return new ContextVariables(this);
+    }
+
     @Override
     public String toString() {
         return getInput();
     }
 
-    @Override
-    public ContextVariables clone() throws CloneNotSupportedException {
-        ContextVariables cloned = (ContextVariables) super.clone();
-        cloned.update(this);
-        return cloned;
-    }
-
-    @Override
-    public Iterator<Map.Entry<String, String>> iterator() {
-        return this._variables.entrySet().iterator();
-    }
-
-    @Override
-    public void forEach(Consumer<? super Map.Entry<String, String>> action) {
-        this._variables.entrySet().forEach(action);
-    }
 }

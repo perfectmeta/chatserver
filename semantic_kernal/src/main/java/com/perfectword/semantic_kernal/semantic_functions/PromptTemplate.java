@@ -1,6 +1,5 @@
 package com.perfectword.semantic_kernal.semantic_functions;
 
-import com.perfectword.semantic_kernal.IKernel;
 import com.perfectword.semantic_kernal.orchestration.SKContext;
 import com.perfectword.semantic_kernal.skill_define.ParameterView;
 import com.perfectword.semantic_kernal.template_engine.IPromptTemplateEngine;
@@ -8,18 +7,12 @@ import com.perfectword.semantic_kernal.template_engine.IPromptTemplateEngine;
 import java.util.List;
 import java.util.concurrent.Future;
 
-public class PromptTemplate implements IPromptTemplate{
+public class PromptTemplate {
 
     private final String template;
+
     private final IPromptTemplateEngine templateEngine;
     private final PromptTemplateConfig promptConfig;
-
-    public PromptTemplate(String template,
-                          PromptTemplateConfig promptTemplateConfig,
-                          IKernel kernel) {
-        this(template, promptTemplateConfig, kernel.getPromptTemplateEngine());
-    }
-
 
     public PromptTemplate(String template,
                           PromptTemplateConfig promptTemplateConfig,
@@ -29,13 +22,11 @@ public class PromptTemplate implements IPromptTemplate{
         this.promptConfig = promptTemplateConfig;
     }
 
-    @Override
     public List<ParameterView> getParameters() {
         return null;
     }
 
-    @Override
-    public Future<String> renderAsync(SKContext executionContext) {
+    public String render(SKContext executionContext) {
         return null;
     }
 }

@@ -1,6 +1,6 @@
 package com.perfectword.semantic_kernal.ai.text_completion;
 
-import com.perfectword.semantic_kernal.semantic_functions.PromptTemplateConfig;
+import com.perfectword.semantic_kernal.semantic_functions.CompletionConfig;
 
 import java.util.List;
 
@@ -27,7 +27,7 @@ public class CompleteRequestSettings {
         this.maxTokens = maxTokens;
     }
 
-    public static CompleteRequestSettings fromPromptTemplateConfig(PromptTemplateConfig.CompletionConfig config) {
+    public static CompleteRequestSettings fromPromptTemplateConfig(CompletionConfig config) {
         return new CompleteRequestSettings(
                 config.temperature,
                 config.topP,
