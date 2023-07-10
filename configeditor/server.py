@@ -78,6 +78,12 @@ class BotModel(BaseModel):
         disabled=True
     )
 
+    artistModel: str = Field(
+        "请指定一个有效的美术模型",
+        title="美术模型",
+        description="美术模型"
+    )
+
     def to_profile_json(self):
         return self.json(exclude={'id', 'prompt', 'info'}, indent=4, ensure_ascii=False)
 
@@ -108,6 +114,8 @@ class BotModel(BaseModel):
         kwargs['id'] = this_bot_dir.name
         kwargs['prompt'] = prompt
         kwargs['info'] = info
+        if 'artistModel' not in kwargs:
+            kwargs['artistModel'] = "请指定一个有效的美术模型"
 
         bot = BotModel.parse_obj(kwargs)
         return bot

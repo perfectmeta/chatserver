@@ -177,6 +177,8 @@ message Contact {
   string favoriteFoods = 14;
   string unInterest = 15;
   string lifeGoal = 16;
+
+  string artistModel = 17;
 }
 
 message CreateMineNPCsRequest {

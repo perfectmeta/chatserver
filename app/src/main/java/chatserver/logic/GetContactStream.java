@@ -1,11 +1,14 @@
 package chatserver.logic;
 
+import chatserver.config.ConfigManager;
+import chatserver.config.RobotConfig;
 import chatserver.entity.EUserType;
 import chatserver.entity.User;
 import chatserver.gen.Contact;
 import chatserver.gen.Hello;
 import chatserver.service.ContactService;
 import chatserver.service.UserService;
+import com.google.common.base.Strings;
 import io.grpc.stub.StreamObserver;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -39,11 +42,19 @@ public class GetContactStream {
         User object = userService.findByUserId(objectUserId);
         var builder = Contact.newBuilder();
 
-        // TODO 属性没设置全
+        builder.setNickName(object.getNickName());
         if (object.getUserType() == EUserType.BOT) {
             builder.setCategoryName(object.getBotId());
+            RobotConfig robotConfig = ConfigManager.getInstance().getRobotByName(object.getBotId());
+            if (robotConfig != null) {
+                builder.setArtistModel(robotConfig.getArtistModel());
+            }
+        } else {
+            builder.setBirthDay(Strings.nullToEmpty(object.getBirthDay()));
+            builder.setEnglishName(Strings.nullToEmpty(object.getEnglishName()));
+            builder.setLocation(Strings.nullToEmpty(object.getLocation()));
+            builder.setInterest(Strings.nullToEmpty(object.getInterest()));
         }
-        builder.setNickName(object.getNickName());
         return builder.build();
     }
 }

@@ -7,9 +7,8 @@ public class RobotConfig {
     private final String model;
     private final String speaker;
     private final String greeting;
-
     private final String headIcon;
-
+    private final String artistModel;
     private final PromptConfig promptConfig;
 
     public RobotConfig(String id,
@@ -19,7 +18,8 @@ public class RobotConfig {
                        String speaker,
                        String greeting,
                        String promptStr,
-                       String headIcon) {
+                       String headIcon,
+                       String artistModel) {
         this.id = id;
         this.name = name;
         this.description = description;
@@ -28,6 +28,7 @@ public class RobotConfig {
         this.greeting = greeting;
         this.promptConfig = PromptConfig.parse(promptStr);
         this.headIcon = headIcon;
+        this.artistModel = artistModel;
     }
 
     public String getId() {
@@ -70,4 +71,7 @@ public class RobotConfig {
         return headIcon;
     }
 
+    public String getArtistModel() {
+        return artistModel;
+    }
 }

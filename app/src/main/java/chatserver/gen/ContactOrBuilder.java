@@ -194,4 +194,16 @@ public interface ContactOrBuilder extends
    */
   com.google.protobuf.ByteString
       getLifeGoalBytes();
+
+  /**
+   * <code>string artistModel = 17;</code>
+   * @return The artistModel.
+   */
+  java.lang.String getArtistModel();
+  /**
+   * <code>string artistModel = 17;</code>
+   * @return The bytes for artistModel.
+   */
+  com.google.protobuf.ByteString
+      getArtistModelBytes();
 }

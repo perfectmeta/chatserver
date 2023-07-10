@@ -67,6 +67,7 @@ public class ConfigManager {
         public String speaker;
         public String greeting;
         public String head;
+        public String artistModel;
     }
 
     private void readRobot(Path path) {
@@ -108,7 +109,8 @@ public class ConfigManager {
                 profile.speaker,
                 profile.greeting,
                 promptStr,
-                profile.head);
+                profile.head,
+                profile.artistModel);
         robots.put(rc.getId(), rc);
     }
 
