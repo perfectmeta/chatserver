@@ -182,6 +182,7 @@ public class Chat {
         var responseMessage = chatserver.gen.Message.newBuilder()
                 .setMessageId(gptMsg.getMessageId())
                 .setText(allContent)
+                .setCreatedTime(gptMsg.getCreatedTime())
                 .setSeq(messageSeq);
 
         var lastResponse = ChatResponseStream.newBuilder().setResponseMessage(responseMessage).build();
