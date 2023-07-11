@@ -1,10 +1,12 @@
 package com.perfectword.semantic_kernal;
 
+import com.perfectword.semantic_kernal.ai.text_completion.ITextCompletion;
 import com.perfectword.semantic_kernal.memory.ISemanticTextMemory;
 import com.perfectword.semantic_kernal.orchestration.ContextVariables;
 import com.perfectword.semantic_kernal.orchestration.SKContext;
-import com.perfectword.semantic_kernal.semantic_functions.SemanticFunctionConfig;
+import com.perfectword.semantic_kernal.semantic_functions.PromptTemplate;
 import com.perfectword.semantic_kernal.skill_define.ISKFunction;
+import com.perfectword.semantic_kernal.skill_define.SemanticSKFunction;
 import com.perfectword.semantic_kernal.skill_define.SkillCollection;
 import com.perfectword.semantic_kernal.template_engine.IPromptTemplateEngine;
 
@@ -15,6 +17,7 @@ public class Kernel {
     private SkillCollection skills;
     private ISemanticTextMemory memory;
     private IPromptTemplateEngine promptTemplateEngine;
+    private ITextCompletion textCompletion;
 
 
 
@@ -34,11 +37,10 @@ public class Kernel {
 
 
     
-    public ISKFunction registerSemanticFunction(String skillName, String functionName, SemanticFunctionConfig functionConfig) {
+    public ISKFunction registerSemanticFunction(String skillName, String functionName, PromptTemplate promptTemplate) {
         Verify.validSkillName(skillName);
         Verify.ValidFunctionName(functionName);
-        ISKFunction function = createSemanticFunction(skillName, functionName, functionConfig);
-        return null;
+        return SemanticSKFunction.of(skillName, functionName, promptTemplate, textCompletion);
     }
 
     

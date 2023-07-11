@@ -5,12 +5,9 @@ import com.perfectword.semantic_kernal.skill_define.ParameterView;
 import com.perfectword.semantic_kernal.template_engine.IPromptTemplateEngine;
 
 import java.util.List;
-import java.util.concurrent.Future;
 
 public class PromptTemplate {
-
     private final String template;
-
     private final IPromptTemplateEngine templateEngine;
     private final PromptTemplateConfig promptConfig;
 
@@ -20,6 +17,19 @@ public class PromptTemplate {
         this.template = template;
         this.templateEngine = promptTemplateEngine;
         this.promptConfig = promptTemplateConfig;
+    }
+
+
+    public String getTemplate() {
+        return template;
+    }
+
+    public IPromptTemplateEngine getTemplateEngine() {
+        return templateEngine;
+    }
+
+    public PromptTemplateConfig getPromptConfig() {
+        return promptConfig;
     }
 
     public List<ParameterView> getParameters() {

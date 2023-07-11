@@ -10,3 +10,6 @@ build
 static
 /.jpb
 /app/tts.wav
+/configdir/changelist.txt
+/configeditor/configeditor.iml
+/app/tts.mp3
