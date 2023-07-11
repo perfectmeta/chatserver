@@ -7,6 +7,8 @@ import com.perfectword.semantic_kernal.semantic_functions.PromptTemplate;
 
 public class SemanticFunction implements ISKFunction{
 
+    private FunctionView view;
+
     public static SemanticFunction of(
             String skillName,
             String functionName,
@@ -15,7 +17,9 @@ public class SemanticFunction implements ISKFunction{
     ) {
         Verify.validSkillName(skillName);
         Verify.ValidFunctionName(functionName);
-
+        var view = new FunctionView(functionName, skillName, "", true,
+                promptTemplate.getParameters());
+        // todo
         return null;
     }
 
