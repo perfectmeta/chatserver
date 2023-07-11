@@ -13,16 +13,25 @@ public class ContextVariables {
         update(src);
     }
 
-    public ContextVariables(String content) {
-        _variables.put(MAIN_KEY, content == null ? "" : content);
+    private ContextVariables(String input) {
+        _variables.put(MAIN_KEY, input == null ? "" : input);
     }
+
+    public static ContextVariables of() {
+        return new ContextVariables("");
+    }
+
+    public static ContextVariables of(String input) {
+        return new ContextVariables(input);
+    }
+
 
     public String getInput() {
         return this._variables.get(MAIN_KEY);
     }
 
-    public void setInput(String content) {
-        _variables.put(MAIN_KEY, content == null ? "" : content);
+    public void setInput(String input) {
+        _variables.put(MAIN_KEY, input == null ? "" : input);
     }
 
     public void replace(ContextVariables newData) {

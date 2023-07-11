@@ -1,92 +1,61 @@
 package com.perfectword.semantic_kernal;
 
+import com.perfectword.semantic_kernal.ai.embeddings.IEmbeddingGeneration;
 import com.perfectword.semantic_kernal.ai.text_completion.ITextCompletion;
 import com.perfectword.semantic_kernal.memory.ISemanticTextMemory;
 import com.perfectword.semantic_kernal.orchestration.ContextVariables;
 import com.perfectword.semantic_kernal.orchestration.SKContext;
-import com.perfectword.semantic_kernal.semantic_functions.PromptTemplate;
 import com.perfectword.semantic_kernal.skill_define.ISKFunction;
-import com.perfectword.semantic_kernal.skill_define.SemanticSKFunction;
 import com.perfectword.semantic_kernal.skill_define.SkillCollection;
 import com.perfectword.semantic_kernal.template_engine.IPromptTemplateEngine;
 
-import java.util.Map;
-import java.util.concurrent.Future;
-
 public class Kernel {
-    private SkillCollection skills;
-    private ISemanticTextMemory memory;
-    private IPromptTemplateEngine promptTemplateEngine;
-    private ITextCompletion textCompletion;
+    private final SkillCollection skills;
+    private final ISemanticTextMemory memory;
+    private final ITextCompletion textCompletion;
+    private final IEmbeddingGeneration embeddingGeneration;
+    private final IPromptTemplateEngine promptTemplateEngine;
+
+    public Kernel(SkillCollection skills,
+                  ISemanticTextMemory memory,
+                  ITextCompletion textCompletion,
+                  IEmbeddingGeneration embeddingGeneration,
+                  IPromptTemplateEngine promptTemplateEngine) {
+        this.skills = skills;
+        this.memory = memory;
+        this.textCompletion = textCompletion;
+        this.embeddingGeneration = embeddingGeneration;
+        this.promptTemplateEngine = promptTemplateEngine;
+    }
 
 
+    public SkillCollection getSkills() {
+        return skills;
+    }
 
     public ISemanticTextMemory getMemory() {
         return memory;
     }
 
-    
+    public ITextCompletion getTextCompletion() {
+        return textCompletion;
+    }
+
+    public IEmbeddingGeneration getEmbeddingGeneration() {
+        return embeddingGeneration;
+    }
+
     public IPromptTemplateEngine getPromptTemplateEngine() {
         return promptTemplateEngine;
     }
 
-    
-    public SkillCollection getSkills() {
-        return skills;
+
+    public void registerFunction(ISKFunction func) {
+        skills.addFunction(func);
     }
 
-
-    
-    public ISKFunction registerSemanticFunction(String skillName, String functionName, PromptTemplate promptTemplate) {
-        Verify.validSkillName(skillName);
-        Verify.ValidFunctionName(functionName);
-        return SemanticSKFunction.of(skillName, functionName, promptTemplate, textCompletion);
-    }
-
-    
-    public ISKFunction registerCustomFunction(String skillName, ISKFunction customFunction) {
+    public SKContext runFunction(ContextVariables variables, ISKFunction... pipeline) {
         return null;
     }
-
-    
-    public Map<String, ISKFunction> importSkill(Object skillInstance, String skillName) {
-        return null;
-    }
-
-    
-    public void registerMemory(ISemanticTextMemory memory) {
-
-    }
-
-    
-    public Future<SKContext> runAsync(ISKFunction... pipeline) {
-        return null;
-    }
-
-    
-    public Future<SKContext> runAsync(String input, ISKFunction... pipeline) {
-        return null;
-    }
-
-    
-    public Future<SKContext> runAsync(ContextVariables variables, ISKFunction... pipeline) {
-        return null;
-    }
-
-    
-    public ISKFunction func(String skillName, String functionName) {
-        return null;
-    }
-
-    
-    public SKContext createNewContext() {
-        return null;
-    }
-
-    
-    public <T> T getService(String name, Class<T> clazz) {
-        return null;
-    }
-
 
 }

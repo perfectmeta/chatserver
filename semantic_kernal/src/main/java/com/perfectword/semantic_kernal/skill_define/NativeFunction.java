@@ -4,12 +4,12 @@ import com.perfectword.semantic_kernal.orchestration.SKContext;
 
 import java.lang.reflect.Method;
 
-public class NativeSKFunction implements ISKFunction {
+public class NativeFunction implements ISKFunction {
 
     private FunctionView view;
 
 
-    public static NativeSKFunction of(
+    public static NativeFunction of(
             Method methodSignature,
             Object methodContainerInstance,
             String skillName

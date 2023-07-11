@@ -1,18 +1,21 @@
 package com.perfectword.semantic_kernal.skill_define;
 
+import com.perfectword.semantic_kernal.Verify;
 import com.perfectword.semantic_kernal.ai.text_completion.ITextCompletion;
 import com.perfectword.semantic_kernal.orchestration.SKContext;
 import com.perfectword.semantic_kernal.semantic_functions.PromptTemplate;
-import com.perfectword.semantic_kernal.semantic_functions.PromptTemplateConfig;
 
-public class SemanticSKFunction implements ISKFunction{
+public class SemanticFunction implements ISKFunction{
 
-    public static SemanticSKFunction of(
+    public static SemanticFunction of(
             String skillName,
             String functionName,
             PromptTemplate promptTemplate,
             ITextCompletion textCompletion
     ) {
+        Verify.validSkillName(skillName);
+        Verify.ValidFunctionName(functionName);
+
         return null;
     }
 

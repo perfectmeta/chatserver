@@ -5,12 +5,12 @@ import java.util.concurrent.Flow;
 import java.util.concurrent.Future;
 
 public interface ITextCompletion {
-    Future<List<ITextCompletionResult>> getCompletionsAsync(
+    List<ITextCompletionResult> getCompletions(
             String text,
             CompleteRequestSettings requestSettings
     );
 
-    Flow.Publisher<ITextCompletionStreamingResult> getStreamingCompletionsAsync(
+    ITextCompletionStreamingResult getStreamingCompletions(
             String text,
             CompleteRequestSettings requestSettings
     );
