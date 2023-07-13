@@ -33,6 +33,4 @@ public class SemanticFunction implements ISKFunction {
     public SKContext invoke(SKContext context) {
         return null;
     }
-
-
 }

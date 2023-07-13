@@ -6,7 +6,6 @@ public class NullMemory implements ISemanticTextMemory{
 
     @Override
     public void saveInformation(String collection, String text, String id, String description, String additionalMetadata) {
-
     }
 
     @Override

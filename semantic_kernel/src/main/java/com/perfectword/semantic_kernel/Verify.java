@@ -1,5 +1,6 @@
 package com.perfectword.semantic_kernel;
 
+import java.lang.reflect.Method;
 import java.util.Objects;
 
 public class Verify {
@@ -24,5 +25,9 @@ public class Verify {
 
     public static void ValidFunctionName(String functionName) {
         // todo implement function
+    }
+
+    public static void NotNull(Method methodSignature) {
+        Objects.requireNonNull(methodSignature);
     }
 }

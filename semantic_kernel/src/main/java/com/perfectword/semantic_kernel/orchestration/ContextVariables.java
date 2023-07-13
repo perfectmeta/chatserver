@@ -25,7 +25,6 @@ public class ContextVariables {
         return new ContextVariables(input);
     }
 
-
     public String getInput() {
         return this._variables.get(MAIN_KEY);
     }
@@ -35,17 +34,14 @@ public class ContextVariables {
     }
 
     public void replace(ContextVariables newData) {
-        if (newData == this)
-            return;
+        if (newData == this) return;
 
         _variables.clear();
         _variables.putAll(newData._variables);
     }
 
-
     public void update(ContextVariables newData) {
-        if (newData == this)
-            return;
+        if (newData == this) return;
         _variables.putAll(newData._variables);
     }
 
@@ -74,5 +70,4 @@ public class ContextVariables {
     public String toString() {
         return getInput();
     }
-
 }

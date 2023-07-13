@@ -16,7 +16,8 @@ public class KernelConfig {
         var skills = new SkillCollection();
         var promptTemplateEngine = new PromptTemplateEngine();
         var memory = new NullMemory();
-        var completeService = new OpenAITextCompletion();
+        // todo fix this
+        var completeService = new OpenAITextCompletion(null, "");
         var embeddingGeneration = new EmbeddingGeneration();
         return new Kernel(skills, memory, completeService, embeddingGeneration, promptTemplateEngine);
     }
