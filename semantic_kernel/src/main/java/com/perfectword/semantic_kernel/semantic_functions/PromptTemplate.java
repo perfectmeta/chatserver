@@ -33,10 +33,11 @@ public class PromptTemplate {
     }
 
     public List<ParameterView> getParameters() {
-        return null;
+        return promptConfig.input().parameters().stream()
+                .map(p -> new ParameterView(p.name(), p.description())).toList();
     }
 
     public String render(SKContext executionContext) {
-        return null;
+        return template;
     }
 }

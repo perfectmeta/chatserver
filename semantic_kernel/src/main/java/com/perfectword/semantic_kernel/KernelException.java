@@ -1,27 +1,29 @@
 package com.perfectword.semantic_kernel;
 
 public class KernelException extends RuntimeException {
-
     private final ErrorCodes errorCode;
-    private final String message;
 
     public KernelException(ErrorCodes errorCode, String message) {
+        this(errorCode, message, null);
+    }
+
+    public KernelException(ErrorCodes errorCode, String message, Throwable cause) {
+        super(msg(errorCode, message), cause);
         this.errorCode = errorCode;
-        this.message = message;
     }
 
-    @Override
-    public String getMessage() {
-        return getDefaultMessage(errorCode, message);
+    public ErrorCodes getErrorCode() {
+        return errorCode;
     }
 
-    private static String getDefaultMessage(ErrorCodes errorCode, String message) {
+    static String msg(ErrorCodes errorCode, String message) {
         String description = errorCode.message;
         if (message != null) {
             return "%s: %s".formatted(description, message);
         }
         return description;
     }
+
 
     public enum ErrorCodes {
         UnknownError(-1, "Unknown error"),

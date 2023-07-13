@@ -1,6 +1,7 @@
 package com.perfectword.semantic_kernel.orchestration;
 
 import com.perfectword.semantic_kernel.memory.ISemanticTextMemory;
+import com.perfectword.semantic_kernel.memory.NullMemory;
 import com.perfectword.semantic_kernel.skill_define.SkillCollection;
 
 public class SKContext {
@@ -15,6 +16,10 @@ public class SKContext {
         this.variables = variables;
         this.memory = memory;
         this.skills = skills;
+    }
+
+    public static SKContext of() {
+        return new SKContext(ContextVariables.of(), new NullMemory(), new SkillCollection());
     }
 
     public ContextVariables getVariables() {

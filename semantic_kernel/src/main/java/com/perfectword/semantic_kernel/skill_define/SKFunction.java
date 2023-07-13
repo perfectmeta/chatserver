@@ -8,5 +8,7 @@ import java.lang.annotation.Target;
 @Target(ElementType.METHOD)
 @Retention(RetentionPolicy.RUNTIME)
 public @interface SKFunction {
-    String name();
+    String name() default "";  // 如果为空，就读method name
+
+    String description();
 }

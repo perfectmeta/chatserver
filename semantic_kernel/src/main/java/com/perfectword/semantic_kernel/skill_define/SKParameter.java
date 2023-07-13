@@ -8,7 +8,7 @@ import java.lang.annotation.Target;
 @Target(ElementType.PARAMETER)
 @Retention(RetentionPolicy.RUNTIME)
 public @interface SKParameter {
-    String name() default "";
+    String name() default "input";
+
     String description() default "";
-    String defaultValue() default "";
 }

@@ -1,66 +1,83 @@
 package com.perfectword.semantic_kernel.skill_define;
 
+import com.perfectword.semantic_kernel.KernelException;
+import com.perfectword.semantic_kernel.KernelException.ErrorCodes;
 import com.perfectword.semantic_kernel.Verify;
 import com.perfectword.semantic_kernel.orchestration.SKContext;
 
-import java.lang.invoke.MethodHandle;
-import java.lang.invoke.MethodHandles;
 import java.lang.reflect.Method;
-import java.lang.reflect.Type;
+import java.lang.reflect.Parameter;
 import java.util.ArrayList;
 import java.util.List;
 
 
-class MethodDetail {
-    public boolean hasSKFunctionAnnotation;
-    public MethodHandle handle;
-    public DelegateTypes delegateTypes;
-    public ParametersConverter parametersConverter;
-    public List<ParameterView> parameters;
-    public String name;
-    public String description;
-}
-
-
-enum DelegateTypes
-{
-    Unknown,
-    Void,
-    OutString,
-    OutTaskString,
-    InSKContext,
-    InSKContextOutString,
-    InSKContextOutTaskString,
-    ContextSwitchInSKContextOutTaskSKContext,
-    InString,
-    InStringOutString,
-    InStringOutTaskString,
-    InStringAndContext,
-    InStringAndContextOutString,
-    InStringAndContextOutTaskString,
-    ContextSwitchInStringAndContextOutTaskContext,
-    InStringOutTask,
-    InContextOutTask,
-    InStringAndContextOutTask,
-    OutTask
-}
-
 public class NativeFunction implements ISKFunction {
+    enum FunctionOutputType { // 就先考虑最简单情况，后面有需要再扩展
+        OutputString,
+        OutputVoid
+    }
 
-    private FunctionView view;
-    private Object delegateOwner;
-    // private MethodHandle handle;
-    private Method handle;
+    private final FunctionView view;
+    private final Object methodContainerInstance;
+    private final Method handle;
+    private final FunctionOutputType outputType;
 
     public NativeFunction(
             Method methodSignature,
             Object methodContainerInstance,
             String skillName
     ) {
-        delegateOwner = methodContainerInstance;
-        var methodDetail = getMethodDetail(methodSignature, methodContainerInstance);
-        view = new FunctionView(methodDetail.name, skillName, methodDetail.description, false, methodDetail.parameters);
-        // handle = methodDetail.handle;
+        Verify.NotNull(methodSignature);
+
+        String methodName = methodSignature.getName();
+        this.methodContainerInstance = methodContainerInstance;
+        SKFunction annotation = methodSignature.getDeclaredAnnotation(SKFunction.class);
+        if (annotation == null) {
+            throw new KernelException(ErrorCodes.InvalidFunctionDescription,
+                    "%s has no annotation".formatted(methodName));
+        }
+
+        String functionName = annotation.name();
+        if (functionName.isBlank()) {
+            functionName = methodName;
+        }
+        String description = annotation.description();
+
+        List<ParameterView> parameters = new ArrayList<>();
+        Parameter[] params = methodSignature.getParameters();
+        for (Parameter p : params) {
+            String pn = "input";
+            String pd = "input";
+            Class<?> pt = p.getType();
+            if (!String.class.isAssignableFrom(pt)) {
+                throw new KernelException(ErrorCodes.InvalidFunctionDescription,
+                        "%s parameter type = %s not supported".formatted(methodName, pt));
+            }
+
+            SKParameter anno = p.getAnnotation(SKParameter.class);
+            if (anno == null) {
+                if (params.length != 1) {
+                    throw new KernelException(ErrorCodes.InvalidFunctionDescription,
+                            "%s parameter annotation not set".formatted(methodName));
+                }
+            } else {
+                pn = anno.name();
+                pd = anno.description();
+            }
+            parameters.add(new ParameterView(pn, pd));
+        }
+
+        Class<?> returnType = methodSignature.getReturnType();
+        if (String.class.isAssignableFrom(returnType)) {
+            outputType = FunctionOutputType.OutputString;
+        } else if (void.class.isAssignableFrom(returnType)) {
+            outputType = FunctionOutputType.OutputVoid;
+        } else {
+            throw new KernelException(ErrorCodes.InvalidFunctionDescription,
+                    "%s return type = %s not supported".formatted(methodName, returnType));
+        }
+
+        view = new FunctionView(functionName, skillName, description, false, parameters);
         handle = methodSignature;
     }
 
@@ -72,88 +89,37 @@ public class NativeFunction implements ISKFunction {
 
     @Override
     public SKContext invoke(SKContext context) {
-        List<Object> parameters = new ArrayList<>();
+        Object[] args = new Object[view.parameters().size()];
+        int i = 0;
         for (var pv : view.parameters()) {
             var p = context.getVariables().get(pv.name());
             if (p != null) {
-                parameters.add(p);
+                args[i] = p;
+                i++;
             } else {
-                throw new IllegalStateException("parameter %s is null".formatted(pv.name()));
+                throw new KernelException(ErrorCodes.FunctionInvokeError,
+                        "%s parameter %s not set".formatted(view.name(), pv.name()));
             }
         }
 
+
+        Object result;
         try {
-            String result;
-            if (delegateOwner != null) {
-                result = (String)handle.invoke(delegateOwner, parameters.toArray());
+            if (methodContainerInstance != null) {
+                result = handle.invoke(methodContainerInstance, args);
             } else {
-                result = (String)handle.invoke(parameters.toArray());
-            }
-            if (result != null) {
-                context.getVariables().setInput(result);
+                result = handle.invoke(args);
             }
         } catch (Throwable e) {
-            throw new RuntimeException(e);
+            throw new KernelException(ErrorCodes.FunctionInvokeError, view.name(), e);
         }
+
+        if (outputType == FunctionOutputType.OutputString) {
+            context.getVariables().setInput((String) result);
+        } // 如果不是返回string，这里input没有冲掉
 
         return context;
     }
 
-    private static MethodDetail getMethodDetail(Method methodSignature,
-                                         Object methodContainerInstance) {
-        Verify.NotNull(methodSignature);
-        MethodDetail detail = new MethodDetail();
-        detail.name = methodSignature.getName();
-        detail.parameters = new ArrayList<>();
 
-        SKFunction functionAnnotation = methodSignature.getDeclaredAnnotation(SKFunction.class);
-        if (functionAnnotation != null) {
-            detail.name = functionAnnotation.name();
-            detail.hasSKFunctionAnnotation = true;
-        } else {
-            detail.name = methodSignature.getName();
-        }
-
-        detail.parameters = getParameterViews(methodContainerInstance, methodSignature);
-        detail.parametersConverter = getParameterConverter(methodSignature);
-        detail.delegateTypes = getDelegateTypes(methodSignature);
-        detail.handle = getHandle(methodSignature, methodContainerInstance);
-        return detail;
-    }
-
-    private static ParametersConverter getParameterConverter(Method methodSignature) {
-        return ParametersConverter.of(methodSignature);
-    }
-
-    private static MethodHandle getHandle(Method methodSignature, Object methodContainerInstance) {
-        var lookup = MethodHandles.lookup();
-        try {
-            return lookup.unreflect(methodSignature);
-        } catch (IllegalAccessException e) {
-            throw new RuntimeException(e);
-        }
-    }
-
-    private static List<ParameterView> getParameterViews(Object target, Method methodSignature) {
-        List<ParameterView> parameters = new ArrayList<>();
-        for (var p : methodSignature.getParameters()) {
-            SKParameter annotation = p.getAnnotation(SKParameter.class);
-            Type type = p.getParameterizedType();
-            if (annotation != null) {
-                parameters.add(new ParameterView(annotation.name(), annotation.description(), annotation.defaultValue()));
-            } else {
-                throw new RuntimeException("Function %s 's raw parameter %s not declared"
-                        .formatted(methodSignature.getName(), p.getName()));
-            }
-        }
-        return parameters;
-    }
-
-    private static DelegateTypes getDelegateTypes(Method method) {
-        // todo implement this method
-        return null;
-    }
-
-    private void constructView(String skillName, Method method, Object container) {
-    }
 }
