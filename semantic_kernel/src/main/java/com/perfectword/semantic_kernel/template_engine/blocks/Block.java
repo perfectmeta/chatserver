@@ -7,12 +7,12 @@ public abstract class Block {
         return BlockTypes.Unidefined;
     }
 
-    private String _content;
-    private String getContent() {
+    protected String _content;
+    public String getContent() {
         return _content;
     }
 
-    protected Block(String content, Logger logger) {
+    protected Block(String content) {
         _content = nullToEmpty(content);
     }
 

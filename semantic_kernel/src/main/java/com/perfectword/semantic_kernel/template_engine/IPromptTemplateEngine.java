@@ -16,5 +16,7 @@ public interface IPromptTemplateEngine {
 
     List<Block> renderVariables(List<Block> blocks, ContextVariables variables);
 
-    Future<String> renderAsync(List<Block> blocks, SKContext context);
+    String render(List<Block> blocks, SKContext context);
+
+    String render(String templateText, SKContext context);
 }

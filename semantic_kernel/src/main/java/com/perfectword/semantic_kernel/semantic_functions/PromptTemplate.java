@@ -38,6 +38,6 @@ public class PromptTemplate {
     }
 
     public String render(SKContext executionContext) {
-        return template;
+        return templateEngine.render(template, executionContext);
     }
 }
