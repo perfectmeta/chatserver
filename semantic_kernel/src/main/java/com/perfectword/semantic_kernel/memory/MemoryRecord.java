@@ -15,6 +15,8 @@ public class MemoryRecord extends DataEntryBase{
                         String key,
                         OffsetDateTime timestamp) {
         super(key, timestamp);
+        this.embedding = embedding;
+        this.metadata = metadata;
     }
 
     public static MemoryRecord referenceRecord(

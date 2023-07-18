@@ -11,7 +11,7 @@ public class VolatileMemoryStore implements IMemoryStore {
 
     @Override
     public void createCollection(String collectionName) {
-        if (!store.containsKey(collectionName)) {
+        if (store.containsKey(collectionName)) {
             throw new MemoryException(MemoryException.ErrorCodes.FailedToCreateCollection,
                     "Could not create collection %s".formatted(collectionName));
         }
@@ -105,6 +105,6 @@ public class VolatileMemoryStore implements IMemoryStore {
                 priorityQueue.add(new MatchResult(entry, similarity));
             }
         }
-        return priorityQueue.stream().toList();
+        return priorityQueue.stream().limit(limit).toList();
     }
 }

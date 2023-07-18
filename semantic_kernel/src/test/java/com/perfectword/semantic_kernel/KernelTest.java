@@ -31,6 +31,6 @@ class KernelTest {
     void runFunction() {
         SKContext context = SKContext.of();
         context.getVariables().set("name", "You");
-        kernel.runFunction(context.getVariables(), )
+        // kernel.runFunction(context.getVariables(), )
     }
 }
