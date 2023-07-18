@@ -22,6 +22,14 @@ public class SKContext {
         return new SKContext(ContextVariables.of(), NullMemory.getInstance(), new SkillCollection());
     }
 
+    public SKContext copy() {
+        SKContext ctx = new SKContext(variables.copy(), memory, skills);
+        ctx.errorOccurred = errorOccurred;
+        ctx.lastErrorDescription = lastErrorDescription;
+        ctx.lastException = lastException;
+        return ctx;
+    }
+
     public ContextVariables getVariables() {
         return variables;
     }
@@ -35,7 +43,7 @@ public class SKContext {
     }
 
 
-    public void Fail(String errorDescription, Exception exception) {
+    public void fail(String errorDescription, Exception exception) {
         errorOccurred = true;
         lastErrorDescription = errorDescription;
         lastException = exception;

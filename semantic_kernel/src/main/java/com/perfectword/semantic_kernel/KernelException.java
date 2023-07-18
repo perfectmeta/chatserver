@@ -36,7 +36,9 @@ public class KernelException extends RuntimeException {
         ServiceNotFound(6, "Service not found"),
         SkillCollectionNotSet(7, "Skill collection not set"),
         FunctionInvokeError(8, "Function invocation error"),
-        AmbiguousMatchFunctionType(9, "Ambiguous match function type");
+        AmbiguousMatchFunctionType(9, "Ambiguous match function type"),
+        TemplateSyntaxError(10, "template syntax error");
+
 
         ErrorCodes(int v, String message) {
             this.value = v;

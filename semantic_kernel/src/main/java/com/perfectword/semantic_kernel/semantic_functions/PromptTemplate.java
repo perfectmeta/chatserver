@@ -3,11 +3,13 @@ package com.perfectword.semantic_kernel.semantic_functions;
 import com.perfectword.semantic_kernel.orchestration.SKContext;
 import com.perfectword.semantic_kernel.skill_define.ParameterView;
 import com.perfectword.semantic_kernel.template_engine.IPromptTemplateEngine;
+import com.perfectword.semantic_kernel.template_engine.Block;
 
 import java.util.List;
 
 public class PromptTemplate {
     private final String template;
+    private final List<Block> templateBlocks;
     private final IPromptTemplateEngine templateEngine;
     private final PromptTemplateConfig promptConfig;
 
@@ -17,6 +19,7 @@ public class PromptTemplate {
         this.template = template;
         this.templateEngine = promptTemplateEngine;
         this.promptConfig = promptTemplateConfig;
+        templateBlocks = promptTemplateEngine.extractBlocks(template);
     }
 
 
@@ -38,6 +41,6 @@ public class PromptTemplate {
     }
 
     public String render(SKContext executionContext) {
-        return templateEngine.render(template, executionContext);
+        return templateEngine.render(templateBlocks, executionContext);
     }
 }

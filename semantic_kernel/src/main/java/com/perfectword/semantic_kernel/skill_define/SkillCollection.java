@@ -21,18 +21,17 @@ public class SkillCollection {
     public ISKFunction getFunction(String skillName, String functionName) {
         var sc = skillCollection.get(skillName);
         if (sc == null) {
-            throwFunctionNotAvailable(skillName, functionName);
+            throw new KernelException(KernelException.ErrorCodes.FunctionNotAvailable,
+                    "skill not available %s".formatted(skillName));
+
         }
         var function = sc.get(functionName);
         if (function == null) {
-            throwFunctionNotAvailable(skillName, functionName);
+            throw new KernelException(KernelException.ErrorCodes.FunctionNotAvailable,
+                    "Function not available %s.%s".formatted(skillName, functionName));
         }
 
         return function;
     }
 
-    private static void throwFunctionNotAvailable(String skillName, String functionName) {
-        throw new KernelException(KernelException.ErrorCodes.FunctionNotAvailable,
-                "Function not available %s.%s".formatted(skillName, functionName));
-    }
 }

@@ -21,6 +21,7 @@ public class NativeFunction implements ISKFunction {
     private final Object methodContainerInstance;
     private final Method handle;
     private final FunctionOutputType outputType;
+    private boolean isFirstInputSKContext;
 
     public NativeFunction(
             Method methodSignature,
@@ -45,11 +46,15 @@ public class NativeFunction implements ISKFunction {
 
         List<ParameterView> parameters = new ArrayList<>();
         Parameter[] params = methodSignature.getParameters();
+        int idx = 0;
         for (Parameter p : params) {
             String pn = "input";
             String pd = "input";
             Class<?> pt = p.getType();
-            if (!String.class.isAssignableFrom(pt)) {
+            // 支持第一个参数是context，其他参数是字符串；或全是字符串
+            if (idx == 0 && SKContext.class.isAssignableFrom(pt)) {
+                isFirstInputSKContext = true;
+            } else if (!String.class.isAssignableFrom(pt)) {
                 throw new KernelException(ErrorCodes.InvalidFunctionDescription,
                         "%s parameter type = %s not supported".formatted(methodName, pt));
             }
@@ -59,12 +64,16 @@ public class NativeFunction implements ISKFunction {
                 if (params.length != 1) {
                     throw new KernelException(ErrorCodes.InvalidFunctionDescription,
                             "%s parameter annotation not set".formatted(methodName));
+                }else if (isFirstInputSKContext){
+                    pn = pd =  "__SKContext__";
                 }
             } else {
                 pn = anno.name();
                 pd = anno.description();
             }
             parameters.add(new ParameterView(pn, pd));
+
+            idx++;
         }
 
         Class<?> returnType = methodSignature.getReturnType();
@@ -90,16 +99,22 @@ public class NativeFunction implements ISKFunction {
     @Override
     public SKContext invoke(SKContext context) {
         Object[] args = new Object[view.parameters().size()];
-        int i = 0;
+        int idx = 0;
         for (var pv : view.parameters()) {
-            var p = context.getVariables().get(pv.name());
-            if (p != null) {
-                args[i] = p;
-                i++;
+            if (idx == 0 && isFirstInputSKContext) {
+                args[0] = context;
             } else {
-                throw new KernelException(ErrorCodes.FunctionInvokeError,
-                        "%s parameter %s not set".formatted(view.name(), pv.name()));
+                var p = context.getVariables().get(pv.name());
+                if (p != null) {
+                    args[idx] = p;
+                } else {
+                    throw new KernelException(ErrorCodes.FunctionInvokeError,
+                            "%s parameter %s not set".formatted(view.name(), pv.name()));
+                }
             }
+
+            idx++;
+
         }
 
 
@@ -108,7 +123,7 @@ public class NativeFunction implements ISKFunction {
             if (methodContainerInstance != null) {
                 result = handle.invoke(methodContainerInstance, args);
             } else {
-                result = handle.invoke(args);
+                result = handle.invoke(null, args);
             }
         } catch (Throwable e) {
             throw new KernelException(ErrorCodes.FunctionInvokeError, view.name(), e);
