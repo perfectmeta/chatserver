@@ -27,7 +27,7 @@ public class NativeFunction implements ISKFunction {
             Object methodContainerInstance,
             String skillName
     ) {
-        Verify.NotNull(methodSignature);
+        Verify.notNull(methodSignature);
 
         String methodName = methodSignature.getName();
         this.methodContainerInstance = methodContainerInstance;

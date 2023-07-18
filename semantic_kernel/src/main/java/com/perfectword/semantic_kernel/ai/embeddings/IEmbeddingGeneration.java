@@ -4,9 +4,6 @@ import java.util.List;
 
 public interface IEmbeddingGeneration {
 
-    public record Embedding(float[] vector) {
-    }
-
     List<Embedding> generateEmbeddings(List<String> values);
 
     default Embedding generateEmbedding(String value) {

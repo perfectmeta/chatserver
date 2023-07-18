@@ -23,11 +23,7 @@ public class Verify {
         // todo implement function
     }
 
-    public static void ValidFunctionName(String functionName) {
-        // todo implement function
-    }
-
-    public static void NotNull(Method methodSignature) {
-        Objects.requireNonNull(methodSignature);
+    public static void notNull(Object obj) {
+        Objects.requireNonNull(obj);
     }
 }

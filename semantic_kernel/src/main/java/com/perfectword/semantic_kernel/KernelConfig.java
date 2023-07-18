@@ -19,7 +19,7 @@ public class KernelConfig {
     public Kernel create() {
         var skills = new SkillCollection();
         var promptTemplateEngine = new PromptTemplateEngine();
-        var memory = new NullMemory();
+        var memory = NullMemory.getInstance();
         // todo fix this
         var completeService = new OpenAITextCompletion(null, "");
         var embeddingGeneration = new EmbeddingGeneration();

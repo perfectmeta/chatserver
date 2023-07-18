@@ -18,7 +18,7 @@ public class SemanticFunction implements ISKFunction {
                             PromptTemplate promptTemplate,
                             ITextCompletion textCompletion) {
         Verify.validSkillName(skillName);
-        Verify.ValidFunctionName(functionName);
+        Verify.validFunctionName(functionName);
         Objects.requireNonNull(promptTemplate);
         Objects.requireNonNull(textCompletion);
         view = new FunctionView(functionName, skillName, promptTemplate.getPromptConfig().description(),

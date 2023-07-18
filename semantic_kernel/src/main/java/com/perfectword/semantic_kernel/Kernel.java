@@ -49,7 +49,6 @@ public class Kernel {
         return promptTemplateEngine;
     }
 
-
     public void registerFunction(ISKFunction func) {
         skills.addFunction(func);
     }

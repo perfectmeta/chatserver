@@ -4,6 +4,13 @@ import java.util.List;
 
 public class NullMemory implements ISemanticTextMemory{
 
+    private NullMemory() {}
+    private static final NullMemory INSTANCE = new NullMemory();
+
+    public static NullMemory getInstance() {
+        return INSTANCE;
+    }
+
     @Override
     public void saveInformation(String collection, String text, String id, String description, String additionalMetadata) {
     }
@@ -20,6 +27,6 @@ public class NullMemory implements ISemanticTextMemory{
 
     @Override
     public List<MemoryQueryResult> search(String collection, String query, int limit, double minRelevanceScore, boolean withEmbeddings) {
-        return null;
+        return List.of();
     }
 }

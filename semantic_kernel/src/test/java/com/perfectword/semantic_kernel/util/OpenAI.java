@@ -27,7 +27,7 @@ public class OpenAI {
     }
 
     private static OkHttpClient makeHttpClient() {
-        return OpenAiService.defaultClient("R", Duration.of(15, ChronoUnit.SECONDS))
+        return OpenAiService.defaultClient("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", Duration.of(15, ChronoUnit.SECONDS))
                 .newBuilder()
                 .build();
     }

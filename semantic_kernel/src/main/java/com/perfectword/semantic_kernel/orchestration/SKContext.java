@@ -19,7 +19,7 @@ public class SKContext {
     }
 
     public static SKContext of() {
-        return new SKContext(ContextVariables.of(), new NullMemory(), new SkillCollection());
+        return new SKContext(ContextVariables.of(), NullMemory.getInstance(), new SkillCollection());
     }
 
     public ContextVariables getVariables() {
