@@ -7,8 +7,8 @@ import com.perfectword.semantic_kernel.ai.embeddings.Embedding;
 import java.time.OffsetDateTime;
 
 public class MemoryRecord extends DataEntryBase{
-    private Embedding embedding;
-    private MemoryRecordMetadata metadata;
+    private final Embedding embedding;
+    private final MemoryRecordMetadata metadata;
 
     public MemoryRecord(MemoryRecordMetadata metadata,
                         Embedding embedding,
@@ -29,10 +29,12 @@ public class MemoryRecord extends DataEntryBase{
             OffsetDateTime timestamp
     ) {
         return new MemoryRecord(
-                new MemoryRecordMetadata(
-                    // todo: fill this constructor
-                        externalId
-                ),
+                new MemoryRecordMetadata(externalId,
+                        true,
+                        sourceName,
+                        description,
+                        "",
+                        additionalMetadata),
                 embedding,
                 key,
                 timestamp
@@ -51,8 +53,12 @@ public class MemoryRecord extends DataEntryBase{
     ) {
         return new MemoryRecord(
                 new MemoryRecordMetadata(
-                        // todo: fill this constructor
-                        id
+                        id,
+                        false,
+                        "",
+                        description == null ? "" : description,
+                        text,
+                        additionalMetadata == null ? "" : additionalMetadata
                 ),
                 embedding,
                 key,
@@ -66,8 +72,15 @@ public class MemoryRecord extends DataEntryBase{
             String key,
             OffsetDateTime timestamp
     ) {
-        // todo fill this constructor
-        return null;
+        var objectMapper = new ObjectMapper();
+        MemoryRecordMetadata metadata;
+        try {
+            metadata = objectMapper.readValue(json, MemoryRecordMetadata.class);
+        } catch (JsonProcessingException e) {
+            throw new MemoryException(MemoryException.ErrorCodes.UnableToDeserializeMetadata,
+                    "Unable to create memory record from serialized metadata ", e);
+        }
+        return new MemoryRecord(metadata, embedding != null ? embedding: Embedding.EMPTY, key, timestamp);
     }
 
     public static MemoryRecord fromMetadata(

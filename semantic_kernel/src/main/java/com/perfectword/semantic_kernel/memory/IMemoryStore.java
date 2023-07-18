@@ -12,8 +12,9 @@ public interface IMemoryStore {
     String upsert(String collectionName, MemoryRecord record);
     List<String> upsertBatch(String collectionName, List<MemoryRecord> records);
     List<MemoryRecord> getBatch(String collectionName, List<String> keys, boolean withEmbeddings);
-    default List<MemoryRecord> getBatch(String collectionName, List<String> keys) {
-        return getBatch(collectionName, keys, false);
+    default MemoryRecord get(String collectionName, String key) {
+        var batchResult = getBatch(collectionName, List.of(key), false);
+        return batchResult.isEmpty() ? null : batchResult.get(0);
     }
 
     void remove(String collectionName, String key);

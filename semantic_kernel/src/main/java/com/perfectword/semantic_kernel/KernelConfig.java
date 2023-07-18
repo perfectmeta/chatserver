@@ -2,7 +2,7 @@ package com.perfectword.semantic_kernel;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.PropertyNamingStrategies;
-import com.perfectword.semantic_kernel.ai.embeddings.EmbeddingGeneration;
+import com.perfectword.semantic_kernel.ai.embeddings.OpenAIEmbeddingGeneration;
 import com.perfectword.semantic_kernel.ai.text_completion.OpenAITextCompletion;
 import com.perfectword.semantic_kernel.memory.NullMemory;
 import com.perfectword.semantic_kernel.semantic_functions.PromptTemplateConfig;
@@ -22,7 +22,7 @@ public class KernelConfig {
         var memory = NullMemory.getInstance();
         // todo fix this
         var completeService = new OpenAITextCompletion(null, "");
-        var embeddingGeneration = new EmbeddingGeneration();
+        var embeddingGeneration = new OpenAIEmbeddingGeneration(null);
         return new Kernel(skills, memory, completeService, embeddingGeneration, promptTemplateEngine);
     }
 

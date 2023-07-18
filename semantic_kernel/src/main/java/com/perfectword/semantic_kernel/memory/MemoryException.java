@@ -15,6 +15,13 @@ public class MemoryException extends RuntimeException {
         this.message = message;
     }
 
+    public MemoryException(ErrorCodes errorCode, String message, Exception innerException) {
+        super(innerException);
+        this.errorCode = errorCode;
+        this.message = message;
+    }
+
+
     public String msg() {
         return "";
     }
