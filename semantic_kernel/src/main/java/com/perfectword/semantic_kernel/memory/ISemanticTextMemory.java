@@ -2,7 +2,7 @@ package com.perfectword.semantic_kernel.memory;
 
 import java.util.List;
 
-public interface ISemanticTextMemory {
+public interface ISemanticTextMemory extends AutoCloseable {
     void saveInformation(
             String collection,
             String text,
@@ -36,5 +36,9 @@ public interface ISemanticTextMemory {
             String query
     ) {
         return search(collection, query, 1, 0.7, false);
+    }
+
+    @Override
+    default void close() throws Exception {
     }
 }

@@ -5,8 +5,8 @@ import com.theokanning.openai.service.OpenAiService;
 
 import java.util.List;
 
-public class OpenAIEmbeddingGeneration implements IEmbeddingGeneration{
-    private OpenAiService service;
+public class OpenAIEmbeddingGeneration implements IEmbeddingGeneration {
+    private final OpenAiService service;
 
     public OpenAIEmbeddingGeneration(OpenAiService service) {
         this.service = service;
@@ -20,14 +20,14 @@ public class OpenAIEmbeddingGeneration implements IEmbeddingGeneration{
                 .build();
         var embeddings = service.createEmbeddings(er).getData();
         assert embeddings != null && embeddings.size() == values.size();
-        return embeddings.stream().map(e->new Embedding(toFloatArray(e.getEmbedding()))).toList();
+        return embeddings.stream().map(e -> new Embedding(toFloatArray(e.getEmbedding()))).toList();
     }
 
-    private float[] toFloatArray(List<Double> values) {
+    private static float[] toFloatArray(List<Double> values) {
         var result = new float[values.size()];
         int i = 0;
         for (var d : values) {
-            result[i++] = (float)d.doubleValue();
+            result[i++] = (float) d.doubleValue();
         }
         return result;
     }

@@ -1,6 +1,7 @@
 package com.perfectword.semantic_kernel.ai.text_completion;
 
-import com.perfectword.semantic_kernel.ai.AIException;
+import com.perfectword.semantic_kernel.KernelException;
+import com.perfectword.semantic_kernel.KernelException.ErrorCodes;
 import com.theokanning.openai.completion.CompletionRequest;
 import com.theokanning.openai.completion.CompletionResult;
 import com.theokanning.openai.service.OpenAiService;
@@ -31,17 +32,17 @@ public class OpenAITextCompletion implements ITextCompletion {
         try {
             CompletionResult res = service.createCompletion(req);
             if (res == null) {
-                throw new AIException(AIException.ErrorCodes.ServiceError, "Text completion null response");
+                throw new KernelException(ErrorCodes.AIServiceError, "Text completion null response");
             }
 
             if (res.getChoices().size() == 0) {
-                throw new AIException(AIException.ErrorCodes.InvalidResponseContent, "Text completion not found");
+                throw new KernelException(ErrorCodes.AIInvalidResponseContent, "Text completion not found");
             }
 
             return res.getChoices().get(0).getText();
 
         } catch (Exception e) {
-            throw new AIException(AIException.ErrorCodes.ServiceError, e);
+            throw new KernelException(ErrorCodes.AIServiceError, e.getMessage(), e);
         }
     }
 

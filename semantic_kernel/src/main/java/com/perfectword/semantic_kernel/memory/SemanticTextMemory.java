@@ -6,7 +6,7 @@ import com.perfectword.semantic_kernel.ai.embeddings.IEmbeddingGeneration;
 import java.time.OffsetDateTime;
 import java.util.List;
 
-public final class SemanticTextMemory implements ISemanticTextMemory, AutoCloseable {
+public final class SemanticTextMemory implements ISemanticTextMemory {
     private final IEmbeddingGeneration embeddingGeneration;
     private final IMemoryStore storage;
 

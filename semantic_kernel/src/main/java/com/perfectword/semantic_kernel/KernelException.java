@@ -37,7 +37,11 @@ public class KernelException extends RuntimeException {
         SkillCollectionNotSet(7, "Skill collection not set"),
         FunctionInvokeError(8, "Function invocation error"),
         AmbiguousMatchFunctionType(9, "Ambiguous match function type"),
-        TemplateSyntaxError(10, "template syntax error");
+        TemplateSyntaxError(10, "template syntax error"),
+
+        AIInvalidResponseContent(11, "Invalid response content"),
+        AIServiceError(12, "Service error");
+
 
 
         ErrorCodes(int v, String message) {

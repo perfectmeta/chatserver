@@ -18,6 +18,7 @@ public record PromptTemplateConfig(int schema,
 
         static final CompletionConfig INSTANCE = new CompletionConfig(1, 0.5,
                 0, 0, 100, List.of());
+
         public static CompletionConfig of() {
             return INSTANCE;
         }

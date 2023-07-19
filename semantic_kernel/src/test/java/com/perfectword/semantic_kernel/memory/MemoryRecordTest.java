@@ -46,8 +46,8 @@ class MemoryRecordTest {
                         """;
         var memoryRecord = MemoryRecord.fromJsonMetadata(metaJson, Embedding.EMPTY, "key", OffsetDateTime.now());
         assertNotNull(memoryRecord);
-        assertEquals(memoryRecord.getMetadata().getText(), "text");
-        assertEquals(memoryRecord.getMetadata().getDescription(), "description");
+        assertEquals(memoryRecord.getMetadata().text(), "text");
+        assertEquals(memoryRecord.getMetadata().description(), "description");
     }
 
     @Test
@@ -62,9 +62,12 @@ class MemoryRecordTest {
                 );
         var memoryRecord = MemoryRecord.fromMetadata(metadata, Embedding.EMPTY, "key", OffsetDateTime.now());
         var metaJson = memoryRecord.serializeMetadata();
+        System.out.println(metaJson);
+
         var memoryRecordCopy = MemoryRecord.fromJsonMetadata(metaJson, Embedding.EMPTY, "key", OffsetDateTime.now());
+
         assertNotNull(memoryRecordCopy);
         assertNotNull(memoryRecord.getMetadata());
-        assertEquals(memoryRecord.getMetadata().getText(), memoryRecordCopy.getMetadata().getText());
+        assertEquals(memoryRecord.getMetadata().text(), memoryRecordCopy.getMetadata().text());
     }
 }

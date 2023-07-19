@@ -2,9 +2,11 @@ package com.perfectword.semantic_kernel.memory;
 
 import java.util.List;
 
-public class NullMemory implements ISemanticTextMemory{
+public class NullMemory implements ISemanticTextMemory {
 
-    private NullMemory() {}
+    private NullMemory() {
+    }
+
     private static final NullMemory INSTANCE = new NullMemory();
 
     public static NullMemory getInstance() {
@@ -22,7 +24,6 @@ public class NullMemory implements ISemanticTextMemory{
 
     @Override
     public void remove(String collection, String key) {
-
     }
 
     @Override

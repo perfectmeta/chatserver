@@ -1,7 +1,7 @@
 package com.perfectword.semantic_kernel.ai.text_completion;
 
-import com.perfectword.semantic_kernel.ai.AIException;
-import com.perfectword.semantic_kernel.ai.AIException.ErrorCodes;
+import com.perfectword.semantic_kernel.KernelException;
+import com.perfectword.semantic_kernel.KernelException.ErrorCodes;
 import com.theokanning.openai.completion.chat.*;
 import com.theokanning.openai.service.OpenAiService;
 import io.reactivex.Flowable;
@@ -21,17 +21,17 @@ public class OpenAIChatCompletion implements IChatCompletion {
         try {
             ChatCompletionResult res = service.createChatCompletion(req);
             if (res == null) {
-                throw new AIException(ErrorCodes.ServiceError, "Chat completion null response");
+                throw new KernelException(ErrorCodes.AIServiceError, "Chat completion null response");
             }
 
             if (res.getChoices().size() == 0) {
-                throw new AIException(ErrorCodes.InvalidResponseContent, "Chat completion not found");
+                throw new KernelException(ErrorCodes.AIInvalidResponseContent, "Chat completion not found");
             }
 
             return res.getChoices().get(0).getMessage().getContent();
 
         } catch (Exception e) {
-            throw new AIException(ErrorCodes.ServiceError, e);
+            throw new KernelException(ErrorCodes.AIServiceError, e.getMessage(), e);
         }
     }
 
@@ -45,6 +45,7 @@ public class OpenAIChatCompletion implements IChatCompletion {
     private ChatCompletionRequest createRequest(ChatHistory chat, CompleteRequestSettings requestSettings) {
         var c = requestSettings.config();
         ChatCompletionRequest req = new ChatCompletionRequest();
+        //noinspection DuplicatedCode
         req.setModel(model);
         req.setTemperature(c.temperature());
         req.setTopP(c.topP());
