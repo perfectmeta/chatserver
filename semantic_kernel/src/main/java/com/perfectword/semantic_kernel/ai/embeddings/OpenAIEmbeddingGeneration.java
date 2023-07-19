@@ -16,7 +16,7 @@ public class OpenAIEmbeddingGeneration implements IEmbeddingGeneration{
     public List<Embedding> generateEmbeddings(List<String> values) {
         EmbeddingRequest er = EmbeddingRequest.builder()
                 .model("text-embedding-ada-002")
-                .input(List.of())
+                .input(values)
                 .build();
         var embeddings = service.createEmbeddings(er).getData();
         assert embeddings != null && embeddings.size() == values.size();

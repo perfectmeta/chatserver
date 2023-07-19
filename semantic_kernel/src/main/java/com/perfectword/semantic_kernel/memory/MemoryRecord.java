@@ -2,6 +2,7 @@ package com.perfectword.semantic_kernel.memory;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.PropertyNamingStrategies;
 import com.perfectword.semantic_kernel.ai.embeddings.Embedding;
 
 import java.time.OffsetDateTime;
@@ -72,7 +73,7 @@ public class MemoryRecord extends DataEntryBase{
             String key,
             OffsetDateTime timestamp
     ) {
-        var objectMapper = new ObjectMapper();
+        var objectMapper = new ObjectMapper().setPropertyNamingStrategy(PropertyNamingStrategies.SNAKE_CASE);
         MemoryRecordMetadata metadata;
         try {
             metadata = objectMapper.readValue(json, MemoryRecordMetadata.class);
@@ -93,7 +94,7 @@ public class MemoryRecord extends DataEntryBase{
     }
 
     public String serializeMetadata() {
-        var mapper = new ObjectMapper();
+        var mapper = new ObjectMapper().setPropertyNamingStrategy(PropertyNamingStrategies.SNAKE_CASE);
         try {
             return mapper.writeValueAsString(metadata);
         } catch (JsonProcessingException e) {

@@ -1,12 +1,29 @@
 package com.perfectword.semantic_kernel.memory;
 
+
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+
 public class MemoryRecordMetadata{
+    @JsonProperty
     private String id;
+    @JsonProperty("is_reference")
+    @JsonDeserialize
     private boolean isReference;
+    @JsonProperty("external_source_name")
+    @JsonDeserialize
     private String externalSourceName;
+    @JsonProperty("description")
+    @JsonDeserialize
     private String description;
+    @JsonProperty("text")
+    @JsonDeserialize
     private String text;
+    @JsonProperty("additional_metadata")
+    @JsonDeserialize
     private String additionalMetadata;
+
+    public MemoryRecordMetadata() {}
 
     public MemoryRecordMetadata(String id, boolean isReference, String externalSourceName, String description, String text, String additionalMetadata) {
         this.id = id;
@@ -21,6 +38,7 @@ public class MemoryRecordMetadata{
         return id;
     }
 
+    @JsonProperty("is_reference")
     public boolean isReference() {
         return isReference;
     }

@@ -1,9 +1,7 @@
 package com.perfectword.semantic_kernel.memory;
 
-import com.perfectword.semantic_kernel.KernelException;
-
 public class MemoryException extends RuntimeException {
-    private ErrorCodes errorCode;
+    private final ErrorCodes errorCode;
     private String message;
 
     public MemoryException(ErrorCodes errorCode) {
@@ -23,19 +21,38 @@ public class MemoryException extends RuntimeException {
 
 
     public String msg() {
-        return "";
+        if (message == null) {
+            return errorCode.getMessage();
+        }
+        return "%s:%s".formatted(errorCode.getMessage(), message);
     }
 
     public enum ErrorCodes {
-        UnknownError,
+        UnknownError(-1, "unknown error"),
 
-        FailedToCreateCollection,
+        FailedToCreateCollection(0, "failed to create collection"),
 
-        FailedToDeleteCollection,
+        FailedToDeleteCollection(1, "failed to delete collection"),
 
-        UnableToDeserializeMetadata,
+        UnableToDeserializeMetadata(2, "Unable to deserialize metadata"),
 
-        AttemptedToAccessNonexistentCollection;
+        AttemptedToAccessNonexistentCollection(3, "Attempted to access nonexistent collection");
+
+        ErrorCodes(int value, String message) {
+            this.value = value;
+            this.message = message;
+        }
+
+        private final int value;
+        private final String message;
+
+        public String getMessage() {
+            return message;
+        }
+
+        public int getValue() {
+            return value;
+        }
     }
 
     public ErrorCodes getErrorCode() {

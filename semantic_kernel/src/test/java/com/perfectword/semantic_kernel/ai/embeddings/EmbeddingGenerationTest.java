@@ -9,6 +9,8 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class EmbeddingGenerationTest {
 
+    private static float[] array;
+
     @Test
     void baseTest() {
         var service = OpenAI.makeOpenAiService();
@@ -16,11 +18,13 @@ class EmbeddingGenerationTest {
         var result = embeddingGeneration.generateEmbeddings(List.of("I'am a coder", "I have a keyboard"));
         assertEquals(result.size(), 2);
         for (var r : result) {
+            System.out.println(r.vector().length);
             System.out.println(floatArrayToString(r.vector()));
         }
     }
 
     public static String floatArrayToString(float[] array) {
+        EmbeddingGenerationTest.array = array;
         StringBuilder sb = new StringBuilder();
         sb.append("[");
 

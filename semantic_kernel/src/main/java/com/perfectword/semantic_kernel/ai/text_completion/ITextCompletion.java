@@ -5,5 +5,4 @@ public interface ITextCompletion {
             String text,
             CompleteRequestSettings requestSettings
     );
-
 }
