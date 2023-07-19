@@ -16,6 +16,11 @@ public record PromptTemplateConfig(int schema,
                                    int maxTokens,
                                    List<String> stopSequences) {
 
+        static final CompletionConfig INSTANCE = new CompletionConfig(1, 0.5,
+                0, 0, 100, List.of());
+        public static CompletionConfig of() {
+            return INSTANCE;
+        }
     }
 
     public record InputParameter(String name,

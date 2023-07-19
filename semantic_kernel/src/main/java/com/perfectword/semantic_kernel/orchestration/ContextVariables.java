@@ -1,12 +1,14 @@
 package com.perfectword.semantic_kernel.orchestration;
 
 import com.perfectword.semantic_kernel.Verify;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.Map;
 
-public class ContextVariables {
-    final String MAIN_KEY = "INPUT";
+public class ContextVariables implements Iterable<Map.Entry<String, String>>{
+    public static final String MAIN_KEY = "INPUT";
     private final Map<String, String> _variables = new HashMap<>();
 
     private ContextVariables(ContextVariables src) {
@@ -69,5 +71,11 @@ public class ContextVariables {
     @Override
     public String toString() {
         return getInput();
+    }
+
+    @NotNull
+    @Override
+    public Iterator<Map.Entry<String, String>> iterator() {
+        return _variables.entrySet().iterator();
     }
 }
