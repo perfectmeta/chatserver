@@ -13,9 +13,9 @@ public interface IMemoryStore extends AutoCloseable {
 
     void deleteCollection(String collectionName);
 
-    String upsert(String collectionName, MemoryRecord record);
+    MemoryRecord upsert(String collectionName, MemoryRecord record);
 
-    List<String> upsertBatch(String collectionName, List<MemoryRecord> records);
+    List<MemoryRecord> upsertBatch(String collectionName, List<MemoryRecord> records);
 
     List<MemoryRecord> getBatch(String collectionName, List<String> keys, boolean withEmbeddings);
 
@@ -28,16 +28,11 @@ public interface IMemoryStore extends AutoCloseable {
 
     void removeBatch(String collectionName, List<String> keys);
 
-    List<MatchResult> getNearestMatches(String collectionName, Embedding embedding, int limit,
-                                        double minRelevanceScore, boolean withEmbeddings);
+    List<MemoryQueryResult> getNearestMatches(String collectionName, Embedding embedding, int limit,
+                                              double minRelevanceScore);
 
-    default List<MatchResult> getNearestMatches(String collectionName, Embedding embedding, int limit,
-                                                double minRelevanceScore) {
-        return getNearestMatches(collectionName, embedding, limit, minRelevanceScore, false);
-    }
-
-    default List<MatchResult> getNearestMatches(String collectionName, Embedding embedding, int limit) {
-        return getNearestMatches(collectionName, embedding, limit, 0.0, false);
+    default List<MemoryQueryResult> getNearestMatches(String collectionName, Embedding embedding, int limit) {
+        return getNearestMatches(collectionName, embedding, limit, 0.0);
     }
 
     @Override

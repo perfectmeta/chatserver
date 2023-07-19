@@ -2,6 +2,8 @@ package com.perfectword.semantic_kernel.skill_define;
 
 import com.perfectword.semantic_kernel.KernelException;
 
+import java.util.Collection;
+import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
 
 public class SkillCollection {
@@ -32,6 +34,19 @@ public class SkillCollection {
         }
 
         return function;
+    }
+
+    public Collection<String> getSkills() {
+        return skillCollection.keySet();
+    }
+
+    public Collection<ISKFunction> getSkillFunctions(String skill) {
+        ConcurrentHashMap<String, ISKFunction> map = skillCollection.get(skill);
+        if (map != null) {
+            return map.values();
+        } else {
+            return List.of();
+        }
     }
 
 }

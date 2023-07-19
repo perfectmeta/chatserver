@@ -26,9 +26,7 @@ public class KernelConfig {
         return new Kernel(skills, memory, completeService, embeddingGeneration, promptTemplateEngine);
     }
 
-    public static void importSkill(Kernel kernel, Path skillDir) {
 
-    }
 
     public static PromptTemplateConfig parseSkillConfigJson(String content) throws IOException {
         ObjectMapper mapper = new ObjectMapper()

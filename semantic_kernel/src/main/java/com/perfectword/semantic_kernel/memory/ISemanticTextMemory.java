@@ -27,15 +27,14 @@ public interface ISemanticTextMemory extends AutoCloseable {
             String collection,
             String query,
             int limit,
-            double minRelevanceScore,
-            boolean withEmbeddings
+            double minRelevanceScore
     );
 
     default List<MemoryQueryResult> search(
             String collection,
             String query
     ) {
-        return search(collection, query, 1, 0.7, false);
+        return search(collection, query, 1, 0.7);
     }
 
     @Override

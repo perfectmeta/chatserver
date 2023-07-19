@@ -1,8 +1,11 @@
 package com.perfectword.semantic_kernel.memory;
 
+import com.perfectword.semantic_kernel.KernelException;
+import com.perfectword.semantic_kernel.KernelException.ErrorCodes;
 import com.perfectword.semantic_kernel.Verify;
 import com.perfectword.semantic_kernel.ai.embeddings.Embedding;
 
+import java.time.OffsetDateTime;
 import java.util.*;
 
 public class VolatileMemoryStore implements IMemoryStore {
@@ -12,7 +15,7 @@ public class VolatileMemoryStore implements IMemoryStore {
     @Override
     public void createCollection(String collectionName) {
         if (store.containsKey(collectionName)) {
-            throw new MemoryException(MemoryException.ErrorCodes.FailedToCreateCollection,
+            throw new KernelException(ErrorCodes.MemoryFailedToCreateCollection,
                     "Could not create collection %s".formatted(collectionName));
         }
         store.putIfAbsent(collectionName, new HashMap<>());
@@ -34,23 +37,26 @@ public class VolatileMemoryStore implements IMemoryStore {
     }
 
     @Override
-    public String upsert(String collectionName, MemoryRecord record) {
+    public MemoryRecord upsert(String collectionName, MemoryRecord record) {
         Verify.notNull(record);
-        if (!store.containsKey(collectionName)) {
-            throw new MemoryException(MemoryException.ErrorCodes.AttemptedToAccessNonexistentCollection,
-                    "Attempted to access a memory collection that does not exist: %s".formatted(collectionName));
-        }
+
         var collection = store.get(collectionName);
-        assert collection != null;
-        collection.put(record.key, record);
-        return record.key;
+        if (collection == null) {
+            throw new KernelException(ErrorCodes.MemoryAttemptedToAccessNonexistentCollection,
+                    "%s not exist".formatted(collectionName));
+        }
+
+        if (record.key() == null) {
+            record = record.setKeyAndTimestamp(record.id(), OffsetDateTime.now());
+        }
+
+        collection.put(record.key(), record);
+        return record;
     }
 
     @Override
-    public List<String> upsertBatch(String collectionName, List<MemoryRecord> records) {
-        var result = new ArrayList<String>();
-        records.forEach(r -> result.add(upsert(collectionName, r)));
-        return result;
+    public List<MemoryRecord> upsertBatch(String collectionName, List<MemoryRecord> records) {
+        return records.stream().map(r -> upsert(collectionName, r)).toList();
     }
 
     @Override
@@ -83,11 +89,10 @@ public class VolatileMemoryStore implements IMemoryStore {
     }
 
     @Override
-    public List<MatchResult> getNearestMatches(String collectionName,
-                                               Embedding embedding,
-                                               int limit,
-                                               double minRelevanceScore,
-                                               boolean withEmbeddings) {
+    public List<MemoryQueryResult> getNearestMatches(String collectionName,
+                                                     Embedding embedding,
+                                                     int limit,
+                                                     double minRelevanceScore) {
         if (limit <= 0) {
             return List.of();
         }
@@ -96,13 +101,12 @@ public class VolatileMemoryStore implements IMemoryStore {
             return List.of();
         }
 
-        PriorityQueue<MatchResult> priorityQueue = new PriorityQueue<>(limit, Comparator.comparingDouble(MatchResult::confidence).reversed());
-        for (var mr : collection.values()) {
+        PriorityQueue<MemoryQueryResult> priorityQueue = new PriorityQueue<>(limit, Comparator.comparingDouble(MemoryQueryResult::confidence).reversed());
+        for (MemoryRecord mr : collection.values()) {
             if (mr == null) continue;
-            double similarity = mr.getEmbedding().cosineSimilarity(embedding);
+            double similarity = mr.embedding().cosineSimilarity(embedding);
             if (similarity >= minRelevanceScore) {
-                var entry = withEmbeddings ? mr : MemoryRecord.fromMetadata(mr.getMetadata(), Embedding.EMPTY, mr.getKey(), mr.getTimeStamp());
-                priorityQueue.add(new MatchResult(entry, similarity));
+                priorityQueue.add(new MemoryQueryResult(mr, similarity));
             }
         }
         return priorityQueue.stream().limit(limit).toList();

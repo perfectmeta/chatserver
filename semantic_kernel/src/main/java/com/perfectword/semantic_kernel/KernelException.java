@@ -40,7 +40,10 @@ public class KernelException extends RuntimeException {
         TemplateSyntaxError(10, "template syntax error"),
 
         AIInvalidResponseContent(11, "Invalid response content"),
-        AIServiceError(12, "Service error");
+        AIServiceError(12, "Service error"),
+
+        MemoryFailedToCreateCollection(21, "failed to create collection"),
+        MemoryAttemptedToAccessNonexistentCollection(22, "Attempted to access nonexistent collection");
 
 
 

@@ -27,7 +27,7 @@ public class NullMemory implements ISemanticTextMemory {
     }
 
     @Override
-    public List<MemoryQueryResult> search(String collection, String query, int limit, double minRelevanceScore, boolean withEmbeddings) {
+    public List<MemoryQueryResult> search(String collection, String query, int limit, double minRelevanceScore) {
         return List.of();
     }
 }

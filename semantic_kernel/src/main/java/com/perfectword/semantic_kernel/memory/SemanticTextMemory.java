@@ -3,7 +3,6 @@ package com.perfectword.semantic_kernel.memory;
 import com.perfectword.semantic_kernel.ai.embeddings.Embedding;
 import com.perfectword.semantic_kernel.ai.embeddings.IEmbeddingGeneration;
 
-import java.time.OffsetDateTime;
 import java.util.List;
 
 public final class SemanticTextMemory implements ISemanticTextMemory {
@@ -18,8 +17,7 @@ public final class SemanticTextMemory implements ISemanticTextMemory {
     @Override
     public void saveInformation(String collection, String text, String id, String description, String additionalMetadata) {
         Embedding embedding = embeddingGeneration.generateEmbedding(text);
-        MemoryRecord record = MemoryRecord.localRecord(id, text, description, embedding,
-                additionalMetadata, "", OffsetDateTime.now());
+        MemoryRecord record = MemoryRecord.ofLocal(id, text, description, additionalMetadata, embedding, null, null);
         if (!storage.doesCollectionExist(collection)) {
             storage.createCollection(collection);
         }
@@ -29,11 +27,7 @@ public final class SemanticTextMemory implements ISemanticTextMemory {
     @Override
     public MemoryQueryResult get(String collection, String key, boolean withEmbedding) {
         MemoryRecord record = storage.get(collection, key);
-        return record == null ? null : MemoryQueryResult.fromMemoryRecord(record, 1.0f);
-    }
-
-    public List<String> getCollections() {
-        return storage.getCollections();
+        return record == null ? null : new MemoryQueryResult(record, 1.0f);
     }
 
     @Override
@@ -42,22 +36,13 @@ public final class SemanticTextMemory implements ISemanticTextMemory {
     }
 
     @Override
-    public List<MemoryQueryResult> search(String collection, String query, int limit, double minRelevanceScore, boolean withEmbeddings) {
+    public List<MemoryQueryResult> search(String collection, String query, int limit, double minRelevanceScore) {
         Embedding queryEmbedding = embeddingGeneration.generateEmbedding(query);
-        List<MatchResult> matchResults = storage.getNearestMatches(collection, queryEmbedding, limit, minRelevanceScore, withEmbeddings);
-        return matchResults.stream().map(r->
-                        MemoryQueryResult.fromMemoryRecord(r.record(), (float)r.confidence()))
-                .toList();
+        return storage.getNearestMatches(collection, queryEmbedding, limit, minRelevanceScore);
     }
 
     @Override
     public void close() throws Exception {
-        if (embeddingGeneration instanceof AutoCloseable) {
-            ((AutoCloseable) embeddingGeneration).close();
-        }
-
-        if (storage instanceof AutoCloseable) {
-            ((AutoCloseable) storage).close();
-        }
+        storage.close();
     }
 }

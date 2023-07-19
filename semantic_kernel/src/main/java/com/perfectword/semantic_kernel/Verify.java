@@ -1,29 +1,37 @@
 package com.perfectword.semantic_kernel;
 
-import java.lang.reflect.Method;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.Objects;
 
 public class Verify {
 
     public static void validFunctionName(String functionName) {
         Objects.requireNonNull(functionName);
-        // todo check FunctionName and throw certain exceptions
     }
 
     public static void validFunctionParamName(String functionParamName) {
         Objects.requireNonNull(functionParamName);
-        // todo check FunctionName and throw certain exceptions
     }
 
     public static void notNullOrWhiteSpace(String name) {
-        // todo implement function
+        Objects.requireNonNull(name);
+        if (name.isBlank()) {
+            throw new IllegalArgumentException();
+        }
     }
 
     public static void validSkillName(String skillName) {
-        // todo implement function
+        notNullOrWhiteSpace(skillName);
     }
 
     public static void notNull(Object obj) {
         Objects.requireNonNull(obj);
+    }
+
+    public static void directoryExists(Path skillDir) {
+        if (!Files.exists(skillDir)) {
+            throw new IllegalArgumentException();
+        }
     }
 }
