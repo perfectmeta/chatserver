@@ -8,6 +8,7 @@ import com.perfectword.semantic_kernel.memory.NullMemory;
 import com.perfectword.semantic_kernel.semantic_functions.PromptTemplateConfig;
 import com.perfectword.semantic_kernel.skill_define.SkillCollection;
 import com.perfectword.semantic_kernel.template_engine.PromptTemplateEngine;
+import com.theokanning.openai.service.OpenAiService;
 
 import java.io.IOException;
 import java.nio.file.Path;
@@ -16,13 +17,12 @@ public class KernelConfig {
     public KernelConfig(Path configFile) {
     }
 
-    public Kernel create() {
+    public Kernel create(OpenAiService service) {
         var skills = new SkillCollection();
         var promptTemplateEngine = new PromptTemplateEngine();
         var memory = NullMemory.getInstance();
-        // todo fix this
-        var completeService = new OpenAITextCompletion(null, "");
-        var embeddingGeneration = new OpenAIEmbeddingGeneration(null);
+        var completeService = new OpenAITextCompletion(service, "");
+        var embeddingGeneration = new OpenAIEmbeddingGeneration(service);
         return new Kernel(skills, memory, completeService, embeddingGeneration, promptTemplateEngine);
     }
 

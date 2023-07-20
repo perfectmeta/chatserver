@@ -70,7 +70,7 @@ public record Kernel(SkillCollection skills,
                 if (!Files.exists(configPath)) {
                     continue;
                 }
-                String configStr = Files.readString(promptPath, StandardCharsets.UTF_8);
+                String configStr = Files.readString(configPath, StandardCharsets.UTF_8);
                 PromptTemplateConfig config = KernelConfig.parseSkillConfigJson(configStr);
 
                 var template = new PromptTemplate(promptStr, config, promptTemplateEngine);
@@ -81,5 +81,4 @@ public record Kernel(SkillCollection skills,
 
 
     }
-
 }
