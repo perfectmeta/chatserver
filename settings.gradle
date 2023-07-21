@@ -17,5 +17,6 @@ plugins {
 rootProject.name = 'chatserver'
 include('baseconfig')
 include('app')
-include('semantic_kernal')
+
+include('semantic_kernel')
 
