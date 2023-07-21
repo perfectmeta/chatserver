@@ -14,13 +14,12 @@ import chatserver.logic.voice.XFYttsSpeaker;
 import chatserver.service.ContactService;
 import chatserver.service.RoomService;
 import chatserver.service.UserService;
+import chatserver.third.openai.SemanticKernel;
 import chatserver.util.TokenLimitor;
 import com.google.common.base.Strings;
 import com.google.protobuf.ByteString;
-import com.theokanning.openai.completion.chat.ChatCompletionChoice;
-import com.theokanning.openai.completion.chat.ChatCompletionRequest;
-import com.theokanning.openai.completion.chat.ChatMessage;
-import com.theokanning.openai.completion.chat.ChatMessageRole;
+import com.perfectword.semantic_kernel.Kernel;
+import com.theokanning.openai.completion.chat.*;
 import com.theokanning.openai.service.OpenAiService;
 import io.grpc.stub.StreamObserver;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -134,11 +133,13 @@ public class Chat {
         var tokenCnt = TokenLimitor.limit(messages, 16384, 10);
         logger.info("Chat use token " + tokenCnt);
 
+        Kernel kernel = SemanticKernel.INSTANCE.getKernel(robot.getId());
         // debugPrintPrompt(messages);
         ChatCompletionRequest chatCompletionRequest = ChatCompletionRequest
                 .builder()
                 .model(robot.getModel())
                 .messages(messages)
+                .functions(kernel.getChatFunctions())
                 .build();
 
         boolean[] hasError = {false};
@@ -152,8 +153,14 @@ public class Chat {
                     logger.warning(throwable.getMessage());
                 })
                 .blockingForEach(chatCompletionChunk -> {
-                    if (chatCompletionChunk.getChoices().size() > 0) {
-                        ChatCompletionChoice choice = chatCompletionChunk.getChoices().get(0);
+                    if (chatCompletionChunk.getChoices().size() == 0) {
+                        return;
+                    }
+                    ChatCompletionChoice choice = chatCompletionChunk.getChoices().get(0);
+                    ChatFunctionCall functionCall = null;
+                    if ((functionCall = choice.getMessage().getFunctionCall()) != null) {
+                        logger.info("try executing function %s".formatted(functionCall.getName()));
+                    } else {
                         String content = choice.getMessage().getContent();
                         if (content == null) {
                             content = "";

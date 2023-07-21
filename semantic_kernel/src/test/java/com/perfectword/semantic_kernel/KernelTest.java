@@ -49,7 +49,7 @@ class KernelTest {
         var kernel = new Kernel(new SkillCollection(), NullMemory.getInstance(),
                 new OpenAITextCompletion(service, ""), null, new PromptTemplateEngine());
         kernel.importSkillFromDirectory(skillDir);
-        var function = kernel.skills().getFunction("DefaultSkill", "ChatGPT");
+        var function = kernel.skills.getFunction("DefaultSkill", "ChatGPT");
         assertNotNull(function);
     }
 }
