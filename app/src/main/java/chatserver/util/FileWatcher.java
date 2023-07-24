@@ -44,7 +44,7 @@ public class FileWatcher {
                         for (var e : key.pollEvents()) {
                             var p = (Path)e.context();
                             logger.info("Change %s".formatted(p.toAbsolutePath().toString()));
-                            if (p.toAbsolutePath().equals(watchFile)) {
+                            if (p.equals(watchFile.getFileName())) {
                                 Runnable handle = this.handler;
                                 if (handle != null) {
                                     handle.run();

@@ -48,6 +48,7 @@ public class Signup {
             var feedback = RegisterFeedback.newBuilder().setStatusCode(RegisterFeedback.StatusCode.OK_VALUE)
                     .setUserId((int)dbUser.getUserId()).build();
             logger.info("signin by nickname: " + nickName + " token: " + dbUser.getUserId());
+            signupBotAndMakeContact(dbUser);
             responseObserver.onNext(feedback);
             responseObserver.onCompleted();
             return;
@@ -77,7 +78,11 @@ public class Signup {
 
     private void signupBotAndMakeContact(User user) {
         var robots = ConfigManager.getInstance().getRobots().values();
+        var contacts = contactService.findBySubjectUserId(user.getUserId());
+        var contactUsers = userService.findByUserId(contacts.stream().map(Contact::getObjectUserId).toList());
         for (var robot : robots) {
+            if (contactUsers.stream().anyMatch(x->x.getBotId().equals(robot.getId())))
+                continue;
             User botUser = signupBotServer.signupFor(robot);
             contactService.addContact(botUser.getUserId(), user.getUserId());
             contactService.addContact(user.getUserId(), botUser.getUserId());

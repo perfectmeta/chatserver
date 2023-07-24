@@ -27,23 +27,43 @@ public class PromptConfig {
 
     public static PromptConfig parse(String promptStr) {
         List<PromptMessage> list = new ArrayList<>();
-        promptStr.lines().forEach(line -> {
+        StringBuilder stringBuilder = new StringBuilder();
+        Role role = null;
+        for (var line : promptStr.lines().toList()) {
+            Role tempRole = null;
             if (line.startsWith("S:")) {
-                var content = line.substring(2);
-                list.add(new PromptMessage(Role.System, content));
-
+                tempRole = Role.System;
             } else if (line.startsWith("U:")) {
-                var content = line.substring(2);
-                list.add(new PromptMessage(Role.User, content));
-
+                tempRole = Role.User;
             } else if (line.startsWith("A:")) {
-                var content = line.substring(2);
-                list.add(new PromptMessage(Role.Assistant, content));
-
-            } else {
-                throw new IllegalStateException(line + " format error, must begin with a prefix S: or A: or U:");
+                tempRole = Role.Assistant;
             }
-        });
+
+            if (tempRole != null) {
+                if (!stringBuilder.isEmpty()) {
+                    list.add(new PromptMessage(role, stringBuilder.toString()));
+                }
+                role = tempRole;
+                stringBuilder = new StringBuilder(line);
+            }
+            else
+            {
+                if (stringBuilder.charAt(stringBuilder.length() - 1) == '\\') {
+                    stringBuilder.setLength(stringBuilder.length()-1);
+                    stringBuilder.append(line);
+                }
+                else if (stringBuilder.charAt(stringBuilder.length() - 1) == '$') {
+                    stringBuilder.setLength(stringBuilder.length() - 1);
+                    stringBuilder.append("\n").append(line);
+                } else {
+                    throw new IllegalStateException(line + " format error, must begin with a prefix S: or A: or U:");
+                }
+            }
+        }
+        if (!stringBuilder.isEmpty()) {
+            list.add(new PromptMessage(role, stringBuilder.toString()));
+        }
+
         return PromptConfig.of(list);
     }
 
