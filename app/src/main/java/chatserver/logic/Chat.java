@@ -139,7 +139,7 @@ public class Chat {
                 .builder()
                 .model(robot.getModel())
                 .messages(messages)
-                .functions(kernel.getChatFunctions())
+                // .functions(kernel.getChatFunctions())
                 .build();
 
         boolean[] hasError = {false};
@@ -157,7 +157,7 @@ public class Chat {
                         return;
                     }
                     ChatCompletionChoice choice = chatCompletionChunk.getChoices().get(0);
-                    ChatFunctionCall functionCall = null;
+                    ChatFunctionCall functionCall;
                     if ((functionCall = choice.getMessage().getFunctionCall()) != null) {
                         logger.info("try executing function %s".formatted(functionCall.getName()));
                     } else {
