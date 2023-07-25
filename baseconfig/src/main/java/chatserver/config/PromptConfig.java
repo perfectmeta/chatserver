@@ -48,6 +48,8 @@ public class PromptConfig {
             }
             else
             {
+                if (stringBuilder.isEmpty())
+                    continue;
                 if (stringBuilder.charAt(stringBuilder.length() - 1) == '\\') {
                     stringBuilder.setLength(stringBuilder.length()-1);
                     stringBuilder.append(line);
