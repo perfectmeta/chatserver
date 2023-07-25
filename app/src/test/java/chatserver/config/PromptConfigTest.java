@@ -61,7 +61,11 @@ class PromptConfigTest {
         assertNotNull(config);
         Field field = PromptConfig.class.getDeclaredField("messageList");
         field.setAccessible(true);
-        List<PromptConfig> messageList = (List<PromptConfig>)field.get(config);
+        @SuppressWarnings("unchecked")
+        List<PromptConfig.PromptMessage> messageList = (List<PromptConfig.PromptMessage>)field.get(config);
         assertEquals(messageList.size(), 3);
+        assertEquals(messageList.get(0).role(), PromptConfig.Role.System);
+        assertEquals(messageList.get(1).role(), PromptConfig.Role.User);
+        assertEquals(messageList.get(2).role(), PromptConfig.Role.Assistant);
     }
 }

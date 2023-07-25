@@ -80,6 +80,10 @@ public class PromptConfig {
             // fixme improve performance using string builder
             while (matcher.find()) {
                 String variableName = matcher.group(1);
+                if (variableName.startsWith("$")) {
+                    // remove prefix $
+                    variableName = variableName.substring(1);
+                }
                 if (variables.containsKey(variableName)) {
                     _content = _content.replaceAll("\\{\\{%s\\}\\}".formatted(variableName), variables.get(variableName));
                 }
