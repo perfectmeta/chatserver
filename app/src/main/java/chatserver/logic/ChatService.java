@@ -1,6 +1,7 @@
 package chatserver.logic;
 
 import chatserver.gen.*;
+import chatserver.logic.gm.GmCommand;
 import io.grpc.stub.StreamObserver;
 import org.lognet.springboot.grpc.GRpcService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,6 +20,7 @@ public class ChatService extends ChatServiceGrpc.ChatServiceImplBase {
     private final Chat chat;
     private final GetMemory getMemory;
     private final DeleteMemory deleteMemory;
+    private final GmCommand gmCommand;
 
     @Autowired
     public ChatService(GetSelfInfo getSelfInfo,
@@ -31,7 +33,7 @@ public class ChatService extends ChatServiceGrpc.ChatServiceImplBase {
                        Chat chat,
                        Signup signup,
                        GetMemory getMemory,
-                       DeleteMemory deleteMemory) {
+                       DeleteMemory deleteMemory, GmCommand gmCommand) {
         this.getSelfInfo = getSelfInfo;
         this.updateSelfInfo = updateSelfInfo;
         this.getRoomList = getRoomList;
@@ -43,6 +45,7 @@ public class ChatService extends ChatServiceGrpc.ChatServiceImplBase {
         this.signup = signup;
         this.getMemory = getMemory;
         this.deleteMemory = deleteMemory;
+        this.gmCommand = gmCommand;
     }
 
     @Override
@@ -98,5 +101,10 @@ public class ChatService extends ChatServiceGrpc.ChatServiceImplBase {
     @Override
     public void deleteMemory(DeleteMemoryRequest request, StreamObserver<DeleteMemoryResponse> responseStreamObserver) {
         deleteMemory.run(request, responseStreamObserver);
+    }
+
+    @Override
+    public void gmCommand(GMCommand command, StreamObserver<GMResponse> responseStreamObserver) {
+        gmCommand.run(command, responseStreamObserver);
     }
 }

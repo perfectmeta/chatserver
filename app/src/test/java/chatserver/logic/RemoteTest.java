@@ -21,6 +21,8 @@ import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.logging.Logger;
 
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 public class RemoteTest {
     private ChatServiceGrpc.ChatServiceStub stub;
@@ -69,7 +71,7 @@ public class RemoteTest {
         latch.await();
         Assertions.assertEquals(1, results.size());
         // 兼容错误码6是以为了远程测试的时候无法真的删除之前添加的账号，咱们就认为数据库冲突也是对的吧
-        Assertions.assertTrue(results.get(0).getStatusCode() == 0 || results.get(0).getStatusCode() == 6);
+        assertTrue(results.get(0).getStatusCode() == 0 || results.get(0).getStatusCode() == 6);
     }
 
     @Test
@@ -99,7 +101,7 @@ public class RemoteTest {
         });
         latch.await();
         Assertions.assertEquals(2, result.size());
-        Assertions.assertTrue(result.get(0).getYou().getName().equals("nick")
+        assertTrue(result.get(0).getYou().getName().equals("nick")
                 || result.get(0).getYou().getName().equals("earneet"));
     }
 
@@ -136,7 +138,7 @@ public class RemoteTest {
         });
         latch.await();
         logger.info("finished");
-        Assertions.assertTrue(success[0]);
+        assertTrue(success[0]);
     }
 
     @Test
@@ -307,6 +309,34 @@ public class RemoteTest {
             }
         });
         Thread.sleep(10000);
+    }
+
+    @Test
+    public void commandCleanHistoryTest() throws InterruptedException {
+        CountDownLatch latch = new CountDownLatch(1);
+        AtomicReference<Boolean> result = new AtomicReference<>(false);
+        stub.gmCommand(GMCommand.newBuilder().setCommand("clean_history").addParameters("2").build(),
+                new StreamObserver<GMResponse>() {
+                    @Override
+                    public void onNext(GMResponse value) {
+                        if (value.getInfo().equals("success")) {
+                            result.set(true);
+                        }
+                    }
+
+                    @Override
+                    public void onError(Throwable t) {
+                        latch.countDown();
+                    }
+
+                    @Override
+                    public void onCompleted() {
+                        latch.countDown();
+                    }
+                }
+        );
+        latch.await();
+        assertTrue(result.get());
     }
 
     @Test

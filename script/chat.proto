@@ -218,6 +218,20 @@ message UpdateSelfInfoResponse {
   Contact contact = 2;
 }
 
+message GMCommand {
+  string command = 1;
+  repeated string parameters = 2;
+}
+
+/*
+  command:
+    "clean_history": "roomId", 清除一个room的所有聊天记录(包含打招呼信息)，客户端传roomId。
+ */
+
+message GMResponse {
+  string info = 1;
+}
+
 //////////////////////////////////////
 
 service ChatService {
@@ -251,4 +265,6 @@ service ChatService {
   rpc GetMemory(GetMemoryRequest) returns (MemoryList);
 
   rpc DeleteMemory(DeleteMemoryRequest) returns (DeleteMemoryResponse);
+
+  rpc GmCommand(GMCommand) returns (GMResponse);
 }

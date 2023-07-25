@@ -356,6 +356,37 @@ public final class ChatServiceGrpc {
     return getDeleteMemoryMethod;
   }
 
+  private static volatile io.grpc.MethodDescriptor<chatserver.gen.GMCommand,
+      chatserver.gen.GMResponse> getGmCommandMethod;
+
+  @io.grpc.stub.annotations.RpcMethod(
+      fullMethodName = SERVICE_NAME + '/' + "GmCommand",
+      requestType = chatserver.gen.GMCommand.class,
+      responseType = chatserver.gen.GMResponse.class,
+      methodType = io.grpc.MethodDescriptor.MethodType.UNARY)
+  public static io.grpc.MethodDescriptor<chatserver.gen.GMCommand,
+      chatserver.gen.GMResponse> getGmCommandMethod() {
+    io.grpc.MethodDescriptor<chatserver.gen.GMCommand, chatserver.gen.GMResponse> getGmCommandMethod;
+    if ((getGmCommandMethod = ChatServiceGrpc.getGmCommandMethod) == null) {
+      synchronized (ChatServiceGrpc.class) {
+        if ((getGmCommandMethod = ChatServiceGrpc.getGmCommandMethod) == null) {
+          ChatServiceGrpc.getGmCommandMethod = getGmCommandMethod =
+              io.grpc.MethodDescriptor.<chatserver.gen.GMCommand, chatserver.gen.GMResponse>newBuilder()
+              .setType(io.grpc.MethodDescriptor.MethodType.UNARY)
+              .setFullMethodName(generateFullMethodName(SERVICE_NAME, "GmCommand"))
+              .setSampledToLocalTracing(true)
+              .setRequestMarshaller(io.grpc.protobuf.ProtoUtils.marshaller(
+                  chatserver.gen.GMCommand.getDefaultInstance()))
+              .setResponseMarshaller(io.grpc.protobuf.ProtoUtils.marshaller(
+                  chatserver.gen.GMResponse.getDefaultInstance()))
+              .setSchemaDescriptor(new ChatServiceMethodDescriptorSupplier("GmCommand"))
+              .build();
+        }
+      }
+    }
+    return getGmCommandMethod;
+  }
+
   /**
    * Creates a new async stub that supports all call types for the service
    */
@@ -509,6 +540,13 @@ public final class ChatServiceGrpc {
         io.grpc.stub.StreamObserver<chatserver.gen.DeleteMemoryResponse> responseObserver) {
       io.grpc.stub.ServerCalls.asyncUnimplementedUnaryCall(getDeleteMemoryMethod(), responseObserver);
     }
+
+    /**
+     */
+    default void gmCommand(chatserver.gen.GMCommand request,
+        io.grpc.stub.StreamObserver<chatserver.gen.GMResponse> responseObserver) {
+      io.grpc.stub.ServerCalls.asyncUnimplementedUnaryCall(getGmCommandMethod(), responseObserver);
+    }
   }
 
   /**
@@ -654,6 +692,14 @@ public final class ChatServiceGrpc {
       io.grpc.stub.ClientCalls.asyncUnaryCall(
           getChannel().newCall(getDeleteMemoryMethod(), getCallOptions()), request, responseObserver);
     }
+
+    /**
+     */
+    public void gmCommand(chatserver.gen.GMCommand request,
+        io.grpc.stub.StreamObserver<chatserver.gen.GMResponse> responseObserver) {
+      io.grpc.stub.ClientCalls.asyncUnaryCall(
+          getChannel().newCall(getGmCommandMethod(), getCallOptions()), request, responseObserver);
+    }
   }
 
   /**
@@ -771,6 +817,13 @@ public final class ChatServiceGrpc {
       return io.grpc.stub.ClientCalls.blockingUnaryCall(
           getChannel(), getDeleteMemoryMethod(), getCallOptions(), request);
     }
+
+    /**
+     */
+    public chatserver.gen.GMResponse gmCommand(chatserver.gen.GMCommand request) {
+      return io.grpc.stub.ClientCalls.blockingUnaryCall(
+          getChannel(), getGmCommandMethod(), getCallOptions(), request);
+    }
   }
 
   /**
@@ -853,6 +906,14 @@ public final class ChatServiceGrpc {
       return io.grpc.stub.ClientCalls.futureUnaryCall(
           getChannel().newCall(getDeleteMemoryMethod(), getCallOptions()), request);
     }
+
+    /**
+     */
+    public com.google.common.util.concurrent.ListenableFuture<chatserver.gen.GMResponse> gmCommand(
+        chatserver.gen.GMCommand request) {
+      return io.grpc.stub.ClientCalls.futureUnaryCall(
+          getChannel().newCall(getGmCommandMethod(), getCallOptions()), request);
+    }
   }
 
   private static final int METHODID_SIGNUP = 0;
@@ -865,7 +926,8 @@ public final class ChatServiceGrpc {
   private static final int METHODID_CHAT = 7;
   private static final int METHODID_GET_MEMORY = 8;
   private static final int METHODID_DELETE_MEMORY = 9;
-  private static final int METHODID_SPEECH_RECOGNIZE = 10;
+  private static final int METHODID_GM_COMMAND = 10;
+  private static final int METHODID_SPEECH_RECOGNIZE = 11;
 
   private static final class MethodHandlers<Req, Resp> implements
       io.grpc.stub.ServerCalls.UnaryMethod<Req, Resp>,
@@ -923,6 +985,10 @@ public final class ChatServiceGrpc {
         case METHODID_DELETE_MEMORY:
           serviceImpl.deleteMemory((chatserver.gen.DeleteMemoryRequest) request,
               (io.grpc.stub.StreamObserver<chatserver.gen.DeleteMemoryResponse>) responseObserver);
+          break;
+        case METHODID_GM_COMMAND:
+          serviceImpl.gmCommand((chatserver.gen.GMCommand) request,
+              (io.grpc.stub.StreamObserver<chatserver.gen.GMResponse>) responseObserver);
           break;
         default:
           throw new AssertionError();
@@ -1022,6 +1088,13 @@ public final class ChatServiceGrpc {
               chatserver.gen.DeleteMemoryRequest,
               chatserver.gen.DeleteMemoryResponse>(
                 service, METHODID_DELETE_MEMORY)))
+        .addMethod(
+          getGmCommandMethod(),
+          io.grpc.stub.ServerCalls.asyncUnaryCall(
+            new MethodHandlers<
+              chatserver.gen.GMCommand,
+              chatserver.gen.GMResponse>(
+                service, METHODID_GM_COMMAND)))
         .build();
   }
 
@@ -1081,6 +1154,7 @@ public final class ChatServiceGrpc {
               .addMethod(getChatMethod())
               .addMethod(getGetMemoryMethod())
               .addMethod(getDeleteMemoryMethod())
+              .addMethod(getGmCommandMethod())
               .build();
         }
       }

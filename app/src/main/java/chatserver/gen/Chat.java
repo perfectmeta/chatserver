@@ -149,6 +149,16 @@ public final class Chat {
   static final 
     com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
       internal_static_UpdateSelfInfoResponse_fieldAccessorTable;
+  static final com.google.protobuf.Descriptors.Descriptor
+    internal_static_GMCommand_descriptor;
+  static final 
+    com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
+      internal_static_GMCommand_fieldAccessorTable;
+  static final com.google.protobuf.Descriptors.Descriptor
+    internal_static_GMResponse_descriptor;
+  static final 
+    com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
+      internal_static_GMResponse_fieldAccessorTable;
 
   public static com.google.protobuf.Descriptors.FileDescriptor
       getDescriptor() {
@@ -218,24 +228,27 @@ public final class Chat {
       "ssageList\030\001 \003(\0132\010.Message\")\n\nMemoryList\022" +
       "\033\n\nmemoryList\030\001 \003(\0132\007.Memory\"C\n\026UpdateSe" +
       "lfInfoResponse\022\016\n\006result\030\001 \001(\005\022\031\n\007contac" +
-      "t\030\002 \001(\0132\010.Contact*\036\n\010UserType\022\t\n\005HUMAN\020\000" +
-      "\022\007\n\003BOT\020\001*S\n\007MsgType\022\023\n\017AUDIO_WITH_TEXT\020" +
-      "\000\022\023\n\017TEXT_WITH_AUDIO\020\001\022\010\n\004TEXT\020\002\022\t\n\005IMAG" +
-      "E\020\003\022\t\n\005VIDEO\020\0042\377\003\n\013ChatService\022*\n\006Signup" +
-      "\022\r.RegisterInfo\032\021.RegisterFeedback\022\037\n\013Ge" +
-      "tSelfInfo\022\006.Hello\032\010.Contact\0223\n\016UpdateSel" +
-      "fInfo\022\010.Contact\032\027.UpdateSelfInfoResponse" +
-      "\022$\n\rGetRoomStream\022\006.Hello\032\t.RoomInfo0\001\022&" +
-      "\n\020GetContactStream\022\006.Hello\032\010.Contact0\001\022)" +
-      "\n\023GetNewMessageStream\022\006.Hello\032\010.Message0" +
-      "\001\022,\n\tEnterRoom\022\021.EnterRoomRequest\032\014.Mess" +
-      "ageList\0220\n\017SpeechRecognize\022\014.AudioStream" +
-      "\032\013.TextStream(\0010\001\022+\n\004Chat\022\014.ChatRequest\032" +
-      "\023.ChatResponseStream0\001\022+\n\tGetMemory\022\021.Ge" +
-      "tMemoryRequest\032\013.MemoryList\022;\n\014DeleteMem" +
-      "ory\022\024.DeleteMemoryRequest\032\025.DeleteMemory" +
-      "ResponseB\035\n\016chatserver.genP\001\252\002\010Chat.Genb" +
-      "\006proto3"
+      "t\030\002 \001(\0132\010.Contact\"0\n\tGMCommand\022\017\n\007comman" +
+      "d\030\001 \001(\t\022\022\n\nparameters\030\002 \003(\t\"\032\n\nGMRespons" +
+      "e\022\014\n\004info\030\001 \001(\t*\036\n\010UserType\022\t\n\005HUMAN\020\000\022\007" +
+      "\n\003BOT\020\001*S\n\007MsgType\022\023\n\017AUDIO_WITH_TEXT\020\000\022" +
+      "\023\n\017TEXT_WITH_AUDIO\020\001\022\010\n\004TEXT\020\002\022\t\n\005IMAGE\020" +
+      "\003\022\t\n\005VIDEO\020\0042\245\004\n\013ChatService\022*\n\006Signup\022\r" +
+      ".RegisterInfo\032\021.RegisterFeedback\022\037\n\013GetS" +
+      "elfInfo\022\006.Hello\032\010.Contact\0223\n\016UpdateSelfI" +
+      "nfo\022\010.Contact\032\027.UpdateSelfInfoResponse\022$" +
+      "\n\rGetRoomStream\022\006.Hello\032\t.RoomInfo0\001\022&\n\020" +
+      "GetContactStream\022\006.Hello\032\010.Contact0\001\022)\n\023" +
+      "GetNewMessageStream\022\006.Hello\032\010.Message0\001\022" +
+      ",\n\tEnterRoom\022\021.EnterRoomRequest\032\014.Messag" +
+      "eList\0220\n\017SpeechRecognize\022\014.AudioStream\032\013" +
+      ".TextStream(\0010\001\022+\n\004Chat\022\014.ChatRequest\032\023." +
+      "ChatResponseStream0\001\022+\n\tGetMemory\022\021.GetM" +
+      "emoryRequest\032\013.MemoryList\022;\n\014DeleteMemor" +
+      "y\022\024.DeleteMemoryRequest\032\025.DeleteMemoryRe" +
+      "sponse\022$\n\tGmCommand\022\n.GMCommand\032\013.GMResp" +
+      "onseB\035\n\016chatserver.genP\001\252\002\010Chat.Genb\006pro" +
+      "to3"
     };
     descriptor = com.google.protobuf.Descriptors.FileDescriptor
       .internalBuildGeneratedFileFrom(descriptorData,
@@ -403,6 +416,18 @@ public final class Chat {
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_UpdateSelfInfoResponse_descriptor,
         new java.lang.String[] { "Result", "Contact", });
+    internal_static_GMCommand_descriptor =
+      getDescriptor().getMessageTypes().get(27);
+    internal_static_GMCommand_fieldAccessorTable = new
+      com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
+        internal_static_GMCommand_descriptor,
+        new java.lang.String[] { "Command", "Parameters", });
+    internal_static_GMResponse_descriptor =
+      getDescriptor().getMessageTypes().get(28);
+    internal_static_GMResponse_fieldAccessorTable = new
+      com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
+        internal_static_GMResponse_descriptor,
+        new java.lang.String[] { "Info", });
   }
 
   // @@protoc_insertion_point(outer_class_scope)
