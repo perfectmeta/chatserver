@@ -11,6 +11,7 @@ static
 /.jpb
 /app/tts.wav
 /configeditor/configeditor.iml
-/configdir/changelist.txt
+/config/changelist.txt
 /app/tts.mp3
-/configdir/head
+/config/head
+/config/key.properties

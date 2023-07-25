@@ -27,7 +27,6 @@ dependencies {
     // Use JUnit Jupiter for testing.
     testImplementation 'org.junit.jupiter:junit-jupiter:5.9.1'
 
-    implementation project(':baseconfig')
     implementation project(':semantic_kernel')
 
     implementation 'org.java-websocket:Java-WebSocket:1.5.3'

@@ -2,6 +2,7 @@ package chatserver;
 
 import chatserver.config.ConfigManager;
 import chatserver.util.FileWatcher;
+import com.google.common.base.Strings;
 import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;
 import org.springframework.stereotype.Component;
@@ -21,7 +22,11 @@ public class AfterBootRunner implements ApplicationRunner {
     }
 
     private void loadConfigDir() {
-        String configDir = System.getenv("chatserver_config_dir");
+        String dir = System.getenv("chatserver_config_dir");
+        if (Strings.isNullOrEmpty(dir)) {
+            dir = "config";
+        }
+        String configDir = dir;
         Path path = Paths.get(configDir);
 
         ConfigManager.reload(path);

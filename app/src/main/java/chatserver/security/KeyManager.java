@@ -26,7 +26,7 @@ public class KeyManager {
     private static void load() {
         String configFile = System.getenv("CHAT_KEY_FILE");
         if (Strings.isNullOrEmpty(configFile)) {
-            configFile = "key.properties";
+            configFile = "config/key.properties";
         }
 
         var properties = new Properties();

@@ -138,4 +138,5 @@ public class Kernel {
 class Property {
     @JsonPropertyDescription("City and state, for example: León, Guanajuato")
     public String location;
+
 }
