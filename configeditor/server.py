@@ -9,6 +9,7 @@ import streamlit as st
 import streamlit_pydantic as sp
 from PIL import Image
 from pydantic import BaseModel, Field
+import tiktoken
 
 
 class Speaker(str, Enum):
@@ -215,6 +216,11 @@ class BotConfigEditor:
                 self.save_bot(bot, is_update)
                 if not is_update:
                     st.experimental_rerun()
+            enc = tiktoken.encoding_for_model(cur.model.value)
+            tokens = enc.encode(cur.prompt)
+            st.text(f"token总数:{len(tokens)}")
+
+            
 
     def save_bot(self, bot: BotModel, is_update: bool):
         bot.save_bot(self.bots_dir)
