@@ -2,10 +2,10 @@ package chatserver.logic;
 
 import chatserver.gen.AudioStream;
 import chatserver.gen.TextStream;
+import chatserver.security.Secrets;
 import chatserver.third.asr.XFYasr;
 import chatserver.util.Digest;
 import chatserver.util.StopSignal;
-import com.google.common.base.Strings;
 import io.grpc.stub.StreamObserver;
 import org.springframework.stereotype.Component;
 
@@ -20,14 +20,14 @@ import java.util.logging.Logger;
 @Component
 public class SpeechRecognize {
     private final Logger logger = Logger.getLogger(SpeechRecognize.class.getName());
-    private final static String resourcePath = !Strings.isNullOrEmpty(System.getenv("static_dir")) ?
-            System.getenv("static_dir") : "./static";
+
 
     static class AudioBuffer {
         private static final Logger logger = Logger.getLogger(AudioBuffer.class.getName());
         private final ByteBuffer bf;
+
         public AudioBuffer() {
-            bf = ByteBuffer.allocate(1024*1024*8);
+            bf = ByteBuffer.allocate(1024 * 1024 * 8);
         }
 
         public void write(byte[] bytes) {
@@ -38,7 +38,7 @@ public class SpeechRecognize {
             bf.flip();
             var fileName = bf.limit() + "_" + Digest.calculateMD5(bf.array()) + ".pcm";
             try {
-                var file = Files.createFile(Path.of(resourcePath, fileName));
+                var file = Files.createFile(Path.of(Secrets.DATA_STATIC_DIR, fileName));
                 try (var fout = new FileOutputStream(file.toFile())) {
                     fout.write(bf.array(), 0, bf.limit());
                 }
@@ -81,8 +81,7 @@ public class SpeechRecognize {
                 var filePath = audioBuffer.save();
                 responseObserver.onNext(TextStream.newBuilder().setAudioUrl(filePath).build());
                 logger.info("Sent response: finished url: " + filePath);
-            }
-            catch (InterruptedException e) {
+            } catch (InterruptedException e) {
                 throw new RuntimeException(e);
             } finally {
                 responseObserver.onCompleted();

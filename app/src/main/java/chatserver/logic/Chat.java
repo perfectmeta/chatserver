@@ -11,6 +11,7 @@ import chatserver.logic.internal.SummaryMemory;
 import chatserver.logic.voice.PwrdSpeaker;
 import chatserver.logic.voice.VoiceTransfer;
 import chatserver.logic.voice.XFYttsSpeaker;
+import chatserver.security.Secrets;
 import chatserver.service.ContactService;
 import chatserver.service.RoomService;
 import chatserver.service.UserService;
@@ -40,8 +41,6 @@ public class Chat {
     private final ContactService contactService;
     private final SummaryMemory summaryMemory;
     private final OpenAiService service = makeOpenAiService();
-    static final String resourcePath = !Strings.isNullOrEmpty(System.getenv("static_dir")) ?
-            System.getenv("static_dir") : ".";
 
     @Autowired
     public Chat(RoomService roomService,
@@ -88,7 +87,7 @@ public class Chat {
                     .setAudio(ByteString.copyFrom(data))
                     .build();
             responseObserver.onNext(audioResponse);
-        }, resourcePath, new PwrdSpeaker(robot.getSpeaker()), new XFYttsSpeaker());
+        }, Secrets.DATA_STATIC_DIR, new PwrdSpeaker(robot.getSpeaker()), new XFYttsSpeaker());
 
         chatserver.gen.Message.Builder rr = chatserver.gen.Message.newBuilder()
                 .setMessageId(newUserMsg.getMessageId())

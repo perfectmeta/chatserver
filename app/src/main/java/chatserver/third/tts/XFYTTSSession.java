@@ -5,7 +5,7 @@ import chatserver.third.tts.entity.stream.res.Response;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.java_websocket.handshake.ServerHandshake;
-import chatserver.security.KeyManager;
+import chatserver.security.Secrets;
 
 import java.io.*;
 import java.net.URI;
@@ -109,7 +109,7 @@ public class XFYTTSSession extends org.java_websocket.client.WebSocketClient {
 
     private String generateRequest(String content) {
         Request.Builder request = new Request.Builder();
-        request.common.app_id = KeyManager.XFY_APPID;
+        request.common.app_id = Secrets.XFY_APPID;
         request.business.aue = "lame";
         request.business.sfl = 1;
         request.business.auf = "audio/L16;rate=8000";

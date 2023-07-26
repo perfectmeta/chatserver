@@ -1,5 +1,6 @@
 package chatserver.third.tts;
 
+import chatserver.security.Secrets;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.base.Strings;
 import okhttp3.ConnectionPool;
@@ -14,36 +15,22 @@ import java.util.concurrent.TimeUnit;
 import java.util.logging.Logger;
 
 public class Pwrdtts {
-
-
     public static final Logger logger = Logger.getLogger(Pwrdtts.class.getName());
-
-    public static String ttsHost = "ip:port";
-    public static String speaker = "zhy";
 
     public static final OkHttpClient client = new OkHttpClient.Builder()
             .connectionPool(new ConnectionPool(10, 5, TimeUnit.MINUTES))
             .build();
 
-    static {
-        String envHost = System.getenv("pwrdtts_host");
-        if (!Strings.isNullOrEmpty(envHost)) {
-            ttsHost = envHost;
-        }
-        String envSpeaker = System.getenv("pwrdtts_speaker");
-        if (!Strings.isNullOrEmpty(envSpeaker)) {
-            speaker = envSpeaker;
-        }
-    }
 
-    public record TTSResponse(int code, String message, String text, String type, String result) { }
+    public record TTSResponse(int code, String message, String text, String type, String result) {
+    }
 
     public static byte[] tts(String txt, String speakerName) {
         if (Strings.isNullOrEmpty(speakerName)) {
-            speakerName = speaker;
+            speakerName = Secrets.PWRDTTS_DEFAULT_SPEAKER;
         }
         String url = String.format("http://%s/%s/tts?speaker=%s&emotion=normal&return_type=mp3&text=%s",
-                ttsHost, speakerName, speakerName, txt);
+                Secrets.PWRDTTS_HOST, speakerName, speakerName, txt);
         Request request = new Request.Builder().url(url).build();
 
         try (Response response = client.newCall(request).execute()) {

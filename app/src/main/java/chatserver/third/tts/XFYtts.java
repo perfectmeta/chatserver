@@ -5,7 +5,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.base.Strings;
 import okhttp3.*;
-import chatserver.security.KeyManager;
+import chatserver.security.Secrets;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -35,7 +35,7 @@ public class XFYtts {
     private static String makeRequestContent(String content) {
         ObjectMapper mapper = new ObjectMapper();
         var builder = new chatserver.third.tts.entity.create.req.Request.Builder();
-        builder.header.app_id = KeyManager.XFY_APPID;
+        builder.header.app_id = Secrets.XFY_APPID;
         builder.parameter.dts.vcn = "x4_yeting";
         builder.parameter.dts.language = "zh";
         builder.parameter.dts.speed = 50;
@@ -65,7 +65,7 @@ public class XFYtts {
 
     private static String makeQueryContent(String taskId) {
         var builder = new chatserver.third.tts.entity.query.req.Request.Builder();
-        builder.header.app_id = KeyManager.XFY_APPID;
+        builder.header.app_id = Secrets.XFY_APPID;
         builder.header.task_id = taskId;
         ObjectMapper mapper = new ObjectMapper();
         try {
@@ -80,7 +80,7 @@ public class XFYtts {
     public static InputStream makeSession(String content) {
         String url;
         try {
-            url = AuthURLEncoder.encodeXFYAuthorUrl(ttsHost, KeyManager.XFY_API_KEY, KeyManager.XFY_API_SECRET, "GET");
+            url = AuthURLEncoder.encodeXFYAuthorUrl(ttsHost, Secrets.XFY_API_KEY, Secrets.XFY_API_SECRET, "GET");
             url = url.replace("https:", "wss:");
         } catch (Exception e) {
             throw new RuntimeException(e);
@@ -111,7 +111,7 @@ public class XFYtts {
     }
 
     private static String createLTTSTask(String content) {
-        var url = AuthURLEncoder.encodeXFYAuthorUrl(lttsHostCreate, KeyManager.XFY_API_KEY, KeyManager.XFY_API_SECRET, "POST");
+        var url = AuthURLEncoder.encodeXFYAuthorUrl(lttsHostCreate, Secrets.XFY_API_KEY, Secrets.XFY_API_SECRET, "POST");
         String requestContent = makeRequestContent(content);
         RequestBody requestBody = RequestBody.create(requestContent, MediaType.parse("application/json;charset=utf-8"));
         Request request = new Request.Builder().url(url).post(requestBody).build();
@@ -140,7 +140,7 @@ public class XFYtts {
         var buffer = ByteBuffer.allocate(100000);
         var finished = false;
         do {
-            var url = AuthURLEncoder.encodeXFYAuthorUrl(lttsHostQuery, KeyManager.XFY_API_KEY, KeyManager.XFY_API_SECRET, "POST");
+            var url = AuthURLEncoder.encodeXFYAuthorUrl(lttsHostQuery, Secrets.XFY_API_KEY, Secrets.XFY_API_SECRET, "POST");
             var queryContent = makeQueryContent(taskId);
             var requestBody = RequestBody.create(queryContent, MediaType.parse("application/json;charset=utf-8"));
             var request = new Request.Builder().url(url).post(requestBody).build();

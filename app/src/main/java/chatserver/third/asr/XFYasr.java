@@ -1,6 +1,6 @@
 package chatserver.third.asr;
 
-import chatserver.security.KeyManager;
+import chatserver.security.Secrets;
 import chatserver.security.authentication.xfy.AuthURLEncoder;
 import com.iflytek.cloud.speech.SpeechConstant;
 import com.iflytek.cloud.speech.SpeechUtility;
@@ -15,13 +15,13 @@ public class XFYasr {
     public static final String asrHost = "https://iat-api.xfyun.cn/v2/iat";
 
     static {
-        SpeechUtility.createUtility(SpeechConstant.APPID + "=" + KeyManager.XFY_APPID + " ");
+        SpeechUtility.createUtility(SpeechConstant.APPID + "=" + Secrets.XFY_APPID + " ");
     }
 
     public static BlockingQueue<Object> makeSession(InputStream audioStream) {
         String url;
         try {
-            url = AuthURLEncoder.encodeXFYAuthorUrl(asrHost, KeyManager.XFY_API_KEY, KeyManager.XFY_API_SECRET, "GET");
+            url = AuthURLEncoder.encodeXFYAuthorUrl(asrHost, Secrets.XFY_API_KEY, Secrets.XFY_API_SECRET, "GET");
         } catch (Exception e) {
             throw new RuntimeException(e);
         }

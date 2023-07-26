@@ -1,6 +1,6 @@
 package chatserver.third.openai;
 
-import chatserver.security.KeyManager;
+import chatserver.security.Secrets;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.theokanning.openai.OpenAiApi;
 import com.theokanning.openai.service.OpenAiService;
@@ -15,25 +15,20 @@ import java.time.temporal.ChronoUnit;
 public class OpenAi {
 
     public static OpenAiService makeOpenAiService() {
-        //Proxy proxy = new Proxy(Proxy.Type.SOCKS, new InetSocketAddress("localhost", 1080));
-        OkHttpClient client = makeHttpClient();
+        // todo, set a socket factory to make socket option tcp_no_delay enabled
+        OkHttpClient client = OpenAiService.defaultClient(Secrets.OPENAI_KEY, Duration.of(15, ChronoUnit.SECONDS))
+                .newBuilder()
+                .build();
         ObjectMapper mapper = OpenAiService.defaultObjectMapper();
         Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl("http://111.207.225.93:4000/")
-                //.baseUrl("https://api.openai.com/")
+                .baseUrl(Secrets.OPENAI_BASEURL)
                 .client(client)
                 .addConverterFactory(JacksonConverterFactory.create(mapper))
                 .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
                 .build();
 
-        OpenAiApi api = retrofit.create(OpenAiApi.class);
+        @SuppressWarnings("deprecation") OpenAiApi api = retrofit.create(OpenAiApi.class);
         return new OpenAiService(api);
     }
 
-    private static OkHttpClient makeHttpClient() {
-        // todo, set a socket factory to make socket option tcp_no_delay enabled
-        return OpenAiService.defaultClient(KeyManager.OPENAI_KEY, Duration.of(15, ChronoUnit.SECONDS))
-                .newBuilder()
-                .build();
-    }
 }

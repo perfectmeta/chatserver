@@ -1,6 +1,6 @@
 package chatserver.logic;
 
-import chatserver.security.KeyManager;
+import chatserver.security.Secrets;
 import com.theokanning.openai.completion.chat.ChatCompletionChoice;
 import com.theokanning.openai.completion.chat.ChatCompletionRequest;
 import com.theokanning.openai.completion.chat.ChatMessage;
@@ -21,7 +21,7 @@ class ChatTest {
 
     @BeforeAll
     void init() {
-        service = new OpenAiService(KeyManager.OPENAI_KEY);
+        service = new OpenAiService(Secrets.OPENAI_KEY);
     }
 
     @AfterAll

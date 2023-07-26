@@ -1,6 +1,6 @@
 package chatserver.logic;
 
-import chatserver.security.KeyManager;
+import chatserver.security.Secrets;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.theokanning.openai.OpenAiApi;
 import com.theokanning.openai.completion.CompletionRequest;
@@ -23,8 +23,8 @@ public class OpenAIAPITest {
     private static final Logger logger = Logger.getLogger(OpenAIAPITest.class.getName());
     @Test
     void connectTest() {
-        logger.info("OpenAiKey " + KeyManager.OPENAI_KEY);
-        OpenAiService service = new OpenAiService(KeyManager.OPENAI_KEY);
+        logger.info("OpenAiKey " + Secrets.OPENAI_KEY);
+        OpenAiService service = new OpenAiService(Secrets.OPENAI_KEY);
         CompletionRequest completionRequest = CompletionRequest.builder()
             .prompt("Somebody once told me the world is gonna roll me")
             .model("ada")
@@ -38,7 +38,7 @@ public class OpenAIAPITest {
     void chatGPTTest() {
         Proxy proxy = new Proxy(Proxy.Type.SOCKS, new InetSocketAddress("localhost", 1080));
         OkHttpClient client =
-                OpenAiService.defaultClient(KeyManager.OPENAI_KEY, Duration.of(5, ChronoUnit.SECONDS))
+                OpenAiService.defaultClient(Secrets.OPENAI_KEY, Duration.of(5, ChronoUnit.SECONDS))
                         .newBuilder()
                         .proxy(proxy)
                         .build();

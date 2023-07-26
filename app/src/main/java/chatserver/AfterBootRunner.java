@@ -22,7 +22,7 @@ public class AfterBootRunner implements ApplicationRunner {
     }
 
     private void loadConfigDir() {
-        String dir = System.getenv("chatserver_config_dir");
+        String dir = System.getenv("chatserver.config");
         if (Strings.isNullOrEmpty(dir)) {
             dir = "config";
         }

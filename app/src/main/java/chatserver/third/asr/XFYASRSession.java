@@ -1,6 +1,6 @@
 package chatserver.third.asr;
 
-import chatserver.security.KeyManager;
+import chatserver.security.Secrets;
 import chatserver.third.asr.entity.stream.req.Request;
 import chatserver.third.asr.entity.stream.res.Response;
 import chatserver.util.StopSignal;
@@ -139,7 +139,7 @@ public class XFYASRSession extends org.java_websocket.client.WebSocketClient imp
 
     private Request.Builder makeRequestBuilder() {
         Request.Builder builder = new Request.Builder();
-        builder.getCommon().app_id = KeyManager.XFY_APPID;
+        builder.getCommon().app_id = Secrets.XFY_APPID;
         builder.getBusiness().language = "zh_cn";
         builder.getBusiness().domain = "iat";
         builder.getBusiness().accent = "mandarin";

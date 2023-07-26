@@ -46,6 +46,7 @@ dependencies {
     runtimeOnly fileTree(dir: 'src/main/resources/lib', includes: ['*.dll'])
 
     runtimeOnly 'com.mysql:mysql-connector-j'
+    runtimeOnly 'org.xerial:sqlite-jdbc'
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
     compileOnly 'org.apache.tomcat:annotations-api:6.0.53' // necessary for Java 9+
     // testRuntimeOnly files('libs/msc32.dll', 'libs/msc64.dll')
